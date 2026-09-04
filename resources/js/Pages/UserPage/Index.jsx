@@ -1923,7 +1923,7 @@ export default function Index() {
     .footer-content {
         text-align: center;
 
-        padding: 65px 0 55px;
+        padding: 20px 0 20px;
     }
 
     .footer-logo img {
@@ -2303,7 +2303,7 @@ export default function Index() {
         }
 
         .footer-content {
-            padding: 55px 0 45px;
+            padding: 20px 0 20px;
         }
 
         .footer-content h2 {
