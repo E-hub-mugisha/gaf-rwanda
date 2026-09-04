@@ -1,6 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import Pagination from '@/Components/Pagination';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
     Activity,
     FileText,
@@ -13,8 +13,188 @@ import {
     ChevronRight,
     X,
 } from 'lucide-react';
+import { getLanguage, LANGUAGE_EVENT } from '@/lib/language';
+
+/*
+|--------------------------------------------------------------------------
+| UI translations (admin chrome only)
+|--------------------------------------------------------------------------
+| Same four admin-panel UI languages as AdminLayout (rw/en/fr/nl). Unrelated
+| to the document content languages (en/es/rw) shown per-row in the table
+| below -- those come from the activity data itself, not this switcher.
+*/
+
+const translations = {
+    rw: {
+        eyebrow: 'Igenzura rya Sisitemu',
+        pageTitle: 'Ibikorwa',
+        pageSubtitle:
+            'Kurikirana kureba inyandiko n’ibikorwa by’abasoma muri portal.',
+        totalViews: 'Ibyasomwe Byose',
+        totalViewsSub: 'Ibyasomwe by’inyandiko byanditswe',
+        activeReaders: 'Abasoma Bakora',
+        activeReadersSub: 'Abasoma bo kuri iyi paji',
+        documents: 'Inyandiko',
+        documentsSub: 'Inyandiko zasomwe',
+        latestActivity: 'Igikorwa Giheruka',
+        active: 'Birakora',
+        none: 'Nta na kimwe',
+        recentActivitySub: 'Igikorwa cy’umusomyi giheruka',
+        noActivitySub: 'Nta gikorwa cyanditswe',
+        recentActivity: 'Ibikorwa Biheruka',
+        chronological: 'Urutonde rw’igihe rw’ibyasomwe by’inyandiko',
+        searchPlaceholder: 'Shakisha igikorwa...',
+        clearSearchLabel: 'Siba ishakisha',
+        noActivityTitle: 'Nta gikorwa cyanditswe',
+        noActivityBody:
+            'Ibyasomwe by’inyandiko bizagaragara hano igihe abasoma bazasoma inyandiko.',
+        noMatchTitle: 'Nta gikorwa gihuye',
+        noMatchBody:
+            'Gerageza gushakisha ukoresheje undi musomyi, indi nyandiko, cyangwa urundi rurimi.',
+        clearSearch: 'Siba Ishakisha',
+        colReader: 'USOMYI',
+        colDocument: 'INYANDIKO',
+        colLanguage: 'URURIMI',
+        colViewed: 'YASOMWE',
+        reader: 'Usoma',
+        document: 'Inyandiko',
+    },
+
+    en: {
+        eyebrow: 'System Monitoring',
+        pageTitle: 'Activity Log',
+        pageSubtitle:
+            'Track document views and reader activity across the portal.',
+        totalViews: 'Total Views',
+        totalViewsSub: 'Recorded document views',
+        activeReaders: 'Active Readers',
+        activeReadersSub: 'Readers on this page',
+        documents: 'Documents',
+        documentsSub: 'Documents viewed',
+        latestActivity: 'Latest Activity',
+        active: 'Active',
+        none: 'None',
+        recentActivitySub: 'Recent reader activity',
+        noActivitySub: 'No activity recorded',
+        recentActivity: 'Recent Activity',
+        chronological: 'A chronological record of document views',
+        searchPlaceholder: 'Search activity...',
+        clearSearchLabel: 'Clear search',
+        noActivityTitle: 'No activity recorded',
+        noActivityBody:
+            'Document views will appear here when readers access documents.',
+        noMatchTitle: 'No matching activity',
+        noMatchBody:
+            'Try searching with a different reader, document, or language.',
+        clearSearch: 'Clear Search',
+        colReader: 'READER',
+        colDocument: 'DOCUMENT',
+        colLanguage: 'LANGUAGE',
+        colViewed: 'VIEWED',
+        reader: 'Reader',
+        document: 'Document',
+    },
+
+    fr: {
+        eyebrow: 'Surveillance du système',
+        pageTitle: 'Journal d’activité',
+        pageSubtitle:
+            'Suivez les consultations de documents et l’activité des lecteurs sur le portail.',
+        totalViews: 'Total des consultations',
+        totalViewsSub: 'Consultations de documents enregistrées',
+        activeReaders: 'Lecteurs actifs',
+        activeReadersSub: 'Lecteurs sur cette page',
+        documents: 'Documents',
+        documentsSub: 'Documents consultés',
+        latestActivity: 'Dernière activité',
+        active: 'Actif',
+        none: 'Aucune',
+        recentActivitySub: 'Activité récente des lecteurs',
+        noActivitySub: 'Aucune activité enregistrée',
+        recentActivity: 'Activité récente',
+        chronological:
+            'Un enregistrement chronologique des consultations de documents',
+        searchPlaceholder: 'Rechercher une activité...',
+        clearSearchLabel: 'Effacer la recherche',
+        noActivityTitle: 'Aucune activité enregistrée',
+        noActivityBody:
+            'Les consultations de documents apparaîtront ici lorsque des lecteurs accéderont aux documents.',
+        noMatchTitle: 'Aucune activité correspondante',
+        noMatchBody:
+            'Essayez de rechercher avec un autre lecteur, document ou langue.',
+        clearSearch: 'Effacer la recherche',
+        colReader: 'LECTEUR',
+        colDocument: 'DOCUMENT',
+        colLanguage: 'LANGUE',
+        colViewed: 'CONSULTÉ',
+        reader: 'Lecteur',
+        document: 'Document',
+    },
+
+    nl: {
+        eyebrow: 'Systeembewaking',
+        pageTitle: 'Activiteitenlogboek',
+        pageSubtitle:
+            'Volg documentweergaven en lezersactiviteit binnen het portaal.',
+        totalViews: 'Totaal aantal weergaven',
+        totalViewsSub: 'Geregistreerde documentweergaven',
+        activeReaders: 'Actieve lezers',
+        activeReadersSub: 'Lezers op deze pagina',
+        documents: 'Documenten',
+        documentsSub: 'Bekeken documenten',
+        latestActivity: 'Laatste activiteit',
+        active: 'Actief',
+        none: 'Geen',
+        recentActivitySub: 'Recente lezersactiviteit',
+        noActivitySub: 'Geen activiteit geregistreerd',
+        recentActivity: 'Recente activiteit',
+        chronological:
+            'Een chronologisch overzicht van documentweergaven',
+        searchPlaceholder: 'Activiteit zoeken...',
+        clearSearchLabel: 'Zoekopdracht wissen',
+        noActivityTitle: 'Geen activiteit geregistreerd',
+        noActivityBody:
+            'Documentweergaven verschijnen hier zodra lezers documenten openen.',
+        noMatchTitle: 'Geen overeenkomende activiteit',
+        noMatchBody:
+            'Probeer te zoeken met een andere lezer, document of taal.',
+        clearSearch: 'Zoekopdracht wissen',
+        colReader: 'LEZER',
+        colDocument: 'DOCUMENT',
+        colLanguage: 'TAAL',
+        colViewed: 'BEKEKEN',
+        reader: 'Lezer',
+        document: 'Document',
+    },
+};
 
 export default function Index({ views }) {
+    /*
+    |--------------------------------------------------------------------------
+    | Admin UI language
+    |--------------------------------------------------------------------------
+    | Same shared-state pattern as AdminLayout: read once on mount, then
+    | subscribe to LANGUAGE_EVENT so a change made anywhere (the layout's
+    | header switcher, the login page, etc.) is picked up here instantly,
+    | including across Inertia navigations within the same tab.
+    */
+
+    const [language, setLanguageState] = useState(getLanguage);
+
+    const t = translations[language] || translations.rw;
+
+    useEffect(() => {
+        const handleLanguageChange = (event) => {
+            setLanguageState(event.detail);
+        };
+
+        window.addEventListener(LANGUAGE_EVENT, handleLanguageChange);
+
+        return () => {
+            window.removeEventListener(LANGUAGE_EVENT, handleLanguageChange);
+        };
+    }, []);
+
     const [search, setSearch] = useState('');
 
     const filteredViews = useMemo(() => {
@@ -68,7 +248,7 @@ export default function Index({ views }) {
     };
 
     return (
-        <AdminLayout title="Activity Log">
+        <AdminLayout title={t.pageTitle}>
             <div className="activity-page">
 
                 {/* ================= HEADER ================= */}
@@ -79,16 +259,11 @@ export default function Index({ views }) {
                         </div>
 
                         <div>
-                            <div className="eyebrow">
-                                System Monitoring
-                            </div>
+                            <div className="eyebrow">{t.eyebrow}</div>
 
-                            <h1>Activity Log</h1>
+                            <h1>{t.pageTitle}</h1>
 
-                            <p>
-                                Track document views and reader activity
-                                across the portal.
-                            </p>
+                            <p>{t.pageSubtitle}</p>
                         </div>
                     </div>
                 </div>
@@ -102,9 +277,9 @@ export default function Index({ views }) {
                         </div>
 
                         <div className="stat-content">
-                            <span>Total Views</span>
+                            <span>{t.totalViews}</span>
                             <strong>{totalViews}</strong>
-                            <small>Recorded document views</small>
+                            <small>{t.totalViewsSub}</small>
                         </div>
                     </div>
 
@@ -114,9 +289,9 @@ export default function Index({ views }) {
                         </div>
 
                         <div className="stat-content">
-                            <span>Active Readers</span>
+                            <span>{t.activeReaders}</span>
                             <strong>{uniqueReaders}</strong>
-                            <small>Readers on this page</small>
+                            <small>{t.activeReadersSub}</small>
                         </div>
                     </div>
 
@@ -126,9 +301,9 @@ export default function Index({ views }) {
                         </div>
 
                         <div className="stat-content">
-                            <span>Documents</span>
+                            <span>{t.documents}</span>
                             <strong>{uniqueDocuments}</strong>
-                            <small>Documents viewed</small>
+                            <small>{t.documentsSub}</small>
                         </div>
                     </div>
 
@@ -138,14 +313,14 @@ export default function Index({ views }) {
                         </div>
 
                         <div className="stat-content">
-                            <span>Latest Activity</span>
+                            <span>{t.latestActivity}</span>
                             <strong>
-                                {views.data.length > 0 ? 'Active' : 'None'}
+                                {views.data.length > 0 ? t.active : t.none}
                             </strong>
                             <small>
                                 {views.data.length > 0
-                                    ? 'Recent reader activity'
-                                    : 'No activity recorded'}
+                                    ? t.recentActivitySub
+                                    : t.noActivitySub}
                             </small>
                         </div>
                     </div>
@@ -162,10 +337,8 @@ export default function Index({ views }) {
                             </div>
 
                             <div>
-                                <h2>Recent Activity</h2>
-                                <p>
-                                    A chronological record of document views
-                                </p>
+                                <h2>{t.recentActivity}</h2>
+                                <p>{t.chronological}</p>
                             </div>
                         </div>
 
@@ -177,7 +350,7 @@ export default function Index({ views }) {
 
                             <input
                                 type="text"
-                                placeholder="Search activity..."
+                                placeholder={t.searchPlaceholder}
                                 value={search}
                                 onChange={(e) =>
                                     setSearch(e.target.value)
@@ -189,7 +362,7 @@ export default function Index({ views }) {
                                     type="button"
                                     className="clear-search"
                                     onClick={() => setSearch('')}
-                                    aria-label="Clear search"
+                                    aria-label={t.clearSearchLabel}
                                 >
                                     <X size={15} />
                                 </button>
@@ -204,12 +377,9 @@ export default function Index({ views }) {
                                 <Activity size={30} />
                             </div>
 
-                            <h3>No activity recorded</h3>
+                            <h3>{t.noActivityTitle}</h3>
 
-                            <p>
-                                Document views will appear here when readers
-                                access documents.
-                            </p>
+                            <p>{t.noActivityBody}</p>
                         </div>
                     ) : filteredViews.length === 0 ? (
                         <div className="empty-state">
@@ -217,19 +387,16 @@ export default function Index({ views }) {
                                 <Search size={28} />
                             </div>
 
-                            <h3>No matching activity</h3>
+                            <h3>{t.noMatchTitle}</h3>
 
-                            <p>
-                                Try searching with a different reader,
-                                document, or language.
-                            </p>
+                            <p>{t.noMatchBody}</p>
 
                             <button
                                 type="button"
                                 className="reset-button"
                                 onClick={() => setSearch('')}
                             >
-                                Clear Search
+                                {t.clearSearch}
                             </button>
                         </div>
                     ) : (
@@ -239,10 +406,10 @@ export default function Index({ views }) {
                                 <table className="activity-table">
                                     <thead>
                                         <tr>
-                                            <th>READER</th>
-                                            <th>DOCUMENT</th>
-                                            <th>LANGUAGE</th>
-                                            <th>VIEWED</th>
+                                            <th>{t.colReader}</th>
+                                            <th>{t.colDocument}</th>
+                                            <th>{t.colLanguage}</th>
+                                            <th>{t.colViewed}</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -266,7 +433,7 @@ export default function Index({ views }) {
                                                             </strong>
 
                                                             <span>
-                                                                Reader
+                                                                {t.reader}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -289,7 +456,7 @@ export default function Index({ views }) {
                                                             </strong>
 
                                                             <span>
-                                                                Document
+                                                                {t.document}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -359,7 +526,7 @@ export default function Index({ views }) {
                                                     </strong>
 
                                                     <span>
-                                                        Reader
+                                                        {t.reader}
                                                     </span>
                                                 </div>
                                             </div>

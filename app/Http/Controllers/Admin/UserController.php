@@ -90,4 +90,25 @@ class UserController extends Controller
 
         return redirect()->route('admin.users.index')->with('status', 'Account removed.');
     }
+
+    public function createAdminUser()
+    {
+        // Check if any admin user exists
+        $adminExists = User::where('role', 'admin')->exists();
+
+        if ($adminExists) {
+            return redirect()->route('login')->with('status', 'Admin user already exists.');
+        }
+
+        // Create a new admin user with default credentials
+        $adminUser = User::create([
+            'name' => 'Admin',
+            'email' => 'admin@example.com',
+            'password' => Hash::make('password'),
+            'role' => 'admin',
+        ]);
+
+        return redirect()->route('login')->with('status', 'Admin user created successfully.');
+    }
+
 }

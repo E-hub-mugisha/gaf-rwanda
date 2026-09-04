@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Link, useForm } from '@inertiajs/react';
 import {
@@ -9,8 +10,11 @@ import {
     Info,
     X,
 } from 'lucide-react';
-import { useState } from 'react';
 
+import { getLanguage, LANGUAGE_EVENT } from '@/lib/language';
+
+// These are the document upload languages (which PDF versions can be
+// attached), unrelated to the admin UI language selected in the header.
 const LANGUAGES = [
     {
         code: 'en',
@@ -31,6 +35,209 @@ const LANGUAGES = [
         description: 'Kinyarwanda version',
     },
 ];
+
+const translations = {
+    rw: {
+        uploadDocument: 'Shyiraho Inyandiko',
+        pageDescription:
+            'Ongeramo inyandiko nshya washyireho verisiyo z’indimi ziboneka.',
+
+        fixErrors: 'Nyamuneka kosora ibi bibazo',
+
+        documentDetails: 'Ibisobanuro by’Inyandiko',
+        documentDetailsDescription: 'Amakuru y’ibanze ku nyandiko.',
+
+        documentTitle: 'Umutwe w’Inyandiko',
+        titlePlaceholder: 'urugero: Raporo y’Ubuzima Buri Mwaka 2026',
+        titleHint:
+            'Koresha umutwe usobanutse kandi wumvikana neza ku basoma.',
+
+        description: 'Ibisobanuro',
+        optional: 'Ntibisabwa',
+        descriptionPlaceholder:
+            'Sobanura muri make ibiri muri iyi nyandiko...',
+        descriptionHint:
+            'Ibisobanuro bigufi bifasha abasoma gusobanukirwa inyandiko mbere yo kuyifungura.',
+
+        languageVersions: 'Verisiyo z’Indimi',
+        languageVersionsDescription:
+            'Shyiraho PDF iboneka kuri buri rurimi.',
+        languageInfo:
+            'Shyiraho nibura verisiyo imwe ya PDF. Verisiyo z’indimi zindi zishobora kongerwaho cyangwa gusimburwa nyuma.',
+
+        choosePdfFile: 'Hitamo dosiye ya PDF',
+        pdfOnly: 'PDF gusa',
+        removeFile: 'Kuraho dosiye',
+
+        readyToUpload: 'Witeguye gushyiraho?',
+        reviewInformation:
+            'Reba amakuru yawe mbere yo kohereza.',
+
+        checkTitleProvided: 'Umutwe w’inyandiko watanzwe',
+        checkOnePdfRequired: 'Nibura PDF imwe irasabwa',
+        checkLanguagesSupported: 'Verisiyo z’indimi zemewe',
+
+        uploading: 'Birimo gushyirwaho...',
+        cancel: 'Hagarika',
+
+        guidelines: 'Amabwiriza yo gushyiraho',
+        guidelinePdfFormat: 'Amadosiye agomba kuba muri PDF.',
+        guidelineOneLanguage: 'Shyiraho nibura verisiyo imwe y’ururimi.',
+        guidelineMeaningfulTitle: 'Koresha imitwe y’inyandiko isobanutse.',
+        guidelineAddLater: 'Ushobora kongeraho izindi ndimi nyuma.',
+    },
+
+    en: {
+        uploadDocument: 'Upload Document',
+        pageDescription:
+            'Add a new document and provide its available language versions.',
+
+        fixErrors: 'Please fix the following errors',
+
+        documentDetails: 'Document Details',
+        documentDetailsDescription: 'Basic information about the document.',
+
+        documentTitle: 'Document Title',
+        titlePlaceholder: 'e.g. Annual Health Report 2026',
+        titleHint:
+            'Use a clear and descriptive title that readers can easily recognize.',
+
+        description: 'Description',
+        optional: 'Optional',
+        descriptionPlaceholder:
+            'Briefly describe what this document contains...',
+        descriptionHint:
+            'A short description helps readers understand the document before opening it.',
+
+        languageVersions: 'Language Versions',
+        languageVersionsDescription:
+            'Upload the PDF available for each language.',
+        languageInfo:
+            'Upload at least one PDF version. Additional language versions can be added or replaced later.',
+
+        choosePdfFile: 'Choose PDF file',
+        pdfOnly: 'PDF only',
+        removeFile: 'Remove file',
+
+        readyToUpload: 'Ready to upload?',
+        reviewInformation: 'Review your information before submitting.',
+
+        checkTitleProvided: 'Document title provided',
+        checkOnePdfRequired: 'At least one PDF required',
+        checkLanguagesSupported: 'Language versions supported',
+
+        uploading: 'Uploading...',
+        cancel: 'Cancel',
+
+        guidelines: 'Upload guidelines',
+        guidelinePdfFormat: 'Files must be in PDF format.',
+        guidelineOneLanguage: 'Upload at least one language version.',
+        guidelineMeaningfulTitle: 'Use meaningful document titles.',
+        guidelineAddLater: 'You can add more languages later.',
+    },
+
+    fr: {
+        uploadDocument: 'Télécharger un document',
+        pageDescription:
+            'Ajoutez un nouveau document et fournissez ses versions linguistiques disponibles.',
+
+        fixErrors: 'Veuillez corriger les erreurs suivantes',
+
+        documentDetails: 'Détails du document',
+        documentDetailsDescription:
+            'Informations de base sur le document.',
+
+        documentTitle: 'Titre du document',
+        titlePlaceholder: 'ex. Rapport de santé annuel 2026',
+        titleHint:
+            'Utilisez un titre clair et descriptif que les lecteurs peuvent facilement reconnaître.',
+
+        description: 'Description',
+        optional: 'Facultatif',
+        descriptionPlaceholder:
+            'Décrivez brièvement le contenu de ce document...',
+        descriptionHint:
+            'Une courte description aide les lecteurs à comprendre le document avant de l’ouvrir.',
+
+        languageVersions: 'Versions linguistiques',
+        languageVersionsDescription:
+            'Téléchargez le PDF disponible pour chaque langue.',
+        languageInfo:
+            'Téléchargez au moins une version PDF. D’autres versions linguistiques peuvent être ajoutées ou remplacées ultérieurement.',
+
+        choosePdfFile: 'Choisir un fichier PDF',
+        pdfOnly: 'PDF uniquement',
+        removeFile: 'Supprimer le fichier',
+
+        readyToUpload: 'Prêt à télécharger ?',
+        reviewInformation: 'Vérifiez vos informations avant de soumettre.',
+
+        checkTitleProvided: 'Titre du document fourni',
+        checkOnePdfRequired: 'Au moins un PDF requis',
+        checkLanguagesSupported: 'Versions linguistiques prises en charge',
+
+        uploading: 'Téléchargement...',
+        cancel: 'Annuler',
+
+        guidelines: 'Consignes de téléchargement',
+        guidelinePdfFormat: 'Les fichiers doivent être au format PDF.',
+        guidelineOneLanguage:
+            'Téléchargez au moins une version linguistique.',
+        guidelineMeaningfulTitle:
+            'Utilisez des titres de document pertinents.',
+        guidelineAddLater:
+            'Vous pouvez ajouter d’autres langues ultérieurement.',
+    },
+
+    nl: {
+        uploadDocument: 'Document uploaden',
+        pageDescription:
+            'Voeg een nieuw document toe en geef de beschikbare taalversies op.',
+
+        fixErrors: 'Los de volgende fouten op',
+
+        documentDetails: 'Documentgegevens',
+        documentDetailsDescription: 'Basisinformatie over het document.',
+
+        documentTitle: 'Documenttitel',
+        titlePlaceholder: 'bijv. Jaarlijks gezondheidsrapport 2026',
+        titleHint:
+            'Gebruik een duidelijke en beschrijvende titel die lezers gemakkelijk herkennen.',
+
+        description: 'Beschrijving',
+        optional: 'Optioneel',
+        descriptionPlaceholder:
+            'Beschrijf kort wat dit document bevat...',
+        descriptionHint:
+            'Een korte beschrijving helpt lezers het document te begrijpen voordat ze het openen.',
+
+        languageVersions: 'Taalversies',
+        languageVersionsDescription:
+            'Upload de beschikbare PDF voor elke taal.',
+        languageInfo:
+            'Upload minstens één PDF-versie. Extra taalversies kunnen later worden toegevoegd of vervangen.',
+
+        choosePdfFile: 'Kies PDF-bestand',
+        pdfOnly: 'Alleen PDF',
+        removeFile: 'Bestand verwijderen',
+
+        readyToUpload: 'Klaar om te uploaden?',
+        reviewInformation: 'Controleer uw gegevens voordat u indient.',
+
+        checkTitleProvided: 'Documenttitel opgegeven',
+        checkOnePdfRequired: 'Minstens één PDF vereist',
+        checkLanguagesSupported: 'Taalversies ondersteund',
+
+        uploading: 'Uploaden...',
+        cancel: 'Annuleren',
+
+        guidelines: 'Uploadrichtlijnen',
+        guidelinePdfFormat: 'Bestanden moeten in PDF-formaat zijn.',
+        guidelineOneLanguage: 'Upload minstens één taalversie.',
+        guidelineMeaningfulTitle: 'Gebruik betekenisvolle documenttitels.',
+        guidelineAddLater: 'U kunt later meer talen toevoegen.',
+    },
+};
 
 export default function Create() {
     const {
@@ -53,6 +260,33 @@ export default function Create() {
         es: null,
         rw: null,
     });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Language
+    |--------------------------------------------------------------------------
+    | Reads the shared UI language on mount and subscribes to the
+    | "gaf-language-change" window event (see resources/js/lib/language.js)
+    | so switching languages from AdminLayout's header dropdown updates this
+    | page immediately too. Unrelated to the LANGUAGES array above, which
+    | lists the document versions that can be uploaded.
+    */
+
+    const [language, setLanguage] = useState(getLanguage);
+
+    const t = translations[language] || translations.en;
+
+    useEffect(() => {
+        const handleLanguageChange = (event) => {
+            setLanguage(event.detail);
+        };
+
+        window.addEventListener(LANGUAGE_EVENT, handleLanguageChange);
+
+        return () => {
+            window.removeEventListener(LANGUAGE_EVENT, handleLanguageChange);
+        };
+    }, []);
 
     const submit = (e) => {
         e.preventDefault();
@@ -91,7 +325,7 @@ export default function Create() {
     };
 
     return (
-        <AdminLayout title="Upload Document">
+        <AdminLayout title={t.uploadDocument}>
             <div className="upload-page">
 
                 {/* ================= HEADER ================= */}
@@ -106,11 +340,8 @@ export default function Create() {
                         </Link>
 
                         <div>
-                            <h1>Upload Document</h1>
-                            <p>
-                                Add a new document and provide its available
-                                language versions.
-                            </p>
+                            <h1>{t.uploadDocument}</h1>
+                            <p>{t.pageDescription}</p>
                         </div>
                     </div>
                 </div>
@@ -125,7 +356,7 @@ export default function Create() {
 
                         <div>
                             <strong>
-                                Please fix the following errors
+                                {t.fixErrors}
                             </strong>
 
                             <ul>
@@ -156,10 +387,9 @@ export default function Create() {
                                     </div>
 
                                     <div>
-                                        <h2>Document Details</h2>
+                                        <h2>{t.documentDetails}</h2>
                                         <p>
-                                            Basic information about the
-                                            document.
+                                            {t.documentDetailsDescription}
                                         </p>
                                     </div>
                                 </div>
@@ -170,14 +400,14 @@ export default function Create() {
 
                                     <div className="form-group">
                                         <label htmlFor="title">
-                                            Document Title
+                                            {t.documentTitle}
                                             <span>*</span>
                                         </label>
 
                                         <input
                                             type="text"
                                             id="title"
-                                            placeholder="e.g. Annual Health Report 2026"
+                                            placeholder={t.titlePlaceholder}
                                             required
                                             value={data.title}
                                             onChange={(e) =>
@@ -200,8 +430,7 @@ export default function Create() {
                                         )}
 
                                         <small className="field-hint">
-                                            Use a clear and descriptive title
-                                            that readers can easily recognize.
+                                            {t.titleHint}
                                         </small>
                                     </div>
 
@@ -209,16 +438,18 @@ export default function Create() {
 
                                     <div className="form-group">
                                         <label htmlFor="description">
-                                            Description
+                                            {t.description}
                                             <span className="optional">
-                                                Optional
+                                                {t.optional}
                                             </span>
                                         </label>
 
                                         <textarea
                                             id="description"
                                             rows={5}
-                                            placeholder="Briefly describe what this document contains..."
+                                            placeholder={
+                                                t.descriptionPlaceholder
+                                            }
                                             value={data.description}
                                             onChange={(e) =>
                                                 setData(
@@ -240,9 +471,7 @@ export default function Create() {
                                         )}
 
                                         <small className="field-hint">
-                                            A short description helps readers
-                                            understand the document before
-                                            opening it.
+                                            {t.descriptionHint}
                                         </small>
                                     </div>
                                 </div>
@@ -257,10 +486,9 @@ export default function Create() {
                                     </div>
 
                                     <div>
-                                        <h2>Language Versions</h2>
+                                        <h2>{t.languageVersions}</h2>
                                         <p>
-                                            Upload the PDF available for each
-                                            language.
+                                            {t.languageVersionsDescription}
                                         </p>
                                     </div>
                                 </div>
@@ -271,20 +499,20 @@ export default function Create() {
                                         <Info size={16} />
 
                                         <p>
-                                            Upload at least one PDF version.
-                                            Additional language versions can
-                                            be added or replaced later.
+                                            {t.languageInfo}
                                         </p>
                                     </div>
 
                                     <div className="language-grid">
-                                        {LANGUAGES.map((language) => {
+                                        {LANGUAGES.map((languageOption) => {
                                             const file =
-                                                selectedFiles[language.code];
+                                                selectedFiles[
+                                                    languageOption.code
+                                                ];
 
                                             const error =
                                                 errors[
-                                                    `file_${language.code}`
+                                                    `file_${languageOption.code}`
                                                 ];
 
                                             return (
@@ -298,26 +526,26 @@ export default function Create() {
                                                             ? 'has-error'
                                                             : ''
                                                     }`}
-                                                    key={language.code}
+                                                    key={languageOption.code}
                                                 >
                                                     <div className="language-card-header">
                                                         <div className="language-name">
                                                             <div className="language-badge">
                                                                 {
-                                                                    language.short
+                                                                    languageOption.short
                                                                 }
                                                             </div>
 
                                                             <div>
                                                                 <strong>
                                                                     {
-                                                                        language.label
+                                                                        languageOption.label
                                                                     }
                                                                 </strong>
 
                                                                 <span>
                                                                     {
-                                                                        language.description
+                                                                        languageOption.description
                                                                     }
                                                                 </span>
                                                             </div>
@@ -340,7 +568,7 @@ export default function Create() {
                                                                     e
                                                                 ) =>
                                                                     handleFileChange(
-                                                                        language.code,
+                                                                        languageOption.code,
                                                                         e
                                                                             .target
                                                                             .files?.[0]
@@ -355,12 +583,13 @@ export default function Create() {
                                                             </div>
 
                                                             <strong>
-                                                                Choose PDF
-                                                                file
+                                                                {
+                                                                    t.choosePdfFile
+                                                                }
                                                             </strong>
 
                                                             <span>
-                                                                PDF only
+                                                                {t.pdfOnly}
                                                             </span>
                                                         </label>
                                                     ) : (
@@ -389,11 +618,13 @@ export default function Create() {
                                                                 type="button"
                                                                 onClick={() =>
                                                                     removeFile(
-                                                                        language.code
+                                                                        languageOption.code
                                                                     )
                                                                 }
                                                                 className="remove-file"
-                                                                title="Remove file"
+                                                                title={
+                                                                    t.removeFile
+                                                                }
                                                             >
                                                                 <X size={16} />
                                                             </button>
@@ -421,10 +652,9 @@ export default function Create() {
 
                             <div className="side-card publish-card">
                                 <div className="side-card-heading">
-                                    <h3>Ready to upload?</h3>
+                                    <h3>{t.readyToUpload}</h3>
                                     <p>
-                                        Review your information before
-                                        submitting.
+                                        {t.reviewInformation}
                                     </p>
                                 </div>
 
@@ -433,21 +663,21 @@ export default function Create() {
                                     <div className="check-item">
                                         <CheckCircle2 size={17} />
                                         <span>
-                                            Document title provided
+                                            {t.checkTitleProvided}
                                         </span>
                                     </div>
 
                                     <div className="check-item">
                                         <CheckCircle2 size={17} />
                                         <span>
-                                            At least one PDF required
+                                            {t.checkOnePdfRequired}
                                         </span>
                                     </div>
 
                                     <div className="check-item">
                                         <CheckCircle2 size={17} />
                                         <span>
-                                            Language versions supported
+                                            {t.checkLanguagesSupported}
                                         </span>
                                     </div>
                                 </div>
@@ -460,12 +690,12 @@ export default function Create() {
                                     {processing ? (
                                         <>
                                             <span className="spinner" />
-                                            Uploading...
+                                            {t.uploading}
                                         </>
                                     ) : (
                                         <>
                                             <UploadCloud size={18} />
-                                            Upload Document
+                                            {t.uploadDocument}
                                         </>
                                     )}
                                 </button>
@@ -476,7 +706,7 @@ export default function Create() {
                                     )}
                                     className="cancel-button"
                                 >
-                                    Cancel
+                                    {t.cancel}
                                 </Link>
                             </div>
 
@@ -488,24 +718,23 @@ export default function Create() {
                                 </div>
 
                                 <div>
-                                    <h3>Upload guidelines</h3>
+                                    <h3>{t.guidelines}</h3>
 
                                     <ul>
                                         <li>
-                                            Files must be in PDF format.
+                                            {t.guidelinePdfFormat}
                                         </li>
 
                                         <li>
-                                            Upload at least one language
-                                            version.
+                                            {t.guidelineOneLanguage}
                                         </li>
 
                                         <li>
-                                            Use meaningful document titles.
+                                            {t.guidelineMeaningfulTitle}
                                         </li>
 
                                         <li>
-                                            You can add more languages later.
+                                            {t.guidelineAddLater}
                                         </li>
                                     </ul>
                                 </div>

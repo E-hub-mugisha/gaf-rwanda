@@ -12,9 +12,210 @@ import {
     Info,
     CheckCircle2,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getLanguage, LANGUAGE_EVENT } from '@/lib/language';
+
+/*
+|--------------------------------------------------------------------------
+| UI translations (admin chrome only)
+|--------------------------------------------------------------------------
+| Same four admin-panel UI languages as AdminLayout (rw/en/fr/nl). Unrelated
+| to the document content languages (en/es/rw) used elsewhere in the portal.
+*/
+
+const translations = {
+    rw: {
+        backLink: 'Subira ku Konti z’Abasoma',
+        pageTitle: 'Konti Nshya y’Umusomyi',
+        pageSubtitle:
+            'Kora konti kugira ngo umusomyi abashe kubona amasomo y’inyandiko.',
+        checkForm: 'Nyamuneka reba iyi fomu',
+        accountDetails: 'Ibisobanuro bya Konti',
+        enterInfo: 'Andika amakuru y’umusomyi hepfo.',
+        readerBadge: 'Usoma',
+        fullName: 'Amazina Yombi',
+        required: '*',
+        fullNamePlaceholder: 'Andika amazina yombi',
+        emailAddress: 'Aderesi ya Imeyili',
+        emailPlaceholder: 'reader@example.com',
+        password: 'Ijambobanga',
+        passwordPlaceholder: 'Kora ijambobanga',
+        showPassword: 'Erekana ijambobanga',
+        hidePassword: 'Hisha ijambobanga',
+        passwordHelp:
+            'Kora ijambobanga rikomeye uryohereze umusomyi ubwawe.',
+        passwordResponsibility: 'Inshingano y’ijambobanga',
+        passwordNotice:
+            'Iyi konti ntikoresha kwiyandikisha cyangwa imeyili yo guhindura ijambobanga. Menya neza ko umusomyi ahabwa amakuru ye yo kwinjira mu buryo bwizewe.',
+        cancel: 'Hagarika',
+        creating: 'Birimo gukorwa...',
+        createReaderAccount: 'Kora Konti y’Umusomyi',
+        accountPreview: 'Kureba Konti Mbere',
+        readerAccountLabel: 'Konti y’umusomyi',
+        readerNamePlaceholder: 'Izina ry’Umusomyi',
+        readerAccess: 'Uburenganzira bw’Usoma',
+        readerAccessSubtitle: 'Ibi konti ishobora gukora',
+        permLogin: 'Kwinjira kuri portal',
+        permBrowse: 'Kureba inyandiko ziboneka',
+        permVersions: 'Kureba verisiyo z’inyandiko',
+        permLanguages: 'Kubona indimi zishyigikiwe',
+        needHelpTitle: 'Ukeneye gucunga konti?',
+        needHelpBody:
+            'Urashobora guhindura cyangwa gukuraho konti z’abasoma nyuma uva ku ipaji ya Konti z’Abasoma.',
+        manageReaders: 'Cunga Abasoma →',
+    },
+
+    en: {
+        backLink: 'Back to Reader Accounts',
+        pageTitle: 'New Reader Account',
+        pageSubtitle:
+            'Create an account for a reader to access the document library.',
+        checkForm: 'Please check the form',
+        accountDetails: 'Account Details',
+        enterInfo: "Enter the reader's information below.",
+        readerBadge: 'Reader',
+        fullName: 'Full Name',
+        required: '*',
+        fullNamePlaceholder: 'Enter full name',
+        emailAddress: 'Email Address',
+        emailPlaceholder: 'reader@example.com',
+        password: 'Password',
+        passwordPlaceholder: 'Create a password',
+        showPassword: 'Show password',
+        hidePassword: 'Hide password',
+        passwordHelp:
+            'Create a secure password and share it with the reader directly.',
+        passwordResponsibility: 'Password responsibility',
+        passwordNotice:
+            'This account does not use self registration or password-reset emails. Make sure the reader receives their login credentials securely.',
+        cancel: 'Cancel',
+        creating: 'Creating...',
+        createReaderAccount: 'Create Reader Account',
+        accountPreview: 'Account Preview',
+        readerAccountLabel: 'Reader account',
+        readerNamePlaceholder: 'Reader Name',
+        readerAccess: 'Reader Access',
+        readerAccessSubtitle: 'What this account can do',
+        permLogin: 'Log in to the portal',
+        permBrowse: 'Browse available documents',
+        permVersions: 'View document versions',
+        permLanguages: 'Access supported languages',
+        needHelpTitle: 'Need to manage accounts?',
+        needHelpBody:
+            'You can edit or remove reader accounts later from the Reader Accounts page.',
+        manageReaders: 'Manage Readers →',
+    },
+
+    fr: {
+        backLink: 'Retour aux comptes lecteurs',
+        pageTitle: 'Nouveau compte lecteur',
+        pageSubtitle:
+            'Créez un compte pour permettre à un lecteur d’accéder à la bibliothèque de documents.',
+        checkForm: 'Veuillez vérifier le formulaire',
+        accountDetails: 'Détails du compte',
+        enterInfo: 'Saisissez les informations du lecteur ci-dessous.',
+        readerBadge: 'Lecteur',
+        fullName: 'Nom complet',
+        required: '*',
+        fullNamePlaceholder: 'Saisissez le nom complet',
+        emailAddress: 'Adresse e-mail',
+        emailPlaceholder: 'reader@example.com',
+        password: 'Mot de passe',
+        passwordPlaceholder: 'Créer un mot de passe',
+        showPassword: 'Afficher le mot de passe',
+        hidePassword: 'Masquer le mot de passe',
+        passwordHelp:
+            'Créez un mot de passe sécurisé et transmettez-le directement au lecteur.',
+        passwordResponsibility: 'Responsabilité du mot de passe',
+        passwordNotice:
+            'Ce compte n’utilise pas l’auto-inscription ni les e-mails de réinitialisation de mot de passe. Assurez-vous que le lecteur reçoive ses identifiants de manière sécurisée.',
+        cancel: 'Annuler',
+        creating: 'Création en cours...',
+        createReaderAccount: 'Créer un compte lecteur',
+        accountPreview: 'Aperçu du compte',
+        readerAccountLabel: 'Compte lecteur',
+        readerNamePlaceholder: 'Nom du lecteur',
+        readerAccess: 'Accès du lecteur',
+        readerAccessSubtitle: 'Ce que ce compte peut faire',
+        permLogin: 'Se connecter au portail',
+        permBrowse: 'Parcourir les documents disponibles',
+        permVersions: 'Consulter les versions des documents',
+        permLanguages: 'Accéder aux langues prises en charge',
+        needHelpTitle: 'Besoin de gérer des comptes ?',
+        needHelpBody:
+            'Vous pouvez modifier ou supprimer des comptes lecteurs plus tard depuis la page Comptes lecteurs.',
+        manageReaders: 'Gérer les lecteurs →',
+    },
+
+    nl: {
+        backLink: 'Terug naar lezersaccounts',
+        pageTitle: 'Nieuw lezersaccount',
+        pageSubtitle:
+            'Maak een account aan zodat een lezer toegang krijgt tot de documentenbibliotheek.',
+        checkForm: 'Controleer het formulier',
+        accountDetails: 'Accountgegevens',
+        enterInfo: 'Voer hieronder de gegevens van de lezer in.',
+        readerBadge: 'Lezer',
+        fullName: 'Volledige naam',
+        required: '*',
+        fullNamePlaceholder: 'Voer volledige naam in',
+        emailAddress: 'E-mailadres',
+        emailPlaceholder: 'reader@example.com',
+        password: 'Wachtwoord',
+        passwordPlaceholder: 'Maak een wachtwoord aan',
+        showPassword: 'Wachtwoord tonen',
+        hidePassword: 'Wachtwoord verbergen',
+        passwordHelp:
+            'Maak een veilig wachtwoord aan en deel dit rechtstreeks met de lezer.',
+        passwordResponsibility: 'Verantwoordelijkheid voor wachtwoord',
+        passwordNotice:
+            'Dit account gebruikt geen zelfregistratie of e-mails voor wachtwoordherstel. Zorg ervoor dat de lezer zijn inloggegevens veilig ontvangt.',
+        cancel: 'Annuleren',
+        creating: 'Bezig met aanmaken...',
+        createReaderAccount: 'Lezersaccount aanmaken',
+        accountPreview: 'Accountvoorbeeld',
+        readerAccountLabel: 'Lezersaccount',
+        readerNamePlaceholder: 'Naam lezer',
+        readerAccess: 'Lezerstoegang',
+        readerAccessSubtitle: 'Wat dit account kan doen',
+        permLogin: 'Inloggen op het portaal',
+        permBrowse: 'Beschikbare documenten bekijken',
+        permVersions: 'Documentversies bekijken',
+        permLanguages: 'Toegang tot ondersteunde talen',
+        needHelpTitle: 'Accounts beheren?',
+        needHelpBody:
+            'U kunt lezersaccounts later bewerken of verwijderen via de pagina Lezersaccounts.',
+        manageReaders: 'Lezers beheren →',
+    },
+};
 
 export default function Create() {
+    /*
+    |--------------------------------------------------------------------------
+    | Admin UI language
+    |--------------------------------------------------------------------------
+    | Same shared-state pattern as AdminLayout: read once on mount, then
+    | subscribe to LANGUAGE_EVENT so a change made anywhere (the layout's
+    | header switcher, the login page, etc.) is picked up here instantly,
+    | including across Inertia navigations within the same tab.
+    */
+
+    const [language, setLanguageState] = useState(getLanguage);
+
+    const t = translations[language] || translations.rw;
+
+    useEffect(() => {
+        const handleLanguageChange = (event) => {
+            setLanguageState(event.detail);
+        };
+
+        window.addEventListener(LANGUAGE_EVENT, handleLanguageChange);
+
+        return () => {
+            window.removeEventListener(LANGUAGE_EVENT, handleLanguageChange);
+        };
+    }, []);
+
     const {
         data,
         setData,
@@ -38,7 +239,7 @@ export default function Create() {
     const hasErrors = Object.keys(errors).length > 0;
 
     return (
-        <AdminLayout title="New Reader Account">
+        <AdminLayout title={t.pageTitle}>
 
             <div className="create-reader-page">
 
@@ -55,7 +256,7 @@ export default function Create() {
                             className="back-link"
                         >
                             <ArrowLeft size={16} />
-                            Back to Reader Accounts
+                            {t.backLink}
                         </Link>
 
                         <div className="page-heading">
@@ -68,12 +269,9 @@ export default function Create() {
                             </div>
 
                             <div>
-                                <h1>New Reader Account</h1>
+                                <h1>{t.pageTitle}</h1>
 
-                                <p>
-                                    Create an account for a reader to access
-                                    the document library.
-                                </p>
+                                <p>{t.pageSubtitle}</p>
                             </div>
 
                         </div>
@@ -94,9 +292,7 @@ export default function Create() {
                         </div>
 
                         <div>
-                            <strong>
-                                Please check the form
-                            </strong>
+                            <strong>{t.checkForm}</strong>
 
                             <ul>
                                 {Object.values(errors).map(
@@ -127,16 +323,14 @@ export default function Create() {
                         <div className="form-card-header">
 
                             <div>
-                                <h2>Account Details</h2>
+                                <h2>{t.accountDetails}</h2>
 
-                                <p>
-                                    Enter the reader's information below.
-                                </p>
+                                <p>{t.enterInfo}</p>
                             </div>
 
                             <div className="header-badge">
                                 <User size={14} />
-                                Reader
+                                {t.readerBadge}
                             </div>
 
                         </div>
@@ -150,8 +344,8 @@ export default function Create() {
                             <div className="form-group">
 
                                 <label htmlFor="name">
-                                    Full Name
-                                    <span>*</span>
+                                    {t.fullName}
+                                    <span>{t.required}</span>
                                 </label>
 
                                 <div
@@ -167,7 +361,9 @@ export default function Create() {
                                     <input
                                         type="text"
                                         id="name"
-                                        placeholder="Enter full name"
+                                        placeholder={
+                                            t.fullNamePlaceholder
+                                        }
                                         autoComplete="name"
                                         value={data.name}
                                         onChange={(e) =>
@@ -202,8 +398,8 @@ export default function Create() {
                             <div className="form-group">
 
                                 <label htmlFor="email">
-                                    Email Address
-                                    <span>*</span>
+                                    {t.emailAddress}
+                                    <span>{t.required}</span>
                                 </label>
 
                                 <div
@@ -219,7 +415,9 @@ export default function Create() {
                                     <input
                                         type="email"
                                         id="email"
-                                        placeholder="reader@example.com"
+                                        placeholder={
+                                            t.emailPlaceholder
+                                        }
                                         autoComplete="email"
                                         value={data.email}
                                         onChange={(e) =>
@@ -254,8 +452,8 @@ export default function Create() {
                             <div className="form-group">
 
                                 <label htmlFor="password">
-                                    Password
-                                    <span>*</span>
+                                    {t.password}
+                                    <span>{t.required}</span>
                                 </label>
 
                                 <div
@@ -278,7 +476,9 @@ export default function Create() {
                                                 : 'password'
                                         }
                                         id="password"
-                                        placeholder="Create a password"
+                                        placeholder={
+                                            t.passwordPlaceholder
+                                        }
                                         autoComplete="new-password"
                                         value={data.password}
                                         onChange={(e) =>
@@ -299,8 +499,8 @@ export default function Create() {
                                         }
                                         aria-label={
                                             showPassword
-                                                ? 'Hide password'
-                                                : 'Show password'
+                                                ? t.hidePassword
+                                                : t.showPassword
                                         }
                                     >
                                         {showPassword ? (
@@ -318,8 +518,7 @@ export default function Create() {
                                     </p>
                                 ) : (
                                     <p className="field-help">
-                                        Create a secure password and share it
-                                        with the reader directly.
+                                        {t.passwordHelp}
                                     </p>
                                 )}
 
@@ -336,14 +535,11 @@ export default function Create() {
                                 </div>
 
                                 <div>
-                                    <strong>Password responsibility</strong>
+                                    <strong>
+                                        {t.passwordResponsibility}
+                                    </strong>
 
-                                    <p>
-                                        This account does not use self
-                                        registration or password-reset
-                                        emails. Make sure the reader receives
-                                        their login credentials securely.
-                                    </p>
+                                    <p>{t.passwordNotice}</p>
                                 </div>
 
                             </div>
@@ -360,7 +556,7 @@ export default function Create() {
                                     )}
                                     className="cancel-btn"
                                 >
-                                    Cancel
+                                    {t.cancel}
                                 </Link>
 
                                 <button
@@ -371,12 +567,12 @@ export default function Create() {
                                     {processing ? (
                                         <>
                                             <span className="spinner" />
-                                            Creating...
+                                            {t.creating}
                                         </>
                                     ) : (
                                         <>
                                             <UserPlus size={17} />
-                                            Create Reader Account
+                                            {t.createReaderAccount}
                                         </>
                                     )}
                                 </button>
@@ -404,10 +600,8 @@ export default function Create() {
                                 </div>
 
                                 <div>
-                                    <h3>Account Preview</h3>
-                                    <p>
-                                        Reader account
-                                    </p>
+                                    <h3>{t.accountPreview}</h3>
+                                    <p>{t.readerAccountLabel}</p>
                                 </div>
 
                             </div>
@@ -432,7 +626,7 @@ export default function Create() {
 
                                     <strong>
                                         {data.name ||
-                                            'Reader Name'}
+                                            t.readerNamePlaceholder}
                                     </strong>
 
                                     <span>
@@ -448,9 +642,7 @@ export default function Create() {
 
                                 <span className="status-dot" />
 
-                                <span>
-                                    Reader access
-                                </span>
+                                <span>{t.readerAccess}</span>
 
                             </div>
 
@@ -467,10 +659,8 @@ export default function Create() {
                                 </div>
 
                                 <div>
-                                    <h3>Reader Access</h3>
-                                    <p>
-                                        What this account can do
-                                    </p>
+                                    <h3>{t.readerAccess}</h3>
+                                    <p>{t.readerAccessSubtitle}</p>
                                 </div>
 
                             </div>
@@ -479,30 +669,22 @@ export default function Create() {
 
                                 <div className="permission-item">
                                     <CheckCircle2 size={15} />
-                                    <span>
-                                        Log in to the portal
-                                    </span>
+                                    <span>{t.permLogin}</span>
                                 </div>
 
                                 <div className="permission-item">
                                     <CheckCircle2 size={15} />
-                                    <span>
-                                        Browse available documents
-                                    </span>
+                                    <span>{t.permBrowse}</span>
                                 </div>
 
                                 <div className="permission-item">
                                     <CheckCircle2 size={15} />
-                                    <span>
-                                        View document versions
-                                    </span>
+                                    <span>{t.permVersions}</span>
                                 </div>
 
                                 <div className="permission-item">
                                     <CheckCircle2 size={15} />
-                                    <span>
-                                        Access supported languages
-                                    </span>
+                                    <span>{t.permLanguages}</span>
                                 </div>
 
                             </div>
@@ -518,21 +700,16 @@ export default function Create() {
                             </div>
 
                             <div>
-                                <strong>
-                                    Need to manage accounts?
-                                </strong>
+                                <strong>{t.needHelpTitle}</strong>
 
-                                <p>
-                                    You can edit or remove reader accounts
-                                    later from the Reader Accounts page.
-                                </p>
+                                <p>{t.needHelpBody}</p>
 
                                 <Link
                                     href={route(
                                         'admin.users.index'
                                     )}
                                 >
-                                    Manage Readers →
+                                    {t.manageReaders}
                                 </Link>
                             </div>
 

@@ -2,21 +2,347 @@ import { useEffect, useRef, useState } from "react";
 import { Head, Link } from "@inertiajs/react";
 
 import AdminLayout from "@/Layouts/AdminLayout";
+import { getLanguage, LANGUAGE_EVENT } from "@/lib/language";
+
+const translations = {
+    rw: {
+        dashboard: "Imbonerahamwe",
+        organizationOverview: "INCAMAKE Y’UMURYANGO",
+        dashboardDescription:
+            "Kurikirana urubuga rw’inyandiko, ibikoresho, abasoma n’ibikorwa by’umuryango ahantu hamwe.",
+        askAnalytics: "Baza Analytics",
+        uploadDocument: "Shyiraho Inyandiko",
+
+        resources: "IBIKORESHO",
+        readers: "ABASOMA",
+        administration: "UBUYOBOZI",
+
+        totalDocuments: "Inyandiko zose ziboneka ku rubuga",
+        registeredReaders: "Konti z’abasoma zanditswe",
+        activeAdministrators: "Konti z’abayobozi zikora",
+
+        manageDocuments: "Gucunga inyandiko",
+        manageReaders: "Gucunga abasoma",
+        viewAccounts: "Reba konti",
+
+        portalIntelligence: "UBWENGE BW’URUBUGA",
+        analyticsTitle: "Baza ibibazo ku muryango wawe",
+        analyticsDescription:
+            "Koresha umufasha wa analytics kugira ngo usesengure inyandiko, konti z’abasoma, indimi n’ibikorwa by’urubuga.",
+        startAnalysis: "Tangira isesengura",
+
+        shortcuts: "SHORTCUTS",
+        quickAccess: "Kwinjira vuba",
+
+        addDocument: "Ongeramo Inyandiko",
+        addDocumentDescription: "Shyiraho ibikoresho bishya",
+
+        manageDocumentsTitle: "Gucunga Inyandiko",
+        manageDocumentsDescription: "Reba ibikoresho biri ku rubuga",
+
+        readerAccounts: "Konti z’Abasoma",
+        readerAccountsDescription: "Gucunga abasoma biyandikishije",
+
+        activityLog: "Amateka y’Ibikorwa",
+        activityLogDescription: "Reba ibikorwa byabereye ku rubuga",
+
+        latestResources: "IBIKORESHO BISHYA",
+        recentDocuments: "Inyandiko ziheruka",
+        viewAll: "Reba byose",
+
+        noDocuments: "Nta nyandiko zirashyirwaho",
+        noDocumentsDescription:
+            "Shyiraho igikoresho cya mbere kugira ngo utangire kubaka ububiko bw’inyandiko.",
+        noLanguageVersions: "Nta verisiyo y’ururimi ihari",
+
+        analyticsAssistant: "Umufasha wa Analytics",
+        portalIntelligenceShort: "Ubwenge bw’urubuga",
+        howCanIHelp: "Nakugirira iki?",
+        askPortalQuestions:
+            "Mbaza ibibazo ku rubuga rw’inyandiko n’umuryango wawe.",
+        tryAsking: "Gerageza kubaza",
+        askPlaceholder: "Baza ku rubuga rwawe...",
+
+        greeting:
+            "Muraho! Ndi umufasha wanyu wa portal analytics. Nshobora kubafasha gusobanukirwa inyandiko, abasoma, indimi n’ibikorwa by’urubuga.",
+
+        quickOverview: "Mpa incamake y’urubuga",
+        quickDocuments: "Sesengura inyandiko zacu",
+        quickReaders: "Sesengura konti z’abasoma",
+        quickLanguages: "Ni izihe ndimi zifite ibikoresho byinshi?",
+
+        analyticsError: "Isesengura ntiryashobotse. Ongera ugerageze.",
+    },
+
+    en: {
+        dashboard: "Dashboard",
+        organizationOverview: "ORGANIZATION OVERVIEW",
+        dashboardDescription:
+            "Monitor your document portal, resources, readers and organizational activity from one place.",
+        askAnalytics: "Ask Analytics",
+        uploadDocument: "Upload Document",
+
+        resources: "RESOURCES",
+        readers: "READERS",
+        administration: "ADMINISTRATION",
+
+        totalDocuments: "Total documents available in the portal",
+        registeredReaders: "Registered reader accounts",
+        activeAdministrators: "Active administrator accounts",
+
+        manageDocuments: "Manage documents",
+        manageReaders: "Manage readers",
+        viewAccounts: "View accounts",
+
+        portalIntelligence: "PORTAL INTELLIGENCE",
+        analyticsTitle: "Ask questions about your organization",
+        analyticsDescription:
+            "Use the analytics assistant to explore your documents, reader accounts, languages and portal activity.",
+        startAnalysis: "Start analysis",
+
+        shortcuts: "SHORTCUTS",
+        quickAccess: "Quick Access",
+
+        addDocument: "Add Document",
+        addDocumentDescription: "Upload a new resource",
+
+        manageDocumentsTitle: "Manage Documents",
+        manageDocumentsDescription: "Browse portal resources",
+
+        readerAccounts: "Reader Accounts",
+        readerAccountsDescription: "Manage registered readers",
+
+        activityLog: "Activity Log",
+        activityLogDescription: "Review portal activity",
+
+        latestResources: "LATEST RESOURCES",
+        recentDocuments: "Recent Documents",
+        viewAll: "View all",
+
+        noDocuments: "No documents uploaded yet",
+        noDocumentsDescription:
+            "Upload your first resource to start building the document library.",
+        noLanguageVersions: "No language versions",
+
+        analyticsAssistant: "Analytics Assistant",
+        portalIntelligenceShort: "Portal intelligence",
+        howCanIHelp: "How can I help?",
+        askPortalQuestions:
+            "Ask me questions about your document portal and organization.",
+        tryAsking: "Try asking",
+        askPlaceholder: "Ask about your portal...",
+
+        greeting:
+            "Hello! I’m your portal analytics assistant. I can help you understand documents, readers, languages, and portal activity.",
+
+        quickOverview: "Give me a portal overview",
+        quickDocuments: "Analyze our documents",
+        quickReaders: "Analyze our reader accounts",
+        quickLanguages: "Which languages have the most resources?",
+
+        analyticsError: "Analytics request failed. Please try again.",
+    },
+
+    fr: {
+        dashboard: "Tableau de bord",
+        organizationOverview: "APERÇU DE L’ORGANISATION",
+        dashboardDescription:
+            "Surveillez votre portail documentaire, vos ressources, vos lecteurs et les activités de l’organisation depuis un seul endroit.",
+        askAnalytics: "Demander une analyse",
+        uploadDocument: "Télécharger un document",
+
+        resources: "RESSOURCES",
+        readers: "LECTEURS",
+        administration: "ADMINISTRATION",
+
+        totalDocuments: "Nombre total de documents disponibles",
+        registeredReaders: "Comptes lecteurs enregistrés",
+        activeAdministrators: "Comptes administrateurs actifs",
+
+        manageDocuments: "Gérer les documents",
+        manageReaders: "Gérer les lecteurs",
+        viewAccounts: "Voir les comptes",
+
+        portalIntelligence: "INTELLIGENCE DU PORTAIL",
+        analyticsTitle: "Posez des questions sur votre organisation",
+        analyticsDescription:
+            "Utilisez l’assistant analytique pour explorer vos documents, comptes lecteurs, langues et activités du portail.",
+        startAnalysis: "Commencer l’analyse",
+
+        shortcuts: "RACCOURCIS",
+        quickAccess: "Accès rapide",
+
+        addDocument: "Ajouter un document",
+        addDocumentDescription: "Télécharger une nouvelle ressource",
+
+        manageDocumentsTitle: "Gérer les documents",
+        manageDocumentsDescription: "Parcourir les ressources du portail",
+
+        readerAccounts: "Comptes lecteurs",
+        readerAccountsDescription: "Gérer les lecteurs enregistrés",
+
+        activityLog: "Journal d’activité",
+        activityLogDescription: "Consulter les activités du portail",
+
+        latestResources: "DERNIÈRES RESSOURCES",
+        recentDocuments: "Documents récents",
+        viewAll: "Voir tout",
+
+        noDocuments: "Aucun document téléchargé",
+        noDocumentsDescription:
+            "Téléchargez votre première ressource pour commencer à créer la bibliothèque documentaire.",
+        noLanguageVersions: "Aucune version linguistique",
+
+        analyticsAssistant: "Assistant analytique",
+        portalIntelligenceShort: "Intelligence du portail",
+        howCanIHelp: "Comment puis-je vous aider ?",
+        askPortalQuestions:
+            "Posez-moi des questions sur votre portail documentaire et votre organisation.",
+        tryAsking: "Essayez de demander",
+        askPlaceholder: "Posez une question sur votre portail...",
+
+        greeting:
+            "Bonjour ! Je suis votre assistant analytique du portail. Je peux vous aider à comprendre les documents, les lecteurs, les langues et les activités du portail.",
+
+        quickOverview: "Donnez-moi un aperçu du portail",
+        quickDocuments: "Analysez nos documents",
+        quickReaders: "Analysez nos comptes lecteurs",
+        quickLanguages: "Quelles langues ont le plus de ressources ?",
+
+        analyticsError: "La demande d’analyse a échoué. Veuillez réessayer.",
+    },
+
+    nl: {
+        dashboard: "Dashboard",
+        organizationOverview: "ORGANISATIEOVERZICHT",
+        dashboardDescription:
+            "Monitor uw documentenportaal, bronnen, lezers en organisatieactiviteiten vanuit één plek.",
+        askAnalytics: "Analytics vragen",
+        uploadDocument: "Document uploaden",
+
+        resources: "BRONNEN",
+        readers: "LEZERS",
+        administration: "BEHEER",
+
+        totalDocuments: "Totaal aantal beschikbare documenten",
+        registeredReaders: "Geregistreerde lezersaccounts",
+        activeAdministrators: "Actieve beheerdersaccounts",
+
+        manageDocuments: "Documenten beheren",
+        manageReaders: "Lezers beheren",
+        viewAccounts: "Accounts bekijken",
+
+        portalIntelligence: "PORTALINTELLIGENTIE",
+        analyticsTitle: "Stel vragen over uw organisatie",
+        analyticsDescription:
+            "Gebruik de analytics-assistent om documenten, lezersaccounts, talen en portalactiviteiten te onderzoeken.",
+        startAnalysis: "Analyse starten",
+
+        shortcuts: "SNELKOPPELINGEN",
+        quickAccess: "Snelle toegang",
+
+        addDocument: "Document toevoegen",
+        addDocumentDescription: "Een nieuwe bron uploaden",
+
+        manageDocumentsTitle: "Documenten beheren",
+        manageDocumentsDescription: "Portalbronnen bekijken",
+
+        readerAccounts: "Lezersaccounts",
+        readerAccountsDescription: "Geregistreerde lezers beheren",
+
+        activityLog: "Activiteitenlogboek",
+        activityLogDescription: "Portalactiviteiten bekijken",
+
+        latestResources: "LAATSTE BRONNEN",
+        recentDocuments: "Recente documenten",
+        viewAll: "Alles bekijken",
+
+        noDocuments: "Nog geen documenten geüpload",
+        noDocumentsDescription:
+            "Upload uw eerste bron om de documentbibliotheek op te bouwen.",
+        noLanguageVersions: "Geen taalversies",
+
+        analyticsAssistant: "Analytics-assistent",
+        portalIntelligenceShort: "Portalintelligentie",
+        howCanIHelp: "Hoe kan ik helpen?",
+        askPortalQuestions:
+            "Stel vragen over uw documentenportaal en organisatie.",
+        tryAsking: "Probeer te vragen",
+        askPlaceholder: "Vraag iets over uw portal...",
+
+        greeting:
+            "Hallo! Ik ben uw portal analytics-assistent. Ik kan u helpen met documenten, lezers, talen en portalactiviteiten.",
+
+        quickOverview: "Geef me een portaloverzicht",
+        quickDocuments: "Analyseer onze documenten",
+        quickReaders: "Analyseer onze lezersaccounts",
+        quickLanguages: "Welke talen hebben de meeste bronnen?",
+
+        analyticsError: "Analytics-aanvraag mislukt. Probeer het opnieuw.",
+    },
+};
 
 export default function Dashboard({ stats, recentDocuments }) {
+    /*
+    |--------------------------------------------------------------------------
+    | Language
+    |--------------------------------------------------------------------------
+    | Reads the shared language on mount and subscribes to the
+    | "gaf-language-change" window event (see resources/js/lib/language.js)
+    | so that switching languages from AdminLayout's header dropdown --
+    | or from anywhere else -- updates this page immediately too, instead
+    | of only taking effect after a full reload.
+    */
+
+    const [language, setLanguage] = useState(getLanguage);
+
     const [chatOpen, setChatOpen] = useState(false);
     const [question, setQuestion] = useState("");
     const [processing, setProcessing] = useState(false);
+    const [analyticsError, setAnalyticsError] = useState(null);
 
     const [messages, setMessages] = useState([
         {
             role: "assistant",
-            message:
-                "Hello! I’m your portal analytics assistant. I can help you understand documents, readers, languages, and portal activity.",
+            message: translations[getLanguage()].greeting,
         },
     ]);
 
     const messagesEndRef = useRef(null);
+
+    const t = translations[language] || translations.en;
+
+    useEffect(() => {
+        const handleLanguageChange = (event) => {
+            setLanguage(event.detail);
+        };
+
+        window.addEventListener(LANGUAGE_EVENT, handleLanguageChange);
+
+        return () => {
+            window.removeEventListener(LANGUAGE_EVENT, handleLanguageChange);
+        };
+    }, []);
+
+    useEffect(() => {
+        document.documentElement.lang = language;
+
+        setMessages((currentMessages) => {
+            if (
+                currentMessages.length === 1 &&
+                currentMessages[0].role === "assistant"
+            ) {
+                return [
+                    {
+                        role: "assistant",
+                        message: t.greeting,
+                    },
+                ];
+            }
+
+            return currentMessages;
+        });
+    }, [language]);
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({
@@ -28,11 +354,23 @@ export default function Dashboard({ stats, recentDocuments }) {
         return new Intl.NumberFormat().format(value ?? 0);
     };
 
-    const askAnalytics = async () => {
-        if (!analyticsQuestion.trim()) return;
+    const askAnalytics = async (questionToAsk = question) => {
+        const cleanQuestion = questionToAsk.trim();
 
-        setAnalyticsLoading(true);
+        if (!cleanQuestion || processing) {
+            return;
+        }
+
+        setProcessing(true);
         setAnalyticsError(null);
+
+        setMessages((currentMessages) => [
+            ...currentMessages,
+            {
+                role: "user",
+                message: cleanQuestion,
+            },
+        ]);
 
         try {
             const response = await fetch(route("admin.analytics.chat"), {
@@ -46,7 +384,7 @@ export default function Dashboard({ stats, recentDocuments }) {
                 },
                 credentials: "same-origin",
                 body: JSON.stringify({
-                    question: analyticsQuestion,
+                    question: cleanQuestion,
                 }),
             });
 
@@ -66,24 +404,31 @@ export default function Dashboard({ stats, recentDocuments }) {
 
             const data = await response.json();
 
-            setAnalyticsMessages((messages) => [
-                ...messages,
-                {
-                    role: "user",
-                    content: analyticsQuestion,
-                },
+            setMessages((currentMessages) => [
+                ...currentMessages,
                 {
                     role: "assistant",
-                    content: data.answer,
+                    message:
+                        data.answer ||
+                        "I was unable to generate an answer.",
                 },
             ]);
 
-            setAnalyticsQuestion("");
+            setQuestion("");
         } catch (error) {
             console.error("Analytics request failed:", error);
+
             setAnalyticsError(error.message);
+
+            setMessages((currentMessages) => [
+                ...currentMessages,
+                {
+                    role: "assistant",
+                    message: t.analyticsError,
+                },
+            ]);
         } finally {
-            setAnalyticsLoading(false);
+            setProcessing(false);
         }
     };
 
@@ -93,31 +438,31 @@ export default function Dashboard({ stats, recentDocuments }) {
     };
 
     const quickQuestions = [
-        "Give me a portal overview",
-        "Analyze our documents",
-        "Analyze our reader accounts",
-        "Which languages have the most resources?",
+        t.quickOverview,
+        t.quickDocuments,
+        t.quickReaders,
+        t.quickLanguages,
     ];
 
     return (
         <>
-            <Head title="Dashboard" />
+            <Head title={t.dashboard} />
 
-            <AdminLayout title="Dashboard">
+            <AdminLayout title={t.dashboard}>
                 <div className="ngo-dashboard">
                     {/* =====================================================
                         PAGE HEADER
                     ====================================================== */}
+
                     <section className="dashboard-header">
                         <div>
-                            <div className="eyebrow">ORGANIZATION OVERVIEW</div>
+                            <div className="eyebrow">
+                                {t.organizationOverview}
+                            </div>
 
-                            <h1>Dashboard</h1>
+                            <h1>{t.dashboard}</h1>
 
-                            <p>
-                                Monitor your document portal, resources, readers
-                                and organizational activity from one place.
-                            </p>
+                            <p>{t.dashboardDescription}</p>
                         </div>
 
                         <div className="header-actions">
@@ -127,7 +472,8 @@ export default function Dashboard({ stats, recentDocuments }) {
                                 onClick={() => setChatOpen(true)}
                             >
                                 <span className="button-icon">✦</span>
-                                Ask Analytics
+
+                                {t.askAnalytics}
                             </button>
 
                             <Link
@@ -135,7 +481,8 @@ export default function Dashboard({ stats, recentDocuments }) {
                                 className="upload-button"
                             >
                                 <span>＋</span>
-                                Upload Document
+
+                                {t.uploadDocument}
                             </Link>
                         </div>
                     </section>
@@ -143,6 +490,7 @@ export default function Dashboard({ stats, recentDocuments }) {
                     {/* =====================================================
                         KPI CARDS
                     ====================================================== */}
+
                     <section className="stats-grid">
                         <div className="stat-card">
                             <div className="stat-top">
@@ -155,12 +503,24 @@ export default function Dashboard({ stats, recentDocuments }) {
                                     >
                                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                                         <polyline points="14 2 14 8 20 8" />
-                                        <line x1="8" y1="13" x2="16" y2="13" />
-                                        <line x1="8" y1="17" x2="16" y2="17" />
+                                        <line
+                                            x1="8"
+                                            y1="13"
+                                            x2="16"
+                                            y2="13"
+                                        />
+                                        <line
+                                            x1="8"
+                                            y1="17"
+                                            x2="16"
+                                            y2="17"
+                                        />
                                     </svg>
                                 </div>
 
-                                <span className="stat-label">RESOURCES</span>
+                                <span className="stat-label">
+                                    {t.resources}
+                                </span>
                             </div>
 
                             <div className="stat-value">
@@ -168,14 +528,15 @@ export default function Dashboard({ stats, recentDocuments }) {
                             </div>
 
                             <div className="stat-description">
-                                Total documents available in the portal
+                                {t.totalDocuments}
                             </div>
 
                             <Link
                                 href={route("admin.documents.index")}
                                 className="stat-link"
                             >
-                                Manage documents
+                                {t.manageDocuments}
+
                                 <span>→</span>
                             </Link>
                         </div>
@@ -196,7 +557,9 @@ export default function Dashboard({ stats, recentDocuments }) {
                                     </svg>
                                 </div>
 
-                                <span className="stat-label">READERS</span>
+                                <span className="stat-label">
+                                    {t.readers}
+                                </span>
                             </div>
 
                             <div className="stat-value">
@@ -204,14 +567,15 @@ export default function Dashboard({ stats, recentDocuments }) {
                             </div>
 
                             <div className="stat-description">
-                                Registered reader accounts
+                                {t.registeredReaders}
                             </div>
 
                             <Link
                                 href={route("admin.users.index")}
                                 className="stat-link"
                             >
-                                Manage readers
+                                {t.manageReaders}
+
                                 <span>→</span>
                             </Link>
                         </div>
@@ -230,7 +594,7 @@ export default function Dashboard({ stats, recentDocuments }) {
                                 </div>
 
                                 <span className="stat-label">
-                                    ADMINISTRATION
+                                    {t.administration}
                                 </span>
                             </div>
 
@@ -239,14 +603,15 @@ export default function Dashboard({ stats, recentDocuments }) {
                             </div>
 
                             <div className="stat-description">
-                                Active administrator accounts
+                                {t.activeAdministrators}
                             </div>
 
                             <Link
                                 href={route("admin.users.index")}
                                 className="stat-link"
                             >
-                                View accounts
+                                {t.viewAccounts}
+
                                 <span>→</span>
                             </Link>
                         </div>
@@ -255,19 +620,16 @@ export default function Dashboard({ stats, recentDocuments }) {
                     {/* =====================================================
                         ANALYTICS BANNER
                     ====================================================== */}
+
                     <section className="analytics-banner">
                         <div className="analytics-banner-icon">✦</div>
 
                         <div className="analytics-banner-content">
-                            <span>PORTAL INTELLIGENCE</span>
+                            <span>{t.portalIntelligence}</span>
 
-                            <h2>Ask questions about your organization</h2>
+                            <h2>{t.analyticsTitle}</h2>
 
-                            <p>
-                                Use the analytics assistant to explore your
-                                documents, reader accounts, languages and portal
-                                activity.
-                            </p>
+                            <p>{t.analyticsDescription}</p>
                         </div>
 
                         <button
@@ -275,7 +637,8 @@ export default function Dashboard({ stats, recentDocuments }) {
                             onClick={() => setChatOpen(true)}
                             className="analytics-banner-button"
                         >
-                            Start analysis
+                            {t.startAnalysis}
+
                             <span>→</span>
                         </button>
                     </section>
@@ -283,16 +646,18 @@ export default function Dashboard({ stats, recentDocuments }) {
                     {/* =====================================================
                         MAIN CONTENT
                     ====================================================== */}
+
                     <div className="dashboard-columns">
                         {/* QUICK ACCESS */}
+
                         <section className="content-card quick-access-card">
                             <div className="card-heading">
                                 <div>
                                     <span className="card-eyebrow">
-                                        SHORTCUTS
+                                        {t.shortcuts}
                                     </span>
 
-                                    <h2>Quick Access</h2>
+                                    <h2>{t.quickAccess}</h2>
                                 </div>
                             </div>
 
@@ -304,9 +669,11 @@ export default function Dashboard({ stats, recentDocuments }) {
                                     <div className="quick-icon">＋</div>
 
                                     <div>
-                                        <strong>Add Document</strong>
+                                        <strong>{t.addDocument}</strong>
 
-                                        <span>Upload a new resource</span>
+                                        <span>
+                                            {t.addDocumentDescription}
+                                        </span>
                                     </div>
 
                                     <span className="quick-arrow">→</span>
@@ -319,9 +686,13 @@ export default function Dashboard({ stats, recentDocuments }) {
                                     <div className="quick-icon">▤</div>
 
                                     <div>
-                                        <strong>Manage Documents</strong>
+                                        <strong>
+                                            {t.manageDocumentsTitle}
+                                        </strong>
 
-                                        <span>Browse portal resources</span>
+                                        <span>
+                                            {t.manageDocumentsDescription}
+                                        </span>
                                     </div>
 
                                     <span className="quick-arrow">→</span>
@@ -334,9 +705,11 @@ export default function Dashboard({ stats, recentDocuments }) {
                                     <div className="quick-icon">♙</div>
 
                                     <div>
-                                        <strong>Reader Accounts</strong>
+                                        <strong>{t.readerAccounts}</strong>
 
-                                        <span>Manage registered readers</span>
+                                        <span>
+                                            {t.readerAccountsDescription}
+                                        </span>
                                     </div>
 
                                     <span className="quick-arrow">→</span>
@@ -349,9 +722,9 @@ export default function Dashboard({ stats, recentDocuments }) {
                                     <div className="quick-icon">◷</div>
 
                                     <div>
-                                        <strong>Activity Log</strong>
+                                        <strong>{t.activityLog}</strong>
 
-                                        <span>Review portal activity</span>
+                                        <span>{t.activityLogDescription}</span>
                                     </div>
 
                                     <span className="quick-arrow">→</span>
@@ -360,21 +733,23 @@ export default function Dashboard({ stats, recentDocuments }) {
                         </section>
 
                         {/* RECENT DOCUMENTS */}
+
                         <section className="content-card recent-card">
                             <div className="card-heading">
                                 <div>
                                     <span className="card-eyebrow">
-                                        LATEST RESOURCES
+                                        {t.latestResources}
                                     </span>
 
-                                    <h2>Recent Documents</h2>
+                                    <h2>{t.recentDocuments}</h2>
                                 </div>
 
                                 <Link
                                     href={route("admin.documents.index")}
                                     className="view-all"
                                 >
-                                    View all
+                                    {t.viewAll}
+
                                     <span>→</span>
                                 </Link>
                             </div>
@@ -383,18 +758,17 @@ export default function Dashboard({ stats, recentDocuments }) {
                                 <div className="empty-state">
                                     <div className="empty-icon">▤</div>
 
-                                    <h3>No documents uploaded yet</h3>
+                                    <h3>{t.noDocuments}</h3>
 
-                                    <p>
-                                        Upload your first resource to start
-                                        building the document library.
-                                    </p>
+                                    <p>{t.noDocumentsDescription}</p>
 
                                     <Link
-                                        href={route("admin.documents.create")}
+                                        href={route(
+                                            "admin.documents.create",
+                                        )}
                                         className="empty-button"
                                     >
-                                        Upload Document
+                                        {t.uploadDocument}
                                     </Link>
                                 </div>
                             ) : (
@@ -442,7 +816,9 @@ export default function Dashboard({ stats, recentDocuments }) {
                                                         )
                                                     ) : (
                                                         <span>
-                                                            No language versions
+                                                            {
+                                                                t.noLanguageVersions
+                                                            }
                                                         </span>
                                                     )}
                                                 </div>
@@ -465,6 +841,7 @@ export default function Dashboard({ stats, recentDocuments }) {
                     {/* =====================================================
                         ANALYTICS CHAT
                     ====================================================== */}
+
                     {chatOpen && (
                         <>
                             <div
@@ -478,9 +855,13 @@ export default function Dashboard({ stats, recentDocuments }) {
                                         <div className="chat-avatar">✦</div>
 
                                         <div>
-                                            <strong>Analytics Assistant</strong>
+                                            <strong>
+                                                {t.analyticsAssistant}
+                                            </strong>
 
-                                            <span>Portal intelligence</span>
+                                            <span>
+                                                {t.portalIntelligenceShort}
+                                            </span>
                                         </div>
                                     </div>
 
@@ -488,6 +869,7 @@ export default function Dashboard({ stats, recentDocuments }) {
                                         type="button"
                                         className="chat-close"
                                         onClick={() => setChatOpen(false)}
+                                        aria-label="Close"
                                     >
                                         ×
                                     </button>
@@ -499,13 +881,16 @@ export default function Dashboard({ stats, recentDocuments }) {
                                             ✦
                                         </div>
 
-                                        <h3>How can I help?</h3>
+                                        <h3>{t.howCanIHelp}</h3>
 
-                                        <p>
-                                            Ask me questions about your document
-                                            portal and organization.
-                                        </p>
+                                        <p>{t.askPortalQuestions}</p>
                                     </div>
+
+                                    {analyticsError && (
+                                        <div className="analytics-error">
+                                            {t.analyticsError}
+                                        </div>
+                                    )}
 
                                     <div className="chat-messages">
                                         {messages.map((message, index) => (
@@ -548,7 +933,7 @@ export default function Dashboard({ stats, recentDocuments }) {
                                     </div>
 
                                     <div className="suggestions">
-                                        <span>Try asking</span>
+                                        <span>{t.tryAsking}</span>
 
                                         {quickQuestions.map((item) => (
                                             <button
@@ -575,7 +960,7 @@ export default function Dashboard({ stats, recentDocuments }) {
                                         onChange={(e) =>
                                             setQuestion(e.target.value)
                                         }
-                                        placeholder="Ask about your portal..."
+                                        placeholder={t.askPlaceholder}
                                         disabled={processing}
                                     />
 
@@ -584,6 +969,7 @@ export default function Dashboard({ stats, recentDocuments }) {
                                         disabled={
                                             processing || !question.trim()
                                         }
+                                        aria-label="Send"
                                     >
                                         ↑
                                     </button>
@@ -596,6 +982,7 @@ export default function Dashboard({ stats, recentDocuments }) {
                 {/* =========================================================
                     PAGE STYLES
                 ========================================================== */}
+
                 <style>{`
                     .ngo-dashboard {
                         --ngo-blue: #5D89C8;
@@ -612,10 +999,6 @@ export default function Dashboard({ stats, recentDocuments }) {
                         min-height: 100%;
                         color: var(--ngo-ink);
                     }
-
-                    /* ===============================
-                       HEADER
-                    =============================== */
 
                     .dashboard-header {
                         display: flex;
@@ -701,10 +1084,6 @@ export default function Dashboard({ stats, recentDocuments }) {
                     .button-icon {
                         font-size: 1rem;
                     }
-
-                    /* ===============================
-                       STATISTICS
-                    =============================== */
 
                     .stats-grid {
                         display: grid;
@@ -803,10 +1182,6 @@ export default function Dashboard({ stats, recentDocuments }) {
                         color: var(--ngo-blue);
                     }
 
-                    /* ===============================
-                       ANALYTICS BANNER
-                    =============================== */
-
                     .analytics-banner {
                         position: relative;
                         overflow: hidden;
@@ -891,10 +1266,6 @@ export default function Dashboard({ stats, recentDocuments }) {
                         color: var(--ngo-blue);
                     }
 
-                    /* ===============================
-                       CONTENT CARDS
-                    =============================== */
-
                     .dashboard-columns {
                         display: grid;
                         grid-template-columns: 330px minmax(0, 1fr);
@@ -937,10 +1308,6 @@ export default function Dashboard({ stats, recentDocuments }) {
                     .view-all:hover {
                         color: var(--ngo-blue);
                     }
-
-                    /* ===============================
-                       QUICK ACCESS
-                    =============================== */
 
                     .quick-actions {
                         padding: .5rem;
@@ -992,10 +1359,6 @@ export default function Dashboard({ stats, recentDocuments }) {
                         color: #AAB3BD !important;
                         font-size: .9rem !important;
                     }
-
-                    /* ===============================
-                       DOCUMENTS
-                    =============================== */
 
                     .documents-list {
                         padding: .4rem 0;
@@ -1080,10 +1443,6 @@ export default function Dashboard({ stats, recentDocuments }) {
                         font-size: .9rem;
                     }
 
-                    /* ===============================
-                       EMPTY STATE
-                    =============================== */
-
                     .empty-state {
                         text-align: center;
                         padding: 3rem 1.5rem;
@@ -1127,7 +1486,7 @@ export default function Dashboard({ stats, recentDocuments }) {
                     }
 
                     /* ===============================
-                       CHAT OVERLAY
+                       CHAT
                     =============================== */
 
                     .chat-overlay {
@@ -1245,6 +1604,16 @@ export default function Dashboard({ stats, recentDocuments }) {
                         line-height: 1.5;
                     }
 
+                    .analytics-error {
+                        margin-bottom: .8rem;
+                        padding: .6rem .7rem;
+                        border-radius: 7px;
+                        background: #FFF5F5;
+                        border: 1px solid #F3D1D1;
+                        color: #A33A3A;
+                        font-size: .68rem;
+                    }
+
                     .chat-messages {
                         display: flex;
                         flex-direction: column;
@@ -1284,6 +1653,7 @@ export default function Dashboard({ stats, recentDocuments }) {
                         font-size: .72rem;
                         line-height: 1.5;
                         box-shadow: 0 1px 2px rgba(0, 0, 0, .02);
+                        white-space: pre-wrap;
                     }
 
                     .user-message .message-bubble {
@@ -1413,10 +1783,6 @@ export default function Dashboard({ stats, recentDocuments }) {
                         cursor: not-allowed;
                     }
 
-                    /* ===============================
-                       TABLET
-                    =============================== */
-
                     @media (max-width: 1100px) {
                         .dashboard-columns {
                             grid-template-columns: 1fr;
@@ -1447,10 +1813,6 @@ export default function Dashboard({ stats, recentDocuments }) {
                             grid-template-columns: 1fr;
                         }
                     }
-
-                    /* ===============================
-                       MOBILE
-                    =============================== */
 
                     @media (max-width: 600px) {
                         .dashboard-header {

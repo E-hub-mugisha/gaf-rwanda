@@ -7,14 +7,127 @@ import {
     ShieldCheck,
     Menu,
     X,
+    Globe,
+    Check,
 } from 'lucide-react';
-import { useState, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { getLanguage, setLanguage as persistLanguage, LANGUAGE_EVENT } from '@/lib/language';
+
+const translations = {
+    rw: {
+        documents: 'Inyandiko',
+        knowledgeResources: 'Ubumenyi & Umutungo',
+        reader: 'Usoma',
+        logOut: 'Sohoka',
+        language: 'Ururimi',
+        documentPortal: 'Portal y’Inyandiko',
+        signedInAs: 'Winjiye nka',
+        readerAccount: 'Konti y’Usoma',
+        languageNames: {
+            rw: 'Kinyarwanda',
+            en: 'English',
+            fr: 'Français',
+            nl: 'Nederlands',
+        },
+    },
+
+    en: {
+        documents: 'Documents',
+        knowledgeResources: 'Knowledge & Resources',
+        reader: 'Reader',
+        logOut: 'Log out',
+        language: 'Language',
+        documentPortal: 'Document Portal',
+        signedInAs: 'Signed in as',
+        readerAccount: 'Reader Account',
+        languageNames: {
+            rw: 'Kinyarwanda',
+            en: 'English',
+            fr: 'Français',
+            nl: 'Nederlands',
+        },
+    },
+
+    fr: {
+        documents: 'Documents',
+        knowledgeResources: 'Savoir & Ressources',
+        reader: 'Lecteur',
+        logOut: 'Se déconnecter',
+        language: 'Langue',
+        documentPortal: 'Portail documentaire',
+        signedInAs: 'Connecté en tant que',
+        readerAccount: 'Compte lecteur',
+        languageNames: {
+            rw: 'Kinyarwanda',
+            en: 'English',
+            fr: 'Français',
+            nl: 'Nederlands',
+        },
+    },
+
+    nl: {
+        documents: 'Documenten',
+        knowledgeResources: 'Kennis & Middelen',
+        reader: 'Lezer',
+        logOut: 'Uitloggen',
+        language: 'Taal',
+        documentPortal: 'Documentenportaal',
+        signedInAs: 'Ingelogd als',
+        readerAccount: 'Lezersaccount',
+        languageNames: {
+            rw: 'Kinyarwanda',
+            en: 'English',
+            fr: 'Français',
+            nl: 'Nederlands',
+        },
+    },
+};
 
 export default function AppLayout({ title, children }) {
     const { props } = usePage();
     const user = props.auth?.user;
 
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Language
+    |--------------------------------------------------------------------------
+    | Same shared-state pattern as AdminLayout: localStorage persists the
+    | choice, and the "gaf-language-change" window event keeps this layout
+    | in sync the instant the language changes anywhere else in the app
+    | (login page, dashboard, etc.) -- including across Inertia navigations
+    | within the same tab.
+    */
+
+    const [language, setLanguageState] = useState(getLanguage);
+    const [languageOpen, setLanguageOpen] = useState(false);
+
+    const t = translations[language] || translations.rw;
+
+    useEffect(() => {
+        // Keep <html lang="..."> correct even on first paint / hard reloads.
+        document.documentElement.lang = language;
+    }, []);
+
+    useEffect(() => {
+        const handleLanguageChange = (event) => {
+            setLanguageState(event.detail);
+        };
+
+        window.addEventListener(LANGUAGE_EVENT, handleLanguageChange);
+
+        return () => {
+            window.removeEventListener(LANGUAGE_EVENT, handleLanguageChange);
+        };
+    }, []);
+
+    const changeLanguage = (lang) => {
+        persistLanguage(lang);
+        setLanguageOpen(false);
+        // No need to call setLanguageState here -- the LANGUAGE_EVENT
+        // listener above will pick up the change and re-render automatically.
+    };
 
     const initials = useMemo(() => {
         if (!user?.name) return 'U';
@@ -54,7 +167,7 @@ export default function AppLayout({ title, children }) {
 
                             <div className="brand-text">
                                 <strong>Document Portal</strong>
-                                <span>Knowledge & Resources</span>
+                                <span>{t.knowledgeResources}</span>
                             </div>
                         </Link>
 
@@ -65,12 +178,82 @@ export default function AppLayout({ title, children }) {
                                 className="nav-link active"
                             >
                                 <FileText size={16} />
-                                Documents
+                                {t.documents}
                             </Link>
                         </nav>
 
                         {/* USER AREA */}
                         <div className="user-area">
+
+                            {/* Language Switcher */}
+                            <div className="header-language">
+
+                                <button
+                                    type="button"
+                                    className="header-language-button"
+                                    onClick={() =>
+                                        setLanguageOpen(!languageOpen)
+                                    }
+                                    aria-expanded={languageOpen}
+                                >
+                                    <Globe size={14} />
+
+                                    <span>
+                                        {language.toUpperCase()}
+                                    </span>
+
+                                    <ChevronDown
+                                        size={11}
+                                        className={
+                                            languageOpen
+                                                ? 'language-chevron open'
+                                                : 'language-chevron'
+                                        }
+                                    />
+                                </button>
+
+                                {languageOpen && (
+                                    <div className="header-language-menu">
+
+                                        <div className="language-menu-title">
+                                            {t.language}
+                                        </div>
+
+                                        {Object.entries(
+                                            t.languageNames
+                                        ).map(([code, name]) => (
+                                            <button
+                                                type="button"
+                                                key={code}
+                                                className={
+                                                    language === code
+                                                        ? 'language-option active'
+                                                        : 'language-option'
+                                                }
+                                                onClick={() =>
+                                                    changeLanguage(code)
+                                                }
+                                            >
+                                                <span className="language-code">
+                                                    {code.toUpperCase()}
+                                                </span>
+
+                                                <span className="language-name">
+                                                    {name}
+                                                </span>
+
+                                                {language === code && (
+                                                    <Check size={13} />
+                                                )}
+                                            </button>
+                                        ))}
+
+                                    </div>
+                                )}
+
+                            </div>
+
+                            <div className="header-divider"></div>
 
                             <div className="user-profile">
                                 <div className="user-avatar">
@@ -84,7 +267,7 @@ export default function AppLayout({ title, children }) {
 
                                     <span>
                                         <ShieldCheck size={11} />
-                                        Reader
+                                        {t.reader}
                                     </span>
                                 </div>
 
@@ -100,10 +283,10 @@ export default function AppLayout({ title, children }) {
                                 <button
                                     type="submit"
                                     className="logout-button"
-                                    title="Log out"
+                                    title={t.logOut}
                                 >
                                     <LogOut size={17} />
-                                    <span>Log out</span>
+                                    <span>{t.logOut}</span>
                                 </button>
                             </form>
                         </div>
@@ -136,8 +319,44 @@ export default function AppLayout({ title, children }) {
                                 }
                             >
                                 <FileText size={17} />
-                                Documents
+                                {t.documents}
                             </Link>
+
+                            {/* Mobile Language Switcher */}
+                            <div className="mobile-language">
+                                <div className="mobile-language-title">
+                                    {t.language}
+                                </div>
+
+                                <div className="mobile-language-options">
+                                    {Object.entries(
+                                        t.languageNames
+                                    ).map(([code, name]) => (
+                                        <button
+                                            type="button"
+                                            key={code}
+                                            className={
+                                                language === code
+                                                    ? 'mobile-language-option active'
+                                                    : 'mobile-language-option'
+                                            }
+                                            onClick={() =>
+                                                changeLanguage(code)
+                                            }
+                                        >
+                                            <span className="language-code">
+                                                {code.toUpperCase()}
+                                            </span>
+
+                                            <span>{name}</span>
+
+                                            {language === code && (
+                                                <Check size={13} />
+                                            )}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
 
                             <div className="mobile-user">
                                 <div className="user-avatar">
@@ -161,7 +380,7 @@ export default function AppLayout({ title, children }) {
                                     className="mobile-logout"
                                 >
                                     <LogOut size={17} />
-                                    Log out
+                                    {t.logOut}
                                 </button>
                             </form>
                         </div>
@@ -182,13 +401,13 @@ export default function AppLayout({ title, children }) {
                             </div>
 
                             <span>
-                                Document Portal
+                                {t.documentPortal}
                             </span>
                         </div>
 
                         <div className="footer-right">
                             <span>
-                                Signed in as{' '}
+                                {t.signedInAs}{' '}
                                 <strong>
                                     {user?.name || 'Reader'}
                                 </strong>
@@ -197,7 +416,7 @@ export default function AppLayout({ title, children }) {
                             <span className="footer-dot"></span>
 
                             <span>
-                                Reader Account
+                                {t.readerAccount}
                             </span>
                         </div>
                     </div>
@@ -426,6 +645,132 @@ export default function AppLayout({ title, children }) {
                 }
 
                 /* =====================================================
+                   LANGUAGE SWITCHER (desktop)
+                   ===================================================== */
+
+                .header-language {
+                    position: relative;
+                }
+
+                .header-language-button {
+                    height: 34px;
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    padding: 0 9px;
+                    border: 1px solid #E0E5EC;
+                    border-radius: 8px;
+                    background: white;
+                    color: #687587;
+                    font-family: inherit;
+                    font-size: 9px;
+                    font-weight: 800;
+                    cursor: pointer;
+                    transition: .18s ease;
+                }
+
+                .header-language-button:hover {
+                    border-color: #cbd5e1;
+                    color: var(--blue-dark);
+                    background: #f9fbfd;
+                }
+
+                .language-chevron {
+                    transition: transform .18s ease;
+                }
+
+                .language-chevron.open {
+                    transform: rotate(180deg);
+                }
+
+                .header-language-menu {
+                    position: absolute;
+                    right: 0;
+                    top: calc(100% + 9px);
+                    width: 175px;
+                    padding: 6px;
+                    background: white;
+                    border: 1px solid #e3e8ef;
+                    border-radius: 10px;
+                    box-shadow: 0 15px 35px rgba(24,35,51,.12);
+                    z-index: 200;
+                    animation: languageDropdown .15s ease;
+                }
+
+                @keyframes languageDropdown {
+                    from {
+                        opacity: 0;
+                        transform: translateY(-4px);
+                    }
+
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+
+                .language-menu-title {
+                    padding: 7px 9px;
+                    color: #9aa4b1;
+                    font-size: 8px;
+                    font-weight: 800;
+                    letter-spacing: 1px;
+                    text-transform: uppercase;
+                }
+
+                .language-option {
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    gap: 9px;
+                    padding: 8px 9px;
+                    border: 0;
+                    border-radius: 7px;
+                    background: transparent;
+                    color: #566273;
+                    font-family: inherit;
+                    font-size: 10px;
+                    text-align: left;
+                    cursor: pointer;
+                }
+
+                .language-option:hover {
+                    background: #f4f7fb;
+                }
+
+                .language-option.active {
+                    background: rgba(93,137,200,.09);
+                    color: var(--blue-dark);
+                    font-weight: 700;
+                }
+
+                .language-code {
+                    width: 25px;
+                    height: 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 5px;
+                    background: #f0f3f7;
+                    color: #7c8795;
+                    font-size: 8px;
+                    font-weight: 800;
+                }
+
+                .language-option.active .language-code {
+                    background: var(--blue);
+                    color: white;
+                }
+
+                .language-name {
+                    flex: 1;
+                }
+
+                .language-option svg {
+                    color: var(--blue);
+                }
+
+                /* =====================================================
                    MAIN
                    ===================================================== */
 
@@ -568,6 +913,68 @@ export default function AppLayout({ title, children }) {
                         font-size: 12px;
                         font-weight: 750;
                         margin-bottom: 12px;
+                    }
+
+                    /* Mobile language switcher */
+
+                    .mobile-language {
+                        margin-bottom: 12px;
+                        padding: 10px 12px;
+                        border-radius: 9px;
+                        background: #F7F9FC;
+                        border: 1px solid #EEF1F5;
+                    }
+
+                    .mobile-language-title {
+                        color: #9aa4b1;
+                        font-size: 8px;
+                        font-weight: 800;
+                        letter-spacing: 1px;
+                        text-transform: uppercase;
+                        margin-bottom: 8px;
+                    }
+
+                    .mobile-language-options {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 6px;
+                    }
+
+                    .mobile-language-option {
+                        display: flex;
+                        align-items: center;
+                        gap: 6px;
+                        padding: 7px 10px;
+                        border: 1px solid #E0E5EC;
+                        border-radius: 7px;
+                        background: white;
+                        color: #566273;
+                        font-family: inherit;
+                        font-size: 10px;
+                        font-weight: 600;
+                        cursor: pointer;
+                    }
+
+                    .mobile-language-option .language-code {
+                        width: 22px;
+                        height: 18px;
+                        font-size: 7.5px;
+                    }
+
+                    .mobile-language-option.active {
+                        border-color: var(--blue);
+                        color: var(--blue-dark);
+                        background: var(--blue-light);
+                        font-weight: 750;
+                    }
+
+                    .mobile-language-option.active .language-code {
+                        background: var(--blue);
+                        color: white;
+                    }
+
+                    .mobile-language-option svg {
+                        color: var(--blue);
                     }
 
                     .mobile-user {

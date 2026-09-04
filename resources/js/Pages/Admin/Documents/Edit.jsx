@@ -14,30 +14,296 @@ import {
     Hash,
     X,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getLanguage, LANGUAGE_EVENT } from '@/lib/language';
 
+/*
+|--------------------------------------------------------------------------
+| UI translations (admin chrome only)
+|--------------------------------------------------------------------------
+| These are the four admin-panel UI languages from AdminLayout (rw/en/fr/nl).
+| This is a different axis from the document content languages below
+| (en/es/rw) -- those are the PDF versions a document can have, not the
+| language the admin interface is displayed in.
+*/
+
+const translations = {
+    rw: {
+        breadcrumbDocuments: 'Inyandiko',
+        breadcrumbEdit: 'Hindura',
+        title: 'Hindura Inyandiko',
+        subtitle:
+            'Vugurura amakuru y’inyandiko no gucunga verisiyo z’indimi.',
+        documentHash: 'Inyandiko #',
+        languageSingular: 'ururimi',
+        languagePlural: 'indimi',
+        active: 'Irakoreshwa',
+        noVersions: 'Nta verisiyo',
+        fixErrors: 'Nyamuneka kosora ibi bikosoke',
+        detailsHeading: 'Ibisobanuro by’Inyandiko',
+        detailsDescription:
+            'Vugurura umutwe n’ibisobanuro by’iyi nyandiko.',
+        titleLabel: 'Umutwe w’Inyandiko',
+        required: '*',
+        descriptionLabel: 'Ibisobanuro',
+        optional: 'Bitegetswe',
+        descriptionPlaceholder: 'Sobanura iyi nyandiko...',
+        versionsHeading: 'Verisiyo z’Indimi',
+        versionsDescription:
+            'Cunga PDF iboneka kuri buri rurimi.',
+        infoBanner:
+            'Amadosiye asanzweho arashobora kurebwa, gusimburwa, cyangwa gukurwaho. Ohereza PDF nshya gusa igihe ushaka kongeramo cyangwa gusimbura verisiyo.',
+        available: 'Iraboneka',
+        missing: 'Ntiboneka',
+        currentVersion: 'Verisiyo y’ururimi isanzwe',
+        preview: 'Reba',
+        remove: 'Kuraho',
+        newReplacement: 'Isimburwa rishya',
+        replacePdf: 'Simbuza PDF',
+        addPdfVersion: 'Ongeraho PDF',
+        pdfOnly: 'Amadosiye ya PDF gusa',
+        versionOf: 'Verisiyo',
+        removeConfirm: (label) =>
+            `Ukura verisiyo ya ${label}?\n\nIbi bizakuraho burundu PDF isanzweho.`,
+        saveHeading: 'Bika Impinduka',
+        saveDescription:
+            'Vugurura iyi nyandiko n’impinduka zawe ziheruka.',
+        documentLabel: 'Inyandiko',
+        languageVersionsLabel: 'Verisiyo z’indimi',
+        saving: 'Birabikwa...',
+        saveButton: 'Bika Impinduka',
+        cancel: 'Hagarika',
+        documentStatus: 'Uko Inyandiko Imeze',
+        languagesLabel: 'Indimi',
+        allLanguagesAvailable:
+            'Verisiyo z’indimi zose zishyigikiwe ziraboneka.',
+        languagesMissing: (count) =>
+            `${count} ${
+                count === 1 ? 'ururimi' : 'indimi'
+            } rukiburiwe.`,
+        helpHeading: 'Gucunga verisiyo',
+        helpDescription:
+            'Gukuraho ururimi bikuraho burundu PDF y’urwo rurimi kuri iyi nyandiko. Kuyisimbuza byohereza PDF nshya hakomeje ururimi rwahiswemo.',
+    },
+
+    en: {
+        breadcrumbDocuments: 'Documents',
+        breadcrumbEdit: 'Edit',
+        title: 'Edit Document',
+        subtitle:
+            'Update document information and manage language versions.',
+        documentHash: 'Document #',
+        languageSingular: 'language',
+        languagePlural: 'languages',
+        active: 'Active',
+        noVersions: 'No versions',
+        fixErrors: 'Please fix the following errors',
+        detailsHeading: 'Document Details',
+        detailsDescription:
+            'Update the title and description of this document.',
+        titleLabel: 'Document Title',
+        required: '*',
+        descriptionLabel: 'Description',
+        optional: 'Optional',
+        descriptionPlaceholder: 'Describe this document...',
+        versionsHeading: 'Language Versions',
+        versionsDescription: 'Manage the PDF available for each language.',
+        infoBanner:
+            'Existing files can be previewed, replaced, or removed. Upload a new PDF only when you want to add or replace a version.',
+        available: 'Available',
+        missing: 'Missing',
+        currentVersion: 'Current language version',
+        preview: 'Preview',
+        remove: 'Remove',
+        newReplacement: 'New replacement',
+        replacePdf: 'Replace PDF',
+        addPdfVersion: 'Add PDF version',
+        pdfOnly: 'PDF files only',
+        versionOf: 'version',
+        removeConfirm: (label) =>
+            `Remove the ${label} version?\n\nThis will permanently remove the existing PDF version.`,
+        saveHeading: 'Save Changes',
+        saveDescription: 'Update this document with your latest changes.',
+        documentLabel: 'Document',
+        languageVersionsLabel: 'Language versions',
+        saving: 'Saving...',
+        saveButton: 'Save Changes',
+        cancel: 'Cancel',
+        documentStatus: 'Document Status',
+        languagesLabel: 'Languages',
+        allLanguagesAvailable:
+            'All supported language versions are available.',
+        languagesMissing: (count) =>
+            `${count} language version${
+                count === 1 ? '' : 's'
+            } still missing.`,
+        helpHeading: 'Managing versions',
+        helpDescription:
+            'Removing a language version deletes that PDF from the document. Replacing it uploads a new PDF while keeping the language assignment.',
+    },
+
+    fr: {
+        breadcrumbDocuments: 'Documents',
+        breadcrumbEdit: 'Modifier',
+        title: 'Modifier le document',
+        subtitle:
+            'Mettez à jour les informations du document et gérez les versions linguistiques.',
+        documentHash: 'Document n°',
+        languageSingular: 'langue',
+        languagePlural: 'langues',
+        active: 'Actif',
+        noVersions: 'Aucune version',
+        fixErrors: 'Veuillez corriger les erreurs suivantes',
+        detailsHeading: 'Détails du document',
+        detailsDescription:
+            'Mettez à jour le titre et la description de ce document.',
+        titleLabel: 'Titre du document',
+        required: '*',
+        descriptionLabel: 'Description',
+        optional: 'Facultatif',
+        descriptionPlaceholder: 'Décrivez ce document...',
+        versionsHeading: 'Versions linguistiques',
+        versionsDescription:
+            'Gérez le PDF disponible pour chaque langue.',
+        infoBanner:
+            'Les fichiers existants peuvent être prévisualisés, remplacés ou supprimés. Téléversez un nouveau PDF uniquement pour ajouter ou remplacer une version.',
+        available: 'Disponible',
+        missing: 'Manquant',
+        currentVersion: 'Version linguistique actuelle',
+        preview: 'Aperçu',
+        remove: 'Supprimer',
+        newReplacement: 'Nouveau remplacement',
+        replacePdf: 'Remplacer le PDF',
+        addPdfVersion: 'Ajouter une version PDF',
+        pdfOnly: 'Fichiers PDF uniquement',
+        versionOf: 'version',
+        removeConfirm: (label) =>
+            `Supprimer la version ${label} ?\n\nCela supprimera définitivement le PDF existant.`,
+        saveHeading: 'Enregistrer les modifications',
+        saveDescription:
+            'Mettez à jour ce document avec vos dernières modifications.',
+        documentLabel: 'Document',
+        languageVersionsLabel: 'Versions linguistiques',
+        saving: 'Enregistrement...',
+        saveButton: 'Enregistrer',
+        cancel: 'Annuler',
+        documentStatus: 'Statut du document',
+        languagesLabel: 'Langues',
+        allLanguagesAvailable:
+            'Toutes les versions linguistiques prises en charge sont disponibles.',
+        languagesMissing: (count) =>
+            `${count} version${count === 1 ? '' : 's'} linguistique${
+                count === 1 ? '' : 's'
+            } encore manquante${count === 1 ? '' : 's'}.`,
+        helpHeading: 'Gestion des versions',
+        helpDescription:
+            'Supprimer une version linguistique supprime ce PDF du document. Le remplacer téléverse un nouveau PDF tout en conservant l’attribution de la langue.',
+    },
+
+    nl: {
+        breadcrumbDocuments: 'Documenten',
+        breadcrumbEdit: 'Bewerken',
+        title: 'Document bewerken',
+        subtitle:
+            'Werk documentinformatie bij en beheer taalversies.',
+        documentHash: 'Document #',
+        languageSingular: 'taal',
+        languagePlural: 'talen',
+        active: 'Actief',
+        noVersions: 'Geen versies',
+        fixErrors: 'Los de volgende fouten op',
+        detailsHeading: 'Documentgegevens',
+        detailsDescription:
+            'Werk de titel en beschrijving van dit document bij.',
+        titleLabel: 'Documenttitel',
+        required: '*',
+        descriptionLabel: 'Beschrijving',
+        optional: 'Optioneel',
+        descriptionPlaceholder: 'Beschrijf dit document...',
+        versionsHeading: 'Taalversies',
+        versionsDescription:
+            'Beheer de beschikbare PDF voor elke taal.',
+        infoBanner:
+            'Bestaande bestanden kunnen worden bekeken, vervangen of verwijderd. Upload alleen een nieuwe PDF als u een versie wilt toevoegen of vervangen.',
+        available: 'Beschikbaar',
+        missing: 'Ontbreekt',
+        currentVersion: 'Huidige taalversie',
+        preview: 'Voorbeeld',
+        remove: 'Verwijderen',
+        newReplacement: 'Nieuwe vervanging',
+        replacePdf: 'PDF vervangen',
+        addPdfVersion: 'PDF-versie toevoegen',
+        pdfOnly: 'Alleen PDF-bestanden',
+        versionOf: 'versie',
+        removeConfirm: (label) =>
+            `De ${label}-versie verwijderen?\n\nHierdoor wordt de bestaande PDF-versie permanent verwijderd.`,
+        saveHeading: 'Wijzigingen opslaan',
+        saveDescription:
+            'Werk dit document bij met uw laatste wijzigingen.',
+        documentLabel: 'Document',
+        languageVersionsLabel: 'Taalversies',
+        saving: 'Bezig met opslaan...',
+        saveButton: 'Wijzigingen opslaan',
+        cancel: 'Annuleren',
+        documentStatus: 'Documentstatus',
+        languagesLabel: 'Talen',
+        allLanguagesAvailable:
+            'Alle ondersteunde taalversies zijn beschikbaar.',
+        languagesMissing: (count) =>
+            `${count} taalversie${count === 1 ? '' : 's'} nog ontbrekend.`,
+        helpHeading: 'Versies beheren',
+        helpDescription:
+            'Het verwijderen van een taalversie verwijdert die PDF uit het document. Vervangen upload een nieuwe PDF met behoud van de taaltoewijzing.',
+    },
+};
+
+// Document content languages -- the PDF versions a document can have.
+// This is unrelated to the admin UI language above.
 const LANGUAGES = [
     {
         code: 'en',
         label: 'English',
         short: 'EN',
-        description: 'English version',
     },
     {
         code: 'es',
         label: 'Spanish',
         short: 'ES',
-        description: 'Spanish version',
     },
     {
         code: 'rw',
         label: 'Kinyarwanda',
         short: 'RW',
-        description: 'Kinyarwanda version',
     },
 ];
 
 export default function Edit({ document }) {
+    /*
+    |--------------------------------------------------------------------------
+    | Admin UI language
+    |--------------------------------------------------------------------------
+    | Same shared-state pattern as AdminLayout: read once on mount, then
+    | subscribe to LANGUAGE_EVENT so a change made anywhere (the layout's
+    | header switcher, the login page, etc.) is picked up here instantly,
+    | including across Inertia navigations within the same tab.
+    */
+
+    const [language, setLanguageState] = useState(getLanguage);
+
+    const t = translations[language] || translations.rw;
+
+    useEffect(() => {
+        const handleLanguageChange = (event) => {
+            setLanguageState(event.detail);
+        };
+
+        window.addEventListener(LANGUAGE_EVENT, handleLanguageChange);
+
+        return () => {
+            window.removeEventListener(LANGUAGE_EVENT, handleLanguageChange);
+        };
+    }, []);
+
     const {
         data,
         setData,
@@ -71,11 +337,7 @@ export default function Edit({ document }) {
     };
 
     const removeVersion = (version, label) => {
-        if (
-            confirm(
-                `Remove the ${label} version?\n\nThis will permanently remove the existing PDF version.`
-            )
-        ) {
+        if (confirm(t.removeConfirm(label))) {
             router.delete(
                 route(
                     'admin.documents.versions.destroy',
@@ -121,7 +383,7 @@ export default function Edit({ document }) {
     const totalVersions = document.versions.length;
 
     return (
-        <AdminLayout title="Edit Document">
+        <AdminLayout title={t.title}>
             <div className="edit-page">
 
                 {/* =====================================================
@@ -140,17 +402,14 @@ export default function Edit({ document }) {
 
                         <div>
                             <div className="breadcrumb">
-                                Documents
+                                {t.breadcrumbDocuments}
                                 <span>/</span>
-                                Edit
+                                {t.breadcrumbEdit}
                             </div>
 
-                            <h1>Edit Document</h1>
+                            <h1>{t.title}</h1>
 
-                            <p>
-                                Update document information and manage
-                                language versions.
-                            </p>
+                            <p>{t.subtitle}</p>
                         </div>
                     </div>
                 </div>
@@ -172,15 +431,16 @@ export default function Edit({ document }) {
                             <div className="summary-meta">
                                 <span>
                                     <Hash size={13} />
-                                    Document #{document.id}
+                                    {t.documentHash}
+                                    {document.id}
                                 </span>
 
                                 <span>
                                     <Languages size={13} />
                                     {totalVersions}{' '}
                                     {totalVersions === 1
-                                        ? 'language'
-                                        : 'languages'}
+                                        ? t.languageSingular
+                                        : t.languagePlural}
                                 </span>
 
                                 {document.created_at && (
@@ -195,9 +455,7 @@ export default function Edit({ document }) {
 
                     <div className="version-badge">
                         <CheckCircle2 size={15} />
-                        {totalVersions > 0
-                            ? 'Active'
-                            : 'No versions'}
+                        {totalVersions > 0 ? t.active : t.noVersions}
                     </div>
                 </div>
 
@@ -213,9 +471,7 @@ export default function Edit({ document }) {
                         </div>
 
                         <div>
-                            <strong>
-                                Please fix the following errors
-                            </strong>
+                            <strong>{t.fixErrors}</strong>
 
                             <ul>
                                 {Object.values(errors).map(
@@ -255,12 +511,9 @@ export default function Edit({ document }) {
                                     </div>
 
                                     <div>
-                                        <h2>Document Details</h2>
+                                        <h2>{t.detailsHeading}</h2>
 
-                                        <p>
-                                            Update the title and description
-                                            of this document.
-                                        </p>
+                                        <p>{t.detailsDescription}</p>
                                     </div>
                                 </div>
 
@@ -271,8 +524,8 @@ export default function Edit({ document }) {
                                     <div className="form-group">
 
                                         <label htmlFor="title">
-                                            Document Title
-                                            <span>*</span>
+                                            {t.titleLabel}
+                                            <span>{t.required}</span>
                                         </label>
 
                                         <input
@@ -305,9 +558,9 @@ export default function Edit({ document }) {
                                     <div className="form-group">
 
                                         <label htmlFor="description">
-                                            Description
+                                            {t.descriptionLabel}
                                             <span className="optional">
-                                                Optional
+                                                {t.optional}
                                             </span>
                                         </label>
 
@@ -321,7 +574,9 @@ export default function Edit({ document }) {
                                                     e.target.value
                                                 )
                                             }
-                                            placeholder="Describe this document..."
+                                            placeholder={
+                                                t.descriptionPlaceholder
+                                            }
                                             className={
                                                 errors.description
                                                     ? 'input-error'
@@ -350,12 +605,9 @@ export default function Edit({ document }) {
                                     </div>
 
                                     <div>
-                                        <h2>Language Versions</h2>
+                                        <h2>{t.versionsHeading}</h2>
 
-                                        <p>
-                                            Manage the PDF available for
-                                            each language.
-                                        </p>
+                                        <p>{t.versionsDescription}</p>
                                     </div>
                                 </div>
 
@@ -364,31 +616,26 @@ export default function Edit({ document }) {
                                     <div className="info-banner">
                                         <AlertCircle size={16} />
 
-                                        <p>
-                                            Existing files can be previewed,
-                                            replaced, or removed. Upload a
-                                            new PDF only when you want to
-                                            add or replace a version.
-                                        </p>
+                                        <p>{t.infoBanner}</p>
                                     </div>
 
                                     <div className="versions-list">
 
-                                        {LANGUAGES.map((language) => {
+                                        {LANGUAGES.map((docLanguage) => {
 
                                             const existing =
                                                 versionFor(
-                                                    language.code
+                                                    docLanguage.code
                                                 );
 
                                             const selected =
                                                 selectedFiles[
-                                                    language.code
+                                                    docLanguage.code
                                                 ];
 
                                             const error =
                                                 errors[
-                                                    `file_${language.code}`
+                                                    `file_${docLanguage.code}`
                                                 ];
 
                                             return (
@@ -402,7 +649,7 @@ export default function Edit({ document }) {
                                                             ? 'replacement'
                                                             : ''
                                                     }`}
-                                                    key={language.code}
+                                                    key={docLanguage.code}
                                                 >
 
                                                     {/* VERSION HEADER */}
@@ -413,20 +660,23 @@ export default function Edit({ document }) {
 
                                                             <div className="language-badge">
                                                                 {
-                                                                    language.short
+                                                                    docLanguage.short
                                                                 }
                                                             </div>
 
                                                             <div>
                                                                 <strong>
                                                                     {
-                                                                        language.label
+                                                                        docLanguage.label
                                                                     }
                                                                 </strong>
 
                                                                 <span>
                                                                     {
-                                                                        language.description
+                                                                        docLanguage.label
+                                                                    }{' '}
+                                                                    {
+                                                                        t.versionOf
                                                                     }
                                                                 </span>
                                                             </div>
@@ -437,14 +687,14 @@ export default function Edit({ document }) {
                                                                 <CheckCircle2
                                                                     size={13}
                                                                 />
-                                                                Available
+                                                                {t.available}
                                                             </span>
                                                         ) : (
                                                             <span className="status-badge missing">
                                                                 <AlertCircle
                                                                     size={13}
                                                                 />
-                                                                Missing
+                                                                {t.missing}
                                                             </span>
                                                         )}
 
@@ -469,9 +719,9 @@ export default function Edit({ document }) {
                                                                 </strong>
 
                                                                 <span>
-                                                                    Current
-                                                                    language
-                                                                    version
+                                                                    {
+                                                                        t.currentVersion
+                                                                    }
                                                                 </span>
                                                             </div>
 
@@ -482,7 +732,7 @@ export default function Edit({ document }) {
                                                                         'documents.stream',
                                                                         [
                                                                             document.id,
-                                                                            language.code,
+                                                                            docLanguage.code,
                                                                         ]
                                                                     )}
                                                                     target="_blank"
@@ -492,7 +742,7 @@ export default function Edit({ document }) {
                                                                     <Eye
                                                                         size={15}
                                                                     />
-                                                                    Preview
+                                                                    {t.preview}
                                                                 </a>
 
                                                                 <button
@@ -501,14 +751,14 @@ export default function Edit({ document }) {
                                                                     onClick={() =>
                                                                         removeVersion(
                                                                             existing,
-                                                                            language.label
+                                                                            docLanguage.label
                                                                         )
                                                                     }
                                                                 >
                                                                     <Trash2
                                                                         size={15}
                                                                     />
-                                                                    Remove
+                                                                    {t.remove}
                                                                 </button>
 
                                                             </div>
@@ -538,7 +788,9 @@ export default function Edit({ document }) {
                                                                         selected.size
                                                                     )}
                                                                     {' · '}
-                                                                    New replacement
+                                                                    {
+                                                                        t.newReplacement
+                                                                    }
                                                                 </span>
                                                             </div>
 
@@ -547,7 +799,7 @@ export default function Edit({ document }) {
                                                                 className="remove-selected"
                                                                 onClick={() =>
                                                                     removeSelectedFile(
-                                                                        language.code
+                                                                        docLanguage.code
                                                                     )
                                                                 }
                                                             >
@@ -571,7 +823,7 @@ export default function Edit({ document }) {
                                                                     e
                                                                 ) =>
                                                                     handleFileChange(
-                                                                        language.code,
+                                                                        docLanguage.code,
                                                                         e
                                                                             .target
                                                                             .files?.[0]
@@ -586,12 +838,12 @@ export default function Edit({ document }) {
                                                             <div>
                                                                 <strong>
                                                                     {existing
-                                                                        ? 'Replace PDF'
-                                                                        : 'Add PDF version'}
+                                                                        ? t.replacePdf
+                                                                        : t.addPdfVersion}
                                                                 </strong>
 
                                                                 <span>
-                                                                    PDF files only
+                                                                    {t.pdfOnly}
                                                                 </span>
                                                             </div>
 
@@ -629,26 +881,25 @@ export default function Edit({ document }) {
                                     </div>
 
                                     <div>
-                                        <h3>Save Changes</h3>
+                                        <h3>{t.saveHeading}</h3>
 
-                                        <p>
-                                            Update this document with your
-                                            latest changes.
-                                        </p>
+                                        <p>{t.saveDescription}</p>
                                     </div>
                                 </div>
 
                                 <div className="save-summary">
 
                                     <div>
-                                        <span>Document</span>
+                                        <span>{t.documentLabel}</span>
                                         <strong>
                                             #{document.id}
                                         </strong>
                                     </div>
 
                                     <div>
-                                        <span>Language versions</span>
+                                        <span>
+                                            {t.languageVersionsLabel}
+                                        </span>
                                         <strong>
                                             {totalVersions}
                                         </strong>
@@ -664,12 +915,12 @@ export default function Edit({ document }) {
                                     {processing ? (
                                         <>
                                             <span className="spinner" />
-                                            Saving...
+                                            {t.saving}
                                         </>
                                     ) : (
                                         <>
                                             <Save size={17} />
-                                            Save Changes
+                                            {t.saveButton}
                                         </>
                                     )}
                                 </button>
@@ -680,7 +931,7 @@ export default function Edit({ document }) {
                                     )}
                                     className="cancel-button"
                                 >
-                                    Cancel
+                                    {t.cancel}
                                 </Link>
 
                             </div>
@@ -691,13 +942,13 @@ export default function Edit({ document }) {
 
                                 <div className="status-title">
                                     <span className="status-dot" />
-                                    Document Status
+                                    {t.documentStatus}
                                 </div>
 
                                 <div className="status-content">
 
                                     <div className="status-row">
-                                        <span>Languages</span>
+                                        <span>{t.languagesLabel}</span>
 
                                         <strong>
                                             {totalVersions}/3
@@ -719,12 +970,10 @@ export default function Edit({ document }) {
 
                                     <p>
                                         {totalVersions === 3
-                                            ? 'All supported language versions are available.'
-                                            : `${3 - totalVersions} language version${
-                                                  3 - totalVersions === 1
-                                                      ? ''
-                                                      : 's'
-                                              } still missing.`}
+                                            ? t.allLanguagesAvailable
+                                            : t.languagesMissing(
+                                                  3 - totalVersions
+                                              )}
                                     </p>
 
                                 </div>
@@ -740,14 +989,9 @@ export default function Edit({ document }) {
                                 </div>
 
                                 <div>
-                                    <h3>Managing versions</h3>
+                                    <h3>{t.helpHeading}</h3>
 
-                                    <p>
-                                        Removing a language version deletes
-                                        that PDF from the document. Replacing
-                                        it uploads a new PDF while keeping
-                                        the language assignment.
-                                    </p>
+                                    <p>{t.helpDescription}</p>
                                 </div>
 
                             </div>

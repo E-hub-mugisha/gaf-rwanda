@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from 'react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Link } from '@inertiajs/react';
 import {
@@ -12,12 +13,175 @@ import {
     CheckCircle2,
     AlertCircle,
 } from 'lucide-react';
-import { useMemo, useState } from 'react';
+
+import { getLanguage, LANGUAGE_EVENT } from '@/lib/language';
+
+const translations = {
+    rw: {
+        viewTitlePrefix: 'Reba',
+        backToDocuments: 'Subira ku Nyandiko',
+
+        documentHash: 'Inyandiko #',
+
+        editDocument: 'Hindura Inyandiko',
+
+        documentInformation: 'Amakuru y’Inyandiko',
+        documentDetails: 'Ibisobanuro by’inyandiko',
+        documentId: 'ID y’Inyandiko',
+        availableLanguages: 'Indimi Ziboneka',
+        uploaded: 'Yashyizweho',
+
+        description: 'Ibisobanuro',
+        aboutThisDocument: 'Ibirebana n’iyi nyandiko',
+
+        languageVersions: 'Verisiyo z’Indimi',
+        selectVersionToPreview: 'Hitamo verisiyo kugira ngo uyirebe',
+        noLanguageVersions: 'Nta verisiyo y’ururimi iboneka.',
+
+        documentPreview: 'Kureba Inyandiko',
+        noFileSelected: 'Nta dosiye yatoranyijwe',
+
+        open: 'Fungura',
+        download: 'Kuramo',
+
+        noDocumentAvailable: 'Nta nyandiko iboneka',
+        noDocumentAvailableDescription:
+            'Iyi nyandiko ntabwo ifite verisiyo y’ururimi iboneka kugira ngo yerekwe.',
+        addDocumentVersion: 'Ongeramo Verisiyo y’Inyandiko',
+    },
+
+    en: {
+        viewTitlePrefix: 'View',
+        backToDocuments: 'Back to Documents',
+
+        documentHash: 'Document #',
+
+        editDocument: 'Edit Document',
+
+        documentInformation: 'Document Information',
+        documentDetails: 'Document details',
+        documentId: 'Document ID',
+        availableLanguages: 'Available Languages',
+        uploaded: 'Uploaded',
+
+        description: 'Description',
+        aboutThisDocument: 'About this document',
+
+        languageVersions: 'Language Versions',
+        selectVersionToPreview: 'Select a version to preview',
+        noLanguageVersions: 'No language versions are available.',
+
+        documentPreview: 'Document Preview',
+        noFileSelected: 'No file selected',
+
+        open: 'Open',
+        download: 'Download',
+
+        noDocumentAvailable: 'No document available',
+        noDocumentAvailableDescription:
+            'This document does not currently have a language version available for preview.',
+        addDocumentVersion: 'Add Document Version',
+    },
+
+    fr: {
+        viewTitlePrefix: 'Voir',
+        backToDocuments: 'Retour aux documents',
+
+        documentHash: 'Document n°',
+
+        editDocument: 'Modifier le document',
+
+        documentInformation: 'Informations sur le document',
+        documentDetails: 'Détails du document',
+        documentId: 'ID du document',
+        availableLanguages: 'Langues disponibles',
+        uploaded: 'Téléchargé',
+
+        description: 'Description',
+        aboutThisDocument: 'À propos de ce document',
+
+        languageVersions: 'Versions linguistiques',
+        selectVersionToPreview: 'Sélectionnez une version à prévisualiser',
+        noLanguageVersions: 'Aucune version linguistique disponible.',
+
+        documentPreview: 'Aperçu du document',
+        noFileSelected: 'Aucun fichier sélectionné',
+
+        open: 'Ouvrir',
+        download: 'Télécharger',
+
+        noDocumentAvailable: 'Aucun document disponible',
+        noDocumentAvailableDescription:
+            'Ce document n’a actuellement aucune version linguistique disponible pour aperçu.',
+        addDocumentVersion: 'Ajouter une version du document',
+    },
+
+    nl: {
+        viewTitlePrefix: 'Bekijk',
+        backToDocuments: 'Terug naar documenten',
+
+        documentHash: 'Document #',
+
+        editDocument: 'Document bewerken',
+
+        documentInformation: 'Documentinformatie',
+        documentDetails: 'Documentgegevens',
+        documentId: 'Document-ID',
+        availableLanguages: 'Beschikbare talen',
+        uploaded: 'Geüpload',
+
+        description: 'Beschrijving',
+        aboutThisDocument: 'Over dit document',
+
+        languageVersions: 'Taalversies',
+        selectVersionToPreview: 'Selecteer een versie om te bekijken',
+        noLanguageVersions: 'Er zijn geen taalversies beschikbaar.',
+
+        documentPreview: 'Documentvoorbeeld',
+        noFileSelected: 'Geen bestand geselecteerd',
+
+        open: 'Openen',
+        download: 'Downloaden',
+
+        noDocumentAvailable: 'Geen document beschikbaar',
+        noDocumentAvailableDescription:
+            'Dit document heeft momenteel geen taalversie beschikbaar voor voorvertoning.',
+        addDocumentVersion: 'Documentversie toevoegen',
+    },
+};
 
 export default function View({ document }) {
     const [selectedLanguage, setSelectedLanguage] = useState(
         document.versions?.[0]?.language ?? null
     );
+
+    /*
+    |--------------------------------------------------------------------------
+    | UI Language
+    |--------------------------------------------------------------------------
+    | Reads the shared UI language on mount and subscribes to the
+    | "gaf-language-change" window event (see resources/js/lib/language.js)
+    | so switching languages from AdminLayout's header dropdown updates this
+    | page immediately too. Note this is unrelated to `selectedLanguage`
+    | above, which is which language *version of the document* is being
+    | previewed.
+    */
+
+    const [uiLanguage, setUiLanguage] = useState(getLanguage);
+
+    const t = translations[uiLanguage] || translations.en;
+
+    useEffect(() => {
+        const handleLanguageChange = (event) => {
+            setUiLanguage(event.detail);
+        };
+
+        window.addEventListener(LANGUAGE_EVENT, handleLanguageChange);
+
+        return () => {
+            window.removeEventListener(LANGUAGE_EVENT, handleLanguageChange);
+        };
+    }, []);
 
     const selectedVersion = useMemo(() => {
         return document.versions?.find(
@@ -33,7 +197,7 @@ export default function View({ document }) {
         : null;
 
     return (
-        <AdminLayout title={`View ${document.title}`}>
+        <AdminLayout title={`${t.viewTitlePrefix} ${document.title}`}>
             <div className="document-view-page">
 
                 {/* ================= HEADER ================= */}
@@ -47,7 +211,7 @@ export default function View({ document }) {
                             className="back-btn"
                         >
                             <ArrowLeft size={17} />
-                            Back to Documents
+                            {t.backToDocuments}
                         </Link>
 
                         <div className="title-section">
@@ -61,7 +225,8 @@ export default function View({ document }) {
 
                                 <div className="document-meta">
                                     <span>
-                                        Document #{document.id}
+                                        {t.documentHash}
+                                        {document.id}
                                     </span>
 
                                     {document.created_at && (
@@ -93,7 +258,7 @@ export default function View({ document }) {
                             className="secondary-btn"
                         >
                             <Edit3 size={16} />
-                            Edit Document
+                            {t.editDocument}
                         </Link>
 
                     </div>
@@ -118,20 +283,20 @@ export default function View({ document }) {
                                 </div>
 
                                 <div>
-                                    <h3>Document Information</h3>
-                                    <p>Document details</p>
+                                    <h3>{t.documentInformation}</h3>
+                                    <p>{t.documentDetails}</p>
                                 </div>
                             </div>
 
                             <div className="info-list">
 
                                 <div className="info-item">
-                                    <span>Document ID</span>
+                                    <span>{t.documentId}</span>
                                     <strong>#{document.id}</strong>
                                 </div>
 
                                 <div className="info-item">
-                                    <span>Available Languages</span>
+                                    <span>{t.availableLanguages}</span>
                                     <strong>
                                         {document.versions?.length ?? 0}
                                     </strong>
@@ -139,7 +304,7 @@ export default function View({ document }) {
 
                                 {document.created_at && (
                                     <div className="info-item">
-                                        <span>Uploaded</span>
+                                        <span>{t.uploaded}</span>
                                         <strong>
                                             {document.created_at}
                                         </strong>
@@ -161,8 +326,8 @@ export default function View({ document }) {
                                     </div>
 
                                     <div>
-                                        <h3>Description</h3>
-                                        <p>About this document</p>
+                                        <h3>{t.description}</h3>
+                                        <p>{t.aboutThisDocument}</p>
                                     </div>
                                 </div>
 
@@ -184,8 +349,8 @@ export default function View({ document }) {
                                 </div>
 
                                 <div>
-                                    <h3>Language Versions</h3>
-                                    <p>Select a version to preview</p>
+                                    <h3>{t.languageVersions}</h3>
+                                    <p>{t.selectVersionToPreview}</p>
                                 </div>
 
                             </div>
@@ -250,7 +415,7 @@ export default function View({ document }) {
                                 <div className="no-versions">
                                     <AlertCircle size={19} />
                                     <span>
-                                        No language versions are available.
+                                        {t.noLanguageVersions}
                                     </span>
                                 </div>
                             )}
@@ -275,13 +440,13 @@ export default function View({ document }) {
                                     <strong>
                                         {selectedVersion
                                             ? selectedVersion.language_label
-                                            : 'Document Preview'}
+                                            : t.documentPreview}
                                     </strong>
 
                                     <span>
                                         {selectedVersion
                                             ? selectedVersion.original_filename
-                                            : 'No file selected'}
+                                            : t.noFileSelected}
                                     </span>
                                 </div>
 
@@ -297,7 +462,7 @@ export default function View({ document }) {
                                         className="viewer-action"
                                     >
                                         <ExternalLink size={15} />
-                                        Open
+                                        {t.open}
                                     </a>
 
                                     <a
@@ -308,7 +473,7 @@ export default function View({ document }) {
                                         className="viewer-action primary"
                                     >
                                         <Download size={15} />
-                                        Download
+                                        {t.download}
                                     </a>
 
                                 </div>
@@ -335,12 +500,10 @@ export default function View({ document }) {
                                     <FileText size={35} />
                                 </div>
 
-                                <h2>No document available</h2>
+                                <h2>{t.noDocumentAvailable}</h2>
 
                                 <p>
-                                    This document does not currently have
-                                    a language version available for
-                                    preview.
+                                    {t.noDocumentAvailableDescription}
                                 </p>
 
                                 <Link
@@ -351,7 +514,7 @@ export default function View({ document }) {
                                     className="primary-btn"
                                 >
                                     <Edit3 size={16} />
-                                    Add Document Version
+                                    {t.addDocumentVersion}
                                 </Link>
 
                             </div>

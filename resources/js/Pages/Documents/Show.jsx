@@ -10,12 +10,104 @@ import {
     Maximize2,
     ShieldCheck,
 } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { getLanguage, LANGUAGE_EVENT } from '@/lib/language';
+
+const translations = {
+    rw: {
+        allDocuments: 'Inyandiko zose',
+        secureViewer: 'Kureba inyandiko byizewe',
+        publishedDocument: 'Inyandiko yatangajwe',
+        onlineReading: 'Gusoma kuri interineti',
+        availableLanguages: 'Indimi ziboneka',
+        reading: 'Urasoma',
+        fullscreen: 'Ahuzuye ecran',
+        officialDocument: 'Urimo gusoma inyandiko yemewe',
+        officialDocumentNote:
+            'Iyi nyandiko itangwa binyuze kuri Document Portal.',
+        backToDocuments: 'Subira ku nyandiko',
+        documentFallback: 'Inyandiko',
+    },
+
+    en: {
+        allDocuments: 'All documents',
+        secureViewer: 'Secure document viewer',
+        publishedDocument: 'Published document',
+        onlineReading: 'Online reading',
+        availableLanguages: 'Available languages',
+        reading: 'Reading',
+        fullscreen: 'Fullscreen',
+        officialDocument: "You're viewing an official document",
+        officialDocumentNote:
+            'This document is provided through the Document Portal.',
+        backToDocuments: 'Back to documents',
+        documentFallback: 'Document',
+    },
+
+    fr: {
+        allDocuments: 'Tous les documents',
+        secureViewer: 'Visionneuse de document sécurisée',
+        publishedDocument: 'Document publié',
+        onlineReading: 'Lecture en ligne',
+        availableLanguages: 'Langues disponibles',
+        reading: 'Lecture',
+        fullscreen: 'Plein écran',
+        officialDocument: 'Vous consultez un document officiel',
+        officialDocumentNote:
+            'Ce document est fourni via le portail documentaire.',
+        backToDocuments: 'Retour aux documents',
+        documentFallback: 'Document',
+    },
+
+    nl: {
+        allDocuments: 'Alle documenten',
+        secureViewer: 'Beveiligde documentviewer',
+        publishedDocument: 'Gepubliceerd document',
+        onlineReading: 'Online lezen',
+        availableLanguages: 'Beschikbare talen',
+        reading: 'Aan het lezen',
+        fullscreen: 'Volledig scherm',
+        officialDocument: 'Je bekijkt een officieel document',
+        officialDocumentNote:
+            'Dit document wordt aangeboden via het documentenportaal.',
+        backToDocuments: 'Terug naar documenten',
+        documentFallback: 'Document',
+    },
+};
 
 export default function Show({
     document: doc,
     language,
     availableLanguages = [],
 }) {
+    /*
+    |--------------------------------------------------------------------------
+    | UI language
+    |--------------------------------------------------------------------------
+    | This is the interface language (buttons, labels, chrome) and is
+    | separate from `language`, the prop that selects which translated
+    | *version* of the document is being displayed. Same shared-state
+    | pattern as the rest of the app: read from localStorage on mount,
+    | then subscribe to "gaf-language-change" so switching the interface
+    | language in AppLayout's header re-renders this page instantly.
+    */
+
+    const [uiLanguage, setUiLanguage] = useState(getLanguage);
+
+    const t = translations[uiLanguage] || translations.rw;
+
+    useEffect(() => {
+        const handleLanguageChange = (event) => {
+            setUiLanguage(event.detail);
+        };
+
+        window.addEventListener(LANGUAGE_EVENT, handleLanguageChange);
+
+        return () => {
+            window.removeEventListener(LANGUAGE_EVENT, handleLanguageChange);
+        };
+    }, []);
+
     const activeLanguage = availableLanguages.find(
         (item) => item.code === language
     );
@@ -24,7 +116,7 @@ export default function Show({
         if (!date) return null;
 
         try {
-            return new Date(date).toLocaleDateString(undefined, {
+            return new Date(date).toLocaleDateString(uiLanguage, {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
@@ -45,7 +137,7 @@ export default function Show({
     };
 
     return (
-        <AppLayout title={doc?.title || 'Document'}>
+        <AppLayout title={doc?.title || t.documentFallback}>
             <div className="document-page">
 
                 {/* =========================================
@@ -57,12 +149,12 @@ export default function Show({
                         className="back-link"
                     >
                         <ArrowLeft size={17} />
-                        <span>All documents</span>
+                        <span>{t.allDocuments}</span>
                     </Link>
 
                     <div className="secure-reading">
                         <ShieldCheck size={15} />
-                        Secure document viewer
+                        {t.secureViewer}
                     </div>
                 </div>
 
@@ -84,7 +176,7 @@ export default function Show({
 
                             <div className="eyebrow">
                                 <span className="published-dot"></span>
-                                Published document
+                                {t.publishedDocument}
                             </div>
 
                             <h1>
@@ -123,7 +215,7 @@ export default function Show({
                                     <BookOpen size={15} />
 
                                     <span>
-                                        Online reading
+                                        {t.onlineReading}
                                     </span>
                                 </div>
 
@@ -141,7 +233,7 @@ export default function Show({
                                 <Languages size={16} />
 
                                 <span>
-                                    Available languages
+                                    {t.availableLanguages}
                                 </span>
                             </div>
 
@@ -196,7 +288,7 @@ export default function Show({
                             <span className="status-dot"></span>
 
                             <span>
-                                Reading
+                                {t.reading}
                             </span>
                         </div>
 
@@ -205,7 +297,7 @@ export default function Show({
                         <span className="current-language">
                             {activeLanguage?.label ||
                                 language ||
-                                'Document'}
+                                t.documentFallback}
                         </span>
 
                     </div>
@@ -214,12 +306,12 @@ export default function Show({
                         type="button"
                         className="fullscreen-button"
                         onClick={openFullscreen}
-                        title="Open viewer fullscreen"
+                        title={t.fullscreen}
                     >
                         <Maximize2 size={16} />
 
                         <span>
-                            Fullscreen
+                            {t.fullscreen}
                         </span>
                     </button>
 
@@ -257,7 +349,7 @@ export default function Show({
                                 'documents.stream',
                                 [doc.id, language]
                             )}
-                            title={doc?.title || 'Document viewer'}
+                            title={doc?.title || t.documentFallback}
                             className="document-iframe"
                         />
 
@@ -276,12 +368,11 @@ export default function Show({
 
                         <div>
                             <strong>
-                                You're viewing an official document
+                                {t.officialDocument}
                             </strong>
 
                             <span>
-                                This document is provided through
-                                the Document Portal.
+                                {t.officialDocumentNote}
                             </span>
                         </div>
 
@@ -294,7 +385,7 @@ export default function Show({
                         <ArrowLeft size={15} />
 
                         <span>
-                            Back to documents
+                            {t.backToDocuments}
                         </span>
                     </Link>
 

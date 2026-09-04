@@ -14,9 +14,240 @@ import {
     UserRoundPen,
     KeyRound,
 } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { getLanguage, LANGUAGE_EVENT } from '@/lib/language';
+
+/*
+|--------------------------------------------------------------------------
+| UI translations (admin chrome only)
+|--------------------------------------------------------------------------
+| Same four admin-panel UI languages as AdminLayout (rw/en/fr/nl). Unrelated
+| to the document content languages (en/es/rw) used elsewhere in the portal.
+*/
+
+const translations = {
+    rw: {
+        eyebrow: 'Gucunga Abasoma',
+        pageTitle: 'Hindura Konti y’Umusomyi',
+        pageSubtitle:
+            'Vugurura amakuru ya konti y’umusomyi n’igenamiterere ry’ijambobanga.',
+        checkInfo: 'Nyamuneka reba amakuru akurikira',
+        accountInformation: 'Amakuru ya Konti',
+        updateDetails:
+            'Vugurura amakuru bwite n’ayo kwinjira y’umusomyi.',
+        fullName: 'Amazina Yombi',
+        required: '*',
+        fullNamePlaceholder: 'Andika amazina yombi',
+        fullNameHint:
+            'Amazina yombi y’umusomyi nk’uko agomba kugaragara muri sisitemu.',
+        emailAddress: 'Aderesi ya Imeyili',
+        emailPlaceholder: 'reader@example.com',
+        emailHint: 'Iyi imeyili izakoreshwa mu kwinjira.',
+        passwordSection: 'Ijambobanga',
+        newPassword: 'Ijambobanga Rishya',
+        newPasswordPlaceholder:
+            'Reka ubusa kugira ngo ukomeze ijambobanga rya none',
+        newPasswordHint:
+            'Reka ubu bwanya bube ubusa niba udashaka guhindura ijambobanga rya none.',
+        showPassword: 'Erekana ijambobanga',
+        hidePassword: 'Hisha ijambobanga',
+        passwordSecurity: 'Umutekano w’ijambobanga',
+        passwordSecurityBody:
+            'Andika ijambobanga rishya gusa igihe ukeneye gusimbura irisanzwe. Ntukigere usangira ijambobanga mu ruhame.',
+        cancel: 'Hagarika',
+        saving: 'Birabikwa...',
+        saveChanges: 'Bika Impinduka',
+        accountPreview: 'Kureba Konti',
+        currentInfo: 'Amakuru y’ubu y’umusomyi',
+        readerNamePlaceholder: 'Izina ry’Umusomyi',
+        readerAccountLabel: 'Konti y’Umusomyi',
+        accessLevel: 'Urwego rw’Uburenganzira',
+        accountPermissions: 'Uburenganzira bwa konti',
+        permReaderTitle: 'Usoma',
+        permReaderBody: 'Ashobora kubona inyandiko zasohotse',
+        permViewingTitle: 'Kureba Inyandiko',
+        permViewingBody:
+            'Ashobora kureba verisiyo z’inyandiko ziboneka',
+        permAdminTitle: 'Ubuyobozi',
+        permAdminBody: 'Nta burenganzira bw’ubuyobozi afite',
+        important: 'Ingenzi',
+        importantBody:
+            'Guhindura aderesi ya imeyili bishobora kugira ingaruka ku buryo uyu musomyi yinjira. Nihindura ijambobanga rye, menya neza ko abona irishya mu buryo bwizewe.',
+    },
+
+    en: {
+        eyebrow: 'Reader Management',
+        pageTitle: 'Edit Reader Account',
+        pageSubtitle:
+            "Update the reader's account information and password settings.",
+        checkInfo: 'Please check the information below',
+        accountInformation: 'Account Information',
+        updateDetails:
+            "Update the reader's personal and login details.",
+        fullName: 'Full Name',
+        required: '*',
+        fullNamePlaceholder: 'Enter full name',
+        fullNameHint:
+            "The reader's full name as it should appear in the system.",
+        emailAddress: 'Email Address',
+        emailPlaceholder: 'reader@example.com',
+        emailHint: 'This email address will be used to sign in.',
+        passwordSection: 'Password',
+        newPassword: 'New Password',
+        newPasswordPlaceholder: 'Leave blank to keep current password',
+        newPasswordHint:
+            'Leave this field blank if you do not want to change the current password.',
+        showPassword: 'Show password',
+        hidePassword: 'Hide password',
+        passwordSecurity: 'Password security',
+        passwordSecurityBody:
+            'Only enter a new password when you need to replace the existing one. Never share passwords publicly.',
+        cancel: 'Cancel',
+        saving: 'Saving...',
+        saveChanges: 'Save Changes',
+        accountPreview: 'Account Preview',
+        currentInfo: 'Current reader information',
+        readerNamePlaceholder: 'Reader Name',
+        readerAccountLabel: 'Reader Account',
+        accessLevel: 'Access Level',
+        accountPermissions: 'Account permissions',
+        permReaderTitle: 'Reader',
+        permReaderBody: 'Can access published documents',
+        permViewingTitle: 'Document Viewing',
+        permViewingBody: 'Can view available document versions',
+        permAdminTitle: 'Administration',
+        permAdminBody: 'No administrative privileges',
+        important: 'Important',
+        importantBody:
+            'Changes to the email address may affect how this reader signs in. If you change their password, make sure they receive the new password securely.',
+    },
+
+    fr: {
+        eyebrow: 'Gestion des lecteurs',
+        pageTitle: 'Modifier le compte lecteur',
+        pageSubtitle:
+            'Mettez à jour les informations du compte et les paramètres de mot de passe du lecteur.',
+        checkInfo: 'Veuillez vérifier les informations ci-dessous',
+        accountInformation: 'Informations du compte',
+        updateDetails:
+            'Mettez à jour les informations personnelles et de connexion du lecteur.',
+        fullName: 'Nom complet',
+        required: '*',
+        fullNamePlaceholder: 'Saisissez le nom complet',
+        fullNameHint:
+            'Le nom complet du lecteur tel qu’il doit apparaître dans le système.',
+        emailAddress: 'Adresse e-mail',
+        emailPlaceholder: 'reader@example.com',
+        emailHint: 'Cette adresse e-mail sera utilisée pour se connecter.',
+        passwordSection: 'Mot de passe',
+        newPassword: 'Nouveau mot de passe',
+        newPasswordPlaceholder:
+            'Laisser vide pour conserver le mot de passe actuel',
+        newPasswordHint:
+            'Laissez ce champ vide si vous ne souhaitez pas changer le mot de passe actuel.',
+        showPassword: 'Afficher le mot de passe',
+        hidePassword: 'Masquer le mot de passe',
+        passwordSecurity: 'Sécurité du mot de passe',
+        passwordSecurityBody:
+            'Ne saisissez un nouveau mot de passe que si vous devez remplacer l’actuel. Ne partagez jamais de mots de passe publiquement.',
+        cancel: 'Annuler',
+        saving: 'Enregistrement...',
+        saveChanges: 'Enregistrer',
+        accountPreview: 'Aperçu du compte',
+        currentInfo: 'Informations actuelles du lecteur',
+        readerNamePlaceholder: 'Nom du lecteur',
+        readerAccountLabel: 'Compte lecteur',
+        accessLevel: 'Niveau d’accès',
+        accountPermissions: 'Permissions du compte',
+        permReaderTitle: 'Lecteur',
+        permReaderBody: 'Peut accéder aux documents publiés',
+        permViewingTitle: 'Consultation des documents',
+        permViewingBody:
+            'Peut consulter les versions de documents disponibles',
+        permAdminTitle: 'Administration',
+        permAdminBody: 'Aucun privilège administratif',
+        important: 'Important',
+        importantBody:
+            'Les modifications de l’adresse e-mail peuvent affecter la connexion de ce lecteur. Si vous changez son mot de passe, assurez-vous qu’il le reçoive de manière sécurisée.',
+    },
+
+    nl: {
+        eyebrow: 'Lezersbeheer',
+        pageTitle: 'Lezersaccount bewerken',
+        pageSubtitle:
+            'Werk de accountgegevens en wachtwoordinstellingen van de lezer bij.',
+        checkInfo: 'Controleer de onderstaande informatie',
+        accountInformation: 'Accountgegevens',
+        updateDetails:
+            'Werk de persoonlijke en inloggegevens van de lezer bij.',
+        fullName: 'Volledige naam',
+        required: '*',
+        fullNamePlaceholder: 'Voer volledige naam in',
+        fullNameHint:
+            'De volledige naam van de lezer zoals die in het systeem moet verschijnen.',
+        emailAddress: 'E-mailadres',
+        emailPlaceholder: 'reader@example.com',
+        emailHint: 'Dit e-mailadres wordt gebruikt om in te loggen.',
+        passwordSection: 'Wachtwoord',
+        newPassword: 'Nieuw wachtwoord',
+        newPasswordPlaceholder:
+            'Laat leeg om het huidige wachtwoord te behouden',
+        newPasswordHint:
+            'Laat dit veld leeg als u het huidige wachtwoord niet wilt wijzigen.',
+        showPassword: 'Wachtwoord tonen',
+        hidePassword: 'Wachtwoord verbergen',
+        passwordSecurity: 'Wachtwoordbeveiliging',
+        passwordSecurityBody:
+            'Voer alleen een nieuw wachtwoord in wanneer u het bestaande wilt vervangen. Deel wachtwoorden nooit openbaar.',
+        cancel: 'Annuleren',
+        saving: 'Bezig met opslaan...',
+        saveChanges: 'Wijzigingen opslaan',
+        accountPreview: 'Accountvoorbeeld',
+        currentInfo: 'Huidige lezersgegevens',
+        readerNamePlaceholder: 'Naam lezer',
+        readerAccountLabel: 'Lezersaccount',
+        accessLevel: 'Toegangsniveau',
+        accountPermissions: 'Accountrechten',
+        permReaderTitle: 'Lezer',
+        permReaderBody: 'Heeft toegang tot gepubliceerde documenten',
+        permViewingTitle: 'Documenten bekijken',
+        permViewingBody:
+            'Kan beschikbare documentversies bekijken',
+        permAdminTitle: 'Administratie',
+        permAdminBody: 'Geen beheerdersrechten',
+        important: 'Belangrijk',
+        importantBody:
+            'Wijzigingen aan het e-mailadres kunnen invloed hebben op hoe deze lezer inlogt. Als u het wachtwoord wijzigt, zorg er dan voor dat de lezer het nieuwe wachtwoord veilig ontvangt.',
+    },
+};
 
 export default function Edit({ user }) {
+    /*
+    |--------------------------------------------------------------------------
+    | Admin UI language
+    |--------------------------------------------------------------------------
+    | Same shared-state pattern as AdminLayout: read once on mount, then
+    | subscribe to LANGUAGE_EVENT so a change made anywhere (the layout's
+    | header switcher, the login page, etc.) is picked up here instantly,
+    | including across Inertia navigations within the same tab.
+    */
+
+    const [language, setLanguageState] = useState(getLanguage);
+
+    const t = translations[language] || translations.rw;
+
+    useEffect(() => {
+        const handleLanguageChange = (event) => {
+            setLanguageState(event.detail);
+        };
+
+        window.addEventListener(LANGUAGE_EVENT, handleLanguageChange);
+
+        return () => {
+            window.removeEventListener(LANGUAGE_EVENT, handleLanguageChange);
+        };
+    }, []);
+
     const [showPassword, setShowPassword] = useState(false);
 
     const { data, setData, post, processing, errors } = useForm({
@@ -45,7 +276,7 @@ export default function Edit({ user }) {
     const hasErrors = Object.keys(errors).length > 0;
 
     return (
-        <AdminLayout title="Edit Reader Account">
+        <AdminLayout title={t.pageTitle}>
             <div className="edit-user-page">
 
                 {/* ================= HEADER ================= */}
@@ -59,16 +290,11 @@ export default function Edit({ user }) {
                         </Link>
 
                         <div>
-                            <div className="eyebrow">
-                                Reader Management
-                            </div>
+                            <div className="eyebrow">{t.eyebrow}</div>
 
-                            <h1>Edit Reader Account</h1>
+                            <h1>{t.pageTitle}</h1>
 
-                            <p>
-                                Update the reader's account information and
-                                password settings.
-                            </p>
+                            <p>{t.pageSubtitle}</p>
                         </div>
                     </div>
                 </div>
@@ -81,9 +307,7 @@ export default function Edit({ user }) {
                         </div>
 
                         <div>
-                            <strong>
-                                Please check the information below
-                            </strong>
+                            <strong>{t.checkInfo}</strong>
 
                             <ul>
                                 {Object.values(errors).map((message, index) => (
@@ -106,11 +330,8 @@ export default function Edit({ user }) {
                             </div>
 
                             <div>
-                                <h2>Account Information</h2>
-                                <p>
-                                    Update the reader's personal and login
-                                    details.
-                                </p>
+                                <h2>{t.accountInformation}</h2>
+                                <p>{t.updateDetails}</p>
                             </div>
                         </div>
 
@@ -119,8 +340,8 @@ export default function Edit({ user }) {
                             {/* NAME */}
                             <div className="form-group">
                                 <label htmlFor="name">
-                                    Full Name
-                                    <span>*</span>
+                                    {t.fullName}
+                                    <span>{t.required}</span>
                                 </label>
 
                                 <div className="input-wrapper">
@@ -135,7 +356,9 @@ export default function Edit({ user }) {
                                         value={data.name}
                                         required
                                         autoComplete="name"
-                                        placeholder="Enter full name"
+                                        placeholder={
+                                            t.fullNamePlaceholder
+                                        }
                                         onChange={(e) =>
                                             setData(
                                                 'name',
@@ -164,16 +387,15 @@ export default function Edit({ user }) {
                                 )}
 
                                 <div className="field-hint">
-                                    The reader's full name as it should appear
-                                    in the system.
+                                    {t.fullNameHint}
                                 </div>
                             </div>
 
                             {/* EMAIL */}
                             <div className="form-group">
                                 <label htmlFor="email">
-                                    Email Address
-                                    <span>*</span>
+                                    {t.emailAddress}
+                                    <span>{t.required}</span>
                                 </label>
 
                                 <div className="input-wrapper">
@@ -188,7 +410,9 @@ export default function Edit({ user }) {
                                         value={data.email}
                                         required
                                         autoComplete="email"
-                                        placeholder="reader@example.com"
+                                        placeholder={
+                                            t.emailPlaceholder
+                                        }
                                         onChange={(e) =>
                                             setData(
                                                 'email',
@@ -217,7 +441,7 @@ export default function Edit({ user }) {
                                 )}
 
                                 <div className="field-hint">
-                                    This email address will be used to sign in.
+                                    {t.emailHint}
                                 </div>
                             </div>
 
@@ -225,12 +449,12 @@ export default function Edit({ user }) {
                             <div className="password-section">
                                 <div className="section-title">
                                     <KeyRound size={18} />
-                                    <span>Password</span>
+                                    <span>{t.passwordSection}</span>
                                 </div>
 
                                 <div className="form-group">
                                     <label htmlFor="password">
-                                        New Password
+                                        {t.newPassword}
                                     </label>
 
                                     <div className="input-wrapper">
@@ -248,7 +472,9 @@ export default function Edit({ user }) {
                                             id="password"
                                             value={data.password}
                                             autoComplete="new-password"
-                                            placeholder="Leave blank to keep current password"
+                                            placeholder={
+                                                t.newPasswordPlaceholder
+                                            }
                                             onChange={(e) =>
                                                 setData(
                                                     'password',
@@ -272,8 +498,8 @@ export default function Edit({ user }) {
                                             }
                                             aria-label={
                                                 showPassword
-                                                    ? 'Hide password'
-                                                    : 'Show password'
+                                                    ? t.hidePassword
+                                                    : t.showPassword
                                             }
                                         >
                                             {showPassword ? (
@@ -291,8 +517,7 @@ export default function Edit({ user }) {
                                     )}
 
                                     <div className="field-hint">
-                                        Leave this field blank if you do not
-                                        want to change the current password.
+                                        {t.newPasswordHint}
                                     </div>
                                 </div>
 
@@ -302,12 +527,10 @@ export default function Edit({ user }) {
                                     </div>
 
                                     <div>
-                                        <strong>Password security</strong>
-                                        <p>
-                                            Only enter a new password when you
-                                            need to replace the existing one.
-                                            Never share passwords publicly.
-                                        </p>
+                                        <strong>
+                                            {t.passwordSecurity}
+                                        </strong>
+                                        <p>{t.passwordSecurityBody}</p>
                                     </div>
                                 </div>
                             </div>
@@ -318,7 +541,7 @@ export default function Edit({ user }) {
                                     href={route('admin.users.index')}
                                     className="cancel-button"
                                 >
-                                    Cancel
+                                    {t.cancel}
                                 </Link>
 
                                 <button
@@ -329,12 +552,12 @@ export default function Edit({ user }) {
                                     {processing ? (
                                         <>
                                             <span className="spinner"></span>
-                                            Saving...
+                                            {t.saving}
                                         </>
                                     ) : (
                                         <>
                                             <Save size={18} />
-                                            Save Changes
+                                            {t.saveChanges}
                                         </>
                                     )}
                                 </button>
@@ -353,8 +576,8 @@ export default function Edit({ user }) {
                                 </div>
 
                                 <div>
-                                    <h3>Account Preview</h3>
-                                    <p>Current reader information</p>
+                                    <h3>{t.accountPreview}</h3>
+                                    <p>{t.currentInfo}</p>
                                 </div>
                             </div>
 
@@ -365,7 +588,8 @@ export default function Edit({ user }) {
 
                                 <div className="profile-info">
                                     <h4>
-                                        {data.name || 'Reader Name'}
+                                        {data.name ||
+                                            t.readerNamePlaceholder}
                                     </h4>
 
                                     <span>
@@ -378,7 +602,7 @@ export default function Edit({ user }) {
                             <div className="account-status">
                                 <span className="status-dot"></span>
 
-                                <span>Reader Account</span>
+                                <span>{t.readerAccountLabel}</span>
                             </div>
                         </div>
 
@@ -390,8 +614,8 @@ export default function Edit({ user }) {
                                 </div>
 
                                 <div>
-                                    <h3>Access Level</h3>
-                                    <p>Account permissions</p>
+                                    <h3>{t.accessLevel}</h3>
+                                    <p>{t.accountPermissions}</p>
                                 </div>
                             </div>
 
@@ -401,10 +625,8 @@ export default function Edit({ user }) {
                                 </div>
 
                                 <div>
-                                    <strong>Reader</strong>
-                                    <span>
-                                        Can access published documents
-                                    </span>
+                                    <strong>{t.permReaderTitle}</strong>
+                                    <span>{t.permReaderBody}</span>
                                 </div>
                             </div>
 
@@ -414,10 +636,8 @@ export default function Edit({ user }) {
                                 </div>
 
                                 <div>
-                                    <strong>Document Viewing</strong>
-                                    <span>
-                                        Can view available document versions
-                                    </span>
+                                    <strong>{t.permViewingTitle}</strong>
+                                    <span>{t.permViewingBody}</span>
                                 </div>
                             </div>
 
@@ -427,10 +647,8 @@ export default function Edit({ user }) {
                                 </div>
 
                                 <div>
-                                    <strong>Administration</strong>
-                                    <span>
-                                        No administrative privileges
-                                    </span>
+                                    <strong>{t.permAdminTitle}</strong>
+                                    <span>{t.permAdminBody}</span>
                                 </div>
                             </div>
                         </div>
@@ -442,14 +660,9 @@ export default function Edit({ user }) {
                             </div>
 
                             <div>
-                                <h3>Important</h3>
+                                <h3>{t.important}</h3>
 
-                                <p>
-                                    Changes to the email address may affect
-                                    how this reader signs in. If you change
-                                    their password, make sure they receive the
-                                    new password securely.
-                                </p>
+                                <p>{t.importantBody}</p>
                             </div>
                         </div>
                     </aside>

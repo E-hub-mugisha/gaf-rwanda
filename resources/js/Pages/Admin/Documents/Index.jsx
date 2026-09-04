@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from "react";
 import AdminLayout from "@/Layouts/AdminLayout";
 import Pagination from "@/Components/Pagination";
 import { Link, router, usePage } from "@inertiajs/react";
@@ -15,7 +16,206 @@ import {
     Eye,
 } from "lucide-react";
 
-import { useMemo, useState } from "react";
+import { getLanguage, LANGUAGE_EVENT } from "@/lib/language";
+
+const translations = {
+    rw: {
+        documents: "Inyandiko",
+        pageDescription: "Gucunga inyandiko zawe n'indimi zazo.",
+        uploadDocument: "Shyiraho Inyandiko",
+
+        totalDocuments: "Inyandiko Zose",
+        languageVersions: "Verisiyo z'Indimi",
+        currentPage: "Ipaji Iriho",
+
+        allDocuments: "Inyandiko Zose",
+        documentCountSingular: "inyandiko iri mu bubiko bwawe",
+        documentCountPlural: "inyandiko ziri mu bubiko bwawe",
+        searchPlaceholder: "Shakisha inyandiko...",
+
+        colDocument: "INYANDIKO",
+        colLanguages: "INDIMI",
+        colUploaded: "YASHYIZWEHO",
+        colActions: "IBIKORWA",
+
+        documentHash: "Inyandiko #",
+        noVersions: "Nta verisiyo",
+        none: "Nta na kimwe",
+
+        view: "Reba",
+        activity: "Ibikorwa",
+        edit: "Hindura",
+        delete: "Siba",
+
+        noDocumentsFound: "Nta nyandiko yabonetse",
+        noDocumentsFoundDescription:
+            'Ntabwo twabashije kubona inyandiko ihuye na "{search}".',
+        clearSearch: "Siba Ishakiro",
+
+        noDocumentsYet: "Nta nyandiko zirahari",
+        noDocumentsYetDescription:
+            "Shyiraho inyandiko ya mbere kugira ngo utangire kubaka ububiko bw'inyandiko zawe.",
+
+        deleteConfirm:
+            'Gusiba "{title}" hamwe na verisiyo zayo zose z\'indimi? Iki gikorwa ntikigaruka.',
+        successTitle: "Byagenze neza",
+
+        languages: {
+            rw: "Kinyarwanda",
+            en: "Icyongereza",
+            fr: "Igifaransa",
+            nl: "Ikidage",
+        },
+    },
+
+    en: {
+        documents: "Documents",
+        pageDescription: "Manage your documents and their language versions.",
+        uploadDocument: "Upload Document",
+
+        totalDocuments: "Total Documents",
+        languageVersions: "Language Versions",
+        currentPage: "Current Page",
+
+        allDocuments: "All Documents",
+        documentCountSingular: "document in your library",
+        documentCountPlural: "documents in your library",
+        searchPlaceholder: "Search documents...",
+
+        colDocument: "DOCUMENT",
+        colLanguages: "LANGUAGES",
+        colUploaded: "UPLOADED",
+        colActions: "ACTIONS",
+
+        documentHash: "Document #",
+        noVersions: "No versions",
+        none: "None",
+
+        view: "View",
+        activity: "Activity",
+        edit: "Edit",
+        delete: "Delete",
+
+        noDocumentsFound: "No documents found",
+        noDocumentsFoundDescription:
+            'We couldn\'t find any document matching "{search}".',
+        clearSearch: "Clear Search",
+
+        noDocumentsYet: "No documents yet",
+        noDocumentsYetDescription:
+            "Upload your first document to start building your document library.",
+
+        deleteConfirm:
+            'Delete "{title}" and all its language versions? This action cannot be undone.',
+        successTitle: "Success",
+
+        languages: {
+            rw: "Kinyarwanda",
+            en: "English",
+            fr: "Français",
+            nl: "Nederlands",
+        },
+    },
+
+    fr: {
+        documents: "Documents",
+        pageDescription:
+            "Gérez vos documents et leurs versions linguistiques.",
+        uploadDocument: "Télécharger un document",
+
+        totalDocuments: "Total des documents",
+        languageVersions: "Versions linguistiques",
+        currentPage: "Page actuelle",
+
+        allDocuments: "Tous les documents",
+        documentCountSingular: "document dans votre bibliothèque",
+        documentCountPlural: "documents dans votre bibliothèque",
+        searchPlaceholder: "Rechercher des documents...",
+
+        colDocument: "DOCUMENT",
+        colLanguages: "LANGUES",
+        colUploaded: "TÉLÉCHARGÉ",
+        colActions: "ACTIONS",
+
+        documentHash: "Document n°",
+        noVersions: "Aucune version",
+        none: "Aucune",
+
+        view: "Voir",
+        activity: "Activité",
+        edit: "Modifier",
+        delete: "Supprimer",
+
+        noDocumentsFound: "Aucun document trouvé",
+        noDocumentsFoundDescription:
+            'Nous n\'avons trouvé aucun document correspondant à "{search}".',
+        clearSearch: "Effacer la recherche",
+
+        noDocumentsYet: "Aucun document pour le moment",
+        noDocumentsYetDescription:
+            "Téléchargez votre premier document pour commencer à créer votre bibliothèque documentaire.",
+
+        deleteConfirm:
+            'Supprimer "{title}" et toutes ses versions linguistiques ? Cette action est irréversible.',
+        successTitle: "Succès",
+
+        languages: {
+            rw: "Kinyarwanda",
+            en: "Anglais",
+            fr: "Français",
+            nl: "Néerlandais",
+        },
+    },
+
+    nl: {
+        documents: "Documenten",
+        pageDescription: "Beheer uw documenten en hun taalversies.",
+        uploadDocument: "Document uploaden",
+
+        totalDocuments: "Totaal aantal documenten",
+        languageVersions: "Taalversies",
+        currentPage: "Huidige pagina",
+
+        allDocuments: "Alle documenten",
+        documentCountSingular: "document in uw bibliotheek",
+        documentCountPlural: "documenten in uw bibliotheek",
+        searchPlaceholder: "Documenten zoeken...",
+
+        colDocument: "DOCUMENT",
+        colLanguages: "TALEN",
+        colUploaded: "GEÜPLOAD",
+        colActions: "ACTIES",
+
+        documentHash: "Document #",
+        noVersions: "Geen versies",
+        none: "Geen",
+
+        view: "Bekijken",
+        activity: "Activiteit",
+        edit: "Bewerken",
+        delete: "Verwijderen",
+
+        noDocumentsFound: "Geen documenten gevonden",
+        noDocumentsFoundDescription:
+            'We konden geen document vinden dat overeenkomt met "{search}".',
+        clearSearch: "Zoekopdracht wissen",
+
+        noDocumentsYet: "Nog geen documenten",
+        noDocumentsYetDescription:
+            "Upload uw eerste document om uw documentbibliotheek op te bouwen.",
+
+        deleteConfirm:
+            'Weet u zeker dat u "{title}" en alle taalversies wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.',
+        successTitle: "Gelukt",
+
+        languages: {
+            rw: "Kinyarwanda",
+            en: "Engels",
+            fr: "Frans",
+            nl: "Nederlands",
+        },
+    },
+};
 
 export default function Index({ documents }) {
     const { props } = usePage();
@@ -23,12 +223,34 @@ export default function Index({ documents }) {
 
     const [search, setSearch] = useState("");
 
+    /*
+    |--------------------------------------------------------------------------
+    | Language
+    |--------------------------------------------------------------------------
+    | Reads the shared language on mount and subscribes to the
+    | "gaf-language-change" window event (see resources/js/lib/language.js)
+    | so switching languages from AdminLayout's header dropdown updates this
+    | page immediately too.
+    */
+
+    const [language, setLanguage] = useState(getLanguage);
+
+    const t = translations[language] || translations.en;
+
+    useEffect(() => {
+        const handleLanguageChange = (event) => {
+            setLanguage(event.detail);
+        };
+
+        window.addEventListener(LANGUAGE_EVENT, handleLanguageChange);
+
+        return () => {
+            window.removeEventListener(LANGUAGE_EVENT, handleLanguageChange);
+        };
+    }, []);
+
     const destroy = (doc) => {
-        if (
-            confirm(
-                `Delete "${doc.title}" and all its language versions? This action cannot be undone.`,
-            )
-        ) {
+        if (confirm(t.deleteConfirm.replace("{title}", doc.title))) {
             router.delete(route("admin.documents.destroy", doc.id));
         }
     };
@@ -42,7 +264,7 @@ export default function Index({ documents }) {
     }, [documents.data, search]);
 
     return (
-        <AdminLayout title="Documents">
+        <AdminLayout title={t.documents}>
             <div className="documents-page">
                 {/* ================= HEADER ================= */}
                 <div className="page-header">
@@ -52,11 +274,8 @@ export default function Index({ documents }) {
                         </div>
 
                         <div>
-                            <h1>Documents</h1>
-                            <p>
-                                Manage your documents and their language
-                                versions.
-                            </p>
+                            <h1>{t.documents}</h1>
+                            <p>{t.pageDescription}</p>
                         </div>
                     </div>
 
@@ -65,7 +284,7 @@ export default function Index({ documents }) {
                         className="upload-btn"
                     >
                         <Upload size={18} />
-                        <span>Upload Document</span>
+                        <span>{t.uploadDocument}</span>
                     </Link>
                 </div>
 
@@ -74,7 +293,7 @@ export default function Index({ documents }) {
                     <div className="success-alert">
                         <div className="success-icon">✓</div>
                         <div>
-                            <strong>Success</strong>
+                            <strong>{t.successTitle}</strong>
                             <p>{status}</p>
                         </div>
                     </div>
@@ -88,7 +307,7 @@ export default function Index({ documents }) {
                         </div>
 
                         <div>
-                            <span>Total Documents</span>
+                            <span>{t.totalDocuments}</span>
                             <strong>{documents.total}</strong>
                         </div>
                     </div>
@@ -99,7 +318,7 @@ export default function Index({ documents }) {
                         </div>
 
                         <div>
-                            <span>Language Versions</span>
+                            <span>{t.languageVersions}</span>
                             <strong>
                                 {documents.data.reduce(
                                     (total, doc) => total + doc.versions.length,
@@ -115,7 +334,7 @@ export default function Index({ documents }) {
                         </div>
 
                         <div>
-                            <span>Current Page</span>
+                            <span>{t.currentPage}</span>
                             <strong>
                                 {documents.current_page} / {documents.last_page}
                             </strong>
@@ -128,13 +347,12 @@ export default function Index({ documents }) {
                     {/* CARD HEADER */}
                     <div className="documents-toolbar">
                         <div>
-                            <h2>All Documents</h2>
+                            <h2>{t.allDocuments}</h2>
                             <p>
                                 {documents.total}{" "}
                                 {documents.total === 1
-                                    ? "document"
-                                    : "documents"}{" "}
-                                in your library
+                                    ? t.documentCountSingular
+                                    : t.documentCountPlural}
                             </p>
                         </div>
 
@@ -142,7 +360,7 @@ export default function Index({ documents }) {
                             <Search size={17} />
                             <input
                                 type="text"
-                                placeholder="Search documents..."
+                                placeholder={t.searchPlaceholder}
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                             />
@@ -158,33 +376,32 @@ export default function Index({ documents }) {
 
                             {search ? (
                                 <>
-                                    <h3>No documents found</h3>
+                                    <h3>{t.noDocumentsFound}</h3>
                                     <p>
-                                        We couldn't find any document matching "
-                                        {search}".
+                                        {t.noDocumentsFoundDescription.replace(
+                                            "{search}",
+                                            search,
+                                        )}
                                     </p>
 
                                     <button
                                         className="clear-search"
                                         onClick={() => setSearch("")}
                                     >
-                                        Clear Search
+                                        {t.clearSearch}
                                     </button>
                                 </>
                             ) : (
                                 <>
-                                    <h3>No documents yet</h3>
-                                    <p>
-                                        Upload your first document to start
-                                        building your document library.
-                                    </p>
+                                    <h3>{t.noDocumentsYet}</h3>
+                                    <p>{t.noDocumentsYetDescription}</p>
 
                                     <Link
                                         href={route("admin.documents.create")}
                                         className="empty-upload-btn"
                                     >
                                         <Upload size={17} />
-                                        Upload Document
+                                        {t.uploadDocument}
                                     </Link>
                                 </>
                             )}
@@ -196,11 +413,11 @@ export default function Index({ documents }) {
                                 <table className="documents-table">
                                     <thead>
                                         <tr>
-                                            <th>DOCUMENT</th>
-                                            <th>LANGUAGES</th>
-                                            <th>UPLOADED</th>
+                                            <th>{t.colDocument}</th>
+                                            <th>{t.colLanguages}</th>
+                                            <th>{t.colUploaded}</th>
                                             <th className="actions-header">
-                                                ACTIONS
+                                                {t.colActions}
                                             </th>
                                         </tr>
                                     </thead>
@@ -223,7 +440,9 @@ export default function Index({ documents }) {
                                                             </div>
 
                                                             <div className="document-id">
-                                                                Document #
+                                                                {
+                                                                    t.documentHash
+                                                                }
                                                                 {doc.id}
                                                             </div>
                                                         </div>
@@ -235,7 +454,7 @@ export default function Index({ documents }) {
                                                     {doc.versions.length ===
                                                     0 ? (
                                                         <span className="no-language">
-                                                            No versions
+                                                            {t.noVersions}
                                                         </span>
                                                     ) : (
                                                         <div className="language-list">
@@ -281,10 +500,12 @@ export default function Index({ documents }) {
                                                                 doc.id,
                                                             )}
                                                             className="action-btn view"
-                                                            title="View document"
+                                                            title={t.view}
                                                         >
                                                             <Eye size={16} />
-                                                            <span>View</span>
+                                                            <span>
+                                                                {t.view}
+                                                            </span>
                                                         </Link>
 
                                                         <Link
@@ -296,13 +517,13 @@ export default function Index({ documents }) {
                                                                 },
                                                             )}
                                                             className="action-btn activity"
-                                                            title="View activity"
+                                                            title={t.activity}
                                                         >
                                                             <Activity
                                                                 size={16}
                                                             />
                                                             <span>
-                                                                Activity
+                                                                {t.activity}
                                                             </span>
                                                         </Link>
 
@@ -312,10 +533,12 @@ export default function Index({ documents }) {
                                                                 doc.id,
                                                             )}
                                                             className="action-btn edit"
-                                                            title="Edit document"
+                                                            title={t.edit}
                                                         >
                                                             <Pencil size={16} />
-                                                            <span>Edit</span>
+                                                            <span>
+                                                                {t.edit}
+                                                            </span>
                                                         </Link>
 
                                                         <button
@@ -324,10 +547,12 @@ export default function Index({ documents }) {
                                                             onClick={() =>
                                                                 destroy(doc)
                                                             }
-                                                            title="Delete document"
+                                                            title={t.delete}
                                                         >
                                                             <Trash2 size={16} />
-                                                            <span>Delete</span>
+                                                            <span>
+                                                                {t.delete}
+                                                            </span>
                                                         </button>
                                                     </div>
                                                 </td>
@@ -366,13 +591,15 @@ export default function Index({ documents }) {
 
                                         <div className="mobile-meta">
                                             <div>
-                                                <span>Languages</span>
+                                                <span>
+                                                    {t.colLanguages}
+                                                </span>
 
                                                 <div className="language-list">
                                                     {doc.versions.length ===
                                                     0 ? (
                                                         <span className="no-language">
-                                                            None
+                                                            {t.none}
                                                         </span>
                                                     ) : (
                                                         doc.versions.map(
@@ -394,7 +621,9 @@ export default function Index({ documents }) {
                                             </div>
 
                                             <div>
-                                                <span>Uploaded</span>
+                                                <span>
+                                                    {t.colUploaded}
+                                                </span>
 
                                                 <strong>
                                                     {doc.created_at_date}
@@ -411,7 +640,7 @@ export default function Index({ documents }) {
                                                 className="action-btn view"
                                             >
                                                 <Eye size={16} />
-                                                View
+                                                {t.view}
                                             </Link>
 
                                             <Link
@@ -424,7 +653,7 @@ export default function Index({ documents }) {
                                                 className="action-btn activity"
                                             >
                                                 <Activity size={16} />
-                                                Activity
+                                                {t.activity}
                                             </Link>
 
                                             <Link
@@ -435,7 +664,7 @@ export default function Index({ documents }) {
                                                 className="action-btn edit"
                                             >
                                                 <Pencil size={16} />
-                                                Edit
+                                                {t.edit}
                                             </Link>
 
                                             <button
@@ -444,7 +673,7 @@ export default function Index({ documents }) {
                                                 onClick={() => destroy(doc)}
                                             >
                                                 <Trash2 size={16} />
-                                                Delete
+                                                {t.delete}
                                             </button>
                                         </div>
                                     </div>
@@ -835,6 +1064,17 @@ export default function Index({ documents }) {
                     background: white;
                 }
 
+                .action-btn.view {
+                    color: #416FAE;
+                    border-color: #D8E5F7;
+                    background: #F5F9FF;
+                }
+
+                .action-btn.view:hover {
+                    background: #EAF1FC;
+                    border-color: #BFD3EE;
+                }
+
                 .action-btn.activity {
                     color: #526581;
                     border-color: #E3E8EF;
@@ -1065,16 +1305,6 @@ export default function Index({ documents }) {
                         justify-content: center;
                     }
                 }
-                    .action-btn.view {
-    color: #416FAE;
-    border-color: #D8E5F7;
-    background: #F5F9FF;
-}
-
-.action-btn.view:hover {
-    background: #EAF1FC;
-    border-color: #BFD3EE;
-}
             `}</style>
         </AdminLayout>
     );

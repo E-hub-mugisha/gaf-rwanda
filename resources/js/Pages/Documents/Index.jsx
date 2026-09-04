@@ -13,13 +13,139 @@ import {
     User,
     Library,
 } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { getLanguage, LANGUAGE_EVENT } from '@/lib/language';
+
+const translations = {
+    rw: {
+        welcomeBack: 'Murakaza neza',
+        heroTitle: 'Ububiko bwawe bw’Inyandiko',
+        heroSubtitle:
+            'Reba kandi ubone inyandiko ziheruka, umutungo, n’ibitabo biboneka kuri wewe.',
+        statDocuments: 'Inyandiko',
+        statAvailable: 'Biraboneka',
+        statResources: 'Umutungo',
+        availableDocuments: 'Inyandiko Ziboneka',
+        exploreResources: 'Reba umutungo watangajwe',
+        searchPlaceholder: 'Shakisha inyandiko...',
+        published: 'Byatangajwe',
+        noDescription: 'Nta bisobanuro bitanzwe kuri iyi nyandiko.',
+        availableLanguages: 'Indimi ziboneka',
+        availableResource: 'Umutungo uboneka',
+        viewDocument: 'Reba Inyandiko',
+        noDocumentsTitle: 'Nta nyandiko ziboneka',
+        noDocumentsBody:
+            'Ubu nta nyandiko zatangajwe ziboneka kuri portal.',
+        notFoundTitle: 'Nta nyandiko yabonetse',
+        notFoundBodyPrefix: 'Ntitwabashije kubona inyandiko ihuye na',
+        clearSearch: 'Siba Ishakiro',
+    },
+
+    en: {
+        welcomeBack: 'Welcome back',
+        heroTitle: 'Your Document Library',
+        heroSubtitle:
+            'Browse and access the latest documents, resources, and publications available to you.',
+        statDocuments: 'Documents',
+        statAvailable: 'Available',
+        statResources: 'Resources',
+        availableDocuments: 'Available Documents',
+        exploreResources: 'Explore published resources',
+        searchPlaceholder: 'Search documents...',
+        published: 'Published',
+        noDescription: 'No description provided for this document.',
+        availableLanguages: 'Available languages',
+        availableResource: 'Available resource',
+        viewDocument: 'View Document',
+        noDocumentsTitle: 'No documents available',
+        noDocumentsBody:
+            'There are currently no published documents available in the portal.',
+        notFoundTitle: 'No documents found',
+        notFoundBodyPrefix: "We couldn't find any documents matching",
+        clearSearch: 'Clear Search',
+    },
+
+    fr: {
+        welcomeBack: 'Bon retour',
+        heroTitle: 'Votre bibliothèque de documents',
+        heroSubtitle:
+            'Parcourez et accédez aux derniers documents, ressources et publications qui vous sont accessibles.',
+        statDocuments: 'Documents',
+        statAvailable: 'Disponible',
+        statResources: 'Ressources',
+        availableDocuments: 'Documents disponibles',
+        exploreResources: 'Explorez les ressources publiées',
+        searchPlaceholder: 'Rechercher des documents...',
+        published: 'Publié',
+        noDescription: 'Aucune description fournie pour ce document.',
+        availableLanguages: 'Langues disponibles',
+        availableResource: 'Ressource disponible',
+        viewDocument: 'Voir le document',
+        noDocumentsTitle: 'Aucun document disponible',
+        noDocumentsBody:
+            "Aucun document publié n'est actuellement disponible sur le portail.",
+        notFoundTitle: 'Aucun document trouvé',
+        notFoundBodyPrefix: "Nous n'avons trouvé aucun document correspondant à",
+        clearSearch: 'Effacer la recherche',
+    },
+
+    nl: {
+        welcomeBack: 'Welkom terug',
+        heroTitle: 'Jouw documentenbibliotheek',
+        heroSubtitle:
+            'Blader door en krijg toegang tot de nieuwste documenten, bronnen en publicaties die voor jou beschikbaar zijn.',
+        statDocuments: 'Documenten',
+        statAvailable: 'Beschikbaar',
+        statResources: 'Bronnen',
+        availableDocuments: 'Beschikbare documenten',
+        exploreResources: 'Verken gepubliceerde bronnen',
+        searchPlaceholder: 'Documenten zoeken...',
+        published: 'Gepubliceerd',
+        noDescription: 'Geen beschrijving beschikbaar voor dit document.',
+        availableLanguages: 'Beschikbare talen',
+        availableResource: 'Beschikbare bron',
+        viewDocument: 'Document bekijken',
+        noDocumentsTitle: 'Geen documenten beschikbaar',
+        noDocumentsBody:
+            'Er zijn momenteel geen gepubliceerde documenten beschikbaar op het portaal.',
+        notFoundTitle: 'Geen documenten gevonden',
+        notFoundBodyPrefix: 'We konden geen documenten vinden die overeenkomen met',
+        clearSearch: 'Zoekopdracht wissen',
+    },
+};
 
 export default function Index({ documents }) {
     const { props } = usePage();
     const user = props.auth?.user;
 
     const [search, setSearch] = useState('');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Language
+    |--------------------------------------------------------------------------
+    | Same shared-state pattern used across the app: read the current
+    | language from localStorage on mount, then subscribe to the
+    | "gaf-language-change" window event so this page re-renders the
+    | instant the language is changed from the header switcher in
+    | AppLayout (or anywhere else) -- no prop drilling needed.
+    */
+
+    const [language, setLanguageState] = useState(getLanguage);
+
+    const t = translations[language] || translations.rw;
+
+    useEffect(() => {
+        const handleLanguageChange = (event) => {
+            setLanguageState(event.detail);
+        };
+
+        window.addEventListener(LANGUAGE_EVENT, handleLanguageChange);
+
+        return () => {
+            window.removeEventListener(LANGUAGE_EVENT, handleLanguageChange);
+        };
+    }, []);
 
     const filteredDocuments = useMemo(() => {
         const query = search.trim().toLowerCase();
@@ -67,17 +193,16 @@ export default function Index({ documents }) {
                         <div className="welcome-badge">
                             <User size={13} />
                             <span>
-                                Welcome back, {user?.name || 'Reader'}
+                                {t.welcomeBack}, {user?.name || 'Reader'}
                             </span>
                         </div>
 
                         <h1>
-                            Your Document Library
+                            {t.heroTitle}
                         </h1>
 
                         <p>
-                            Browse and access the latest documents,
-                            resources, and publications available to you.
+                            {t.heroSubtitle}
                         </p>
 
                         <div className="hero-stats">
@@ -92,7 +217,7 @@ export default function Index({ documents }) {
                                             documents.data.length}
                                     </strong>
 
-                                    <span>Documents</span>
+                                    <span>{t.statDocuments}</span>
                                 </div>
                             </div>
 
@@ -105,10 +230,10 @@ export default function Index({ documents }) {
 
                                 <div>
                                     <strong>
-                                        Available
+                                        {t.statAvailable}
                                     </strong>
 
-                                    <span>Resources</span>
+                                    <span>{t.statResources}</span>
                                 </div>
                             </div>
                         </div>
@@ -137,9 +262,9 @@ export default function Index({ documents }) {
                         </div>
 
                         <div>
-                            <h2>Available Documents</h2>
+                            <h2>{t.availableDocuments}</h2>
                             <p>
-                                Explore published resources
+                                {t.exploreResources}
                             </p>
                         </div>
                     </div>
@@ -152,7 +277,7 @@ export default function Index({ documents }) {
 
                         <input
                             type="text"
-                            placeholder="Search documents..."
+                            placeholder={t.searchPlaceholder}
                             value={search}
                             onChange={(e) =>
                                 setSearch(e.target.value)
@@ -183,12 +308,11 @@ export default function Index({ documents }) {
                         </div>
 
                         <h3>
-                            No documents available
+                            {t.noDocumentsTitle}
                         </h3>
 
                         <p>
-                            There are currently no published documents
-                            available in the portal.
+                            {t.noDocumentsBody}
                         </p>
                     </div>
                 ) : filteredDocuments.length === 0 ? (
@@ -199,12 +323,11 @@ export default function Index({ documents }) {
                         </div>
 
                         <h3>
-                            No documents found
+                            {t.notFoundTitle}
                         </h3>
 
                         <p>
-                            We couldn't find any documents matching
-                            "{search}".
+                            {t.notFoundBodyPrefix} "{search}".
                         </p>
 
                         <button
@@ -212,7 +335,7 @@ export default function Index({ documents }) {
                             className="clear-filter-button"
                             onClick={() => setSearch('')}
                         >
-                            Clear Search
+                            {t.clearSearch}
                         </button>
                     </div>
                 ) : (
@@ -233,7 +356,7 @@ export default function Index({ documents }) {
                                         </div>
 
                                         <span className="published-badge">
-                                            Published
+                                            {t.published}
                                         </span>
                                     </div>
 
@@ -255,8 +378,7 @@ export default function Index({ documents }) {
                                             </p>
                                         ) : (
                                             <p className="document-description no-description">
-                                                No description provided for
-                                                this document.
+                                                {t.noDescription}
                                             </p>
                                         )}
 
@@ -267,7 +389,7 @@ export default function Index({ documents }) {
                                                 <div className="language-heading">
                                                     <Languages size={13} />
                                                     <span>
-                                                        Available languages
+                                                        {t.availableLanguages}
                                                     </span>
                                                 </div>
 
@@ -298,7 +420,7 @@ export default function Index({ documents }) {
                                             <CalendarDays size={14} />
 
                                             <span>
-                                                Available resource
+                                                {t.availableResource}
                                             </span>
                                         </div>
 
@@ -310,7 +432,7 @@ export default function Index({ documents }) {
                                             className="view-button"
                                         >
                                             <span>
-                                                View Document
+                                                {t.viewDocument}
                                             </span>
 
                                             <ArrowRight size={15} />

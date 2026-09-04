@@ -14,20 +14,213 @@ import {
     UserCircle,
     MoreHorizontal,
 } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { getLanguage, LANGUAGE_EVENT } from '@/lib/language';
+
+/*
+|--------------------------------------------------------------------------
+| UI translations (admin chrome only)
+|--------------------------------------------------------------------------
+| Same four admin-panel UI languages as AdminLayout (rw/en/fr/nl). This is
+| unrelated to the document content languages (en/es/rw) used elsewhere in
+| the portal -- this page never touches document PDFs.
+*/
+
+const translations = {
+    rw: {
+        pageTitle: 'Konti z’Abasoma',
+        pageSubtitle:
+            'Cunga konti z’abasoma bo mu baturage n’uburenganzira bwabo.',
+        newReader: 'Umusomyi Mushya',
+        success: 'Byagenze neza',
+        totalReaders: 'Abasoma bose',
+        currentPage: 'Urupapuro rugezweho',
+        accountType: 'Ubwoko bwa Konti',
+        reader: 'Usoma',
+        allAccounts: 'Konti Zose z’Abasoma',
+        registeredCount: (count) =>
+            `${count} ${
+                count === 1 ? 'konti y’umusomyi' : 'konti z’abasoma'
+            } zanditswe`,
+        searchPlaceholder: 'Shakisha ukoresheje izina cyangwa imeli...',
+        noReadersFoundTitle: 'Nta musomyi wabonetse',
+        noReadersFoundBody: (query) =>
+            `Ntitwabashije kubona konti ihuye na "${query}".`,
+        clearSearch: 'Siba Ishakisha',
+        noReadersYetTitle: 'Nta konti z’abasoma zirahari',
+        noReadersYetBody:
+            'Kora konti y’umusomyi kugira ngo abaturage babashe kwinjira no kubona inyandiko.',
+        createReaderAccount: 'Kora Konti y’Umusomyi',
+        colReader: 'USOMYI',
+        colEmail: 'AADIRESI YA IMEYILI',
+        colAccountType: 'UBWOKO BWA KONTI',
+        colCreated: 'YAKOZWE',
+        colActions: 'IBIKORWA',
+        readerHash: 'Usoma #',
+        readerAccountBadge: 'Konti y’Umusomyi',
+        edit: 'Hindura',
+        delete: 'Siba',
+        editReader: 'Hindura umusomyi',
+        deleteReader: 'Siba umusomyi',
+        email: 'Imeyili',
+        created: 'Yakozwe',
+        destroyConfirm: (name) =>
+            `Ukura "${name}" muri konti z’abasoma? Iki gikorwa ntikigaruka.`,
+    },
+
+    en: {
+        pageTitle: 'Reader Accounts',
+        pageSubtitle: 'Manage public reader accounts and access.',
+        newReader: 'New Reader',
+        success: 'Success',
+        totalReaders: 'Total Readers',
+        currentPage: 'Current Page',
+        accountType: 'Account Type',
+        reader: 'Reader',
+        allAccounts: 'All Reader Accounts',
+        registeredCount: (count) =>
+            `${count} ${
+                count === 1 ? 'reader account' : 'reader accounts'
+            } registered`,
+        searchPlaceholder: 'Search by name or email...',
+        noReadersFoundTitle: 'No readers found',
+        noReadersFoundBody: (query) =>
+            `We couldn't find an account matching "${query}".`,
+        clearSearch: 'Clear Search',
+        noReadersYetTitle: 'No reader accounts yet',
+        noReadersYetBody:
+            'Create a reader account so members of the public can log in and access documents.',
+        createReaderAccount: 'Create Reader Account',
+        colReader: 'READER',
+        colEmail: 'EMAIL ADDRESS',
+        colAccountType: 'ACCOUNT TYPE',
+        colCreated: 'CREATED',
+        colActions: 'ACTIONS',
+        readerHash: 'Reader #',
+        readerAccountBadge: 'Reader Account',
+        edit: 'Edit',
+        delete: 'Delete',
+        editReader: 'Edit reader',
+        deleteReader: 'Delete reader',
+        email: 'Email',
+        created: 'Created',
+        destroyConfirm: (name) =>
+            `Remove "${name}" from the reader accounts? This action cannot be undone.`,
+    },
+
+    fr: {
+        pageTitle: 'Comptes lecteurs',
+        pageSubtitle: 'Gérez les comptes lecteurs publics et leur accès.',
+        newReader: 'Nouveau lecteur',
+        success: 'Succès',
+        totalReaders: 'Total des lecteurs',
+        currentPage: 'Page actuelle',
+        accountType: 'Type de compte',
+        reader: 'Lecteur',
+        allAccounts: 'Tous les comptes lecteurs',
+        registeredCount: (count) =>
+            `${count} compte${count === 1 ? '' : 's'} lecteur${
+                count === 1 ? '' : 's'
+            } enregistré${count === 1 ? '' : 's'}`,
+        searchPlaceholder: 'Rechercher par nom ou e-mail...',
+        noReadersFoundTitle: 'Aucun lecteur trouvé',
+        noReadersFoundBody: (query) =>
+            `Aucun compte ne correspond à "${query}".`,
+        clearSearch: 'Effacer la recherche',
+        noReadersYetTitle: 'Aucun compte lecteur pour le moment',
+        noReadersYetBody:
+            'Créez un compte lecteur pour permettre au public de se connecter et d’accéder aux documents.',
+        createReaderAccount: 'Créer un compte lecteur',
+        colReader: 'LECTEUR',
+        colEmail: 'ADRESSE E-MAIL',
+        colAccountType: 'TYPE DE COMPTE',
+        colCreated: 'CRÉÉ LE',
+        colActions: 'ACTIONS',
+        readerHash: 'Lecteur n°',
+        readerAccountBadge: 'Compte lecteur',
+        edit: 'Modifier',
+        delete: 'Supprimer',
+        editReader: 'Modifier le lecteur',
+        deleteReader: 'Supprimer le lecteur',
+        email: 'E-mail',
+        created: 'Créé le',
+        destroyConfirm: (name) =>
+            `Supprimer "${name}" des comptes lecteurs ? Cette action est irréversible.`,
+    },
+
+    nl: {
+        pageTitle: 'Lezersaccounts',
+        pageSubtitle: 'Beheer openbare lezersaccounts en toegang.',
+        newReader: 'Nieuwe lezer',
+        success: 'Gelukt',
+        totalReaders: 'Totaal aantal lezers',
+        currentPage: 'Huidige pagina',
+        accountType: 'Accounttype',
+        reader: 'Lezer',
+        allAccounts: 'Alle lezersaccounts',
+        registeredCount: (count) =>
+            `${count} lezersaccount${count === 1 ? '' : 's'} geregistreerd`,
+        searchPlaceholder: 'Zoeken op naam of e-mail...',
+        noReadersFoundTitle: 'Geen lezers gevonden',
+        noReadersFoundBody: (query) =>
+            `We konden geen account vinden dat overeenkomt met "${query}".`,
+        clearSearch: 'Zoekopdracht wissen',
+        noReadersYetTitle: 'Nog geen lezersaccounts',
+        noReadersYetBody:
+            'Maak een lezersaccount aan zodat het publiek kan inloggen en documenten kan bekijken.',
+        createReaderAccount: 'Lezersaccount aanmaken',
+        colReader: 'LEZER',
+        colEmail: 'E-MAILADRES',
+        colAccountType: 'ACCOUNTTYPE',
+        colCreated: 'AANGEMAAKT',
+        colActions: 'ACTIES',
+        readerHash: 'Lezer #',
+        readerAccountBadge: 'Lezersaccount',
+        edit: 'Bewerken',
+        delete: 'Verwijderen',
+        editReader: 'Lezer bewerken',
+        deleteReader: 'Lezer verwijderen',
+        email: 'E-mail',
+        created: 'Aangemaakt',
+        destroyConfirm: (name) =>
+            `"${name}" verwijderen uit de lezersaccounts? Deze actie kan niet ongedaan worden gemaakt.`,
+    },
+};
 
 export default function Index({ users }) {
     const { props } = usePage();
     const status = props.flash?.status;
 
+    /*
+    |--------------------------------------------------------------------------
+    | Admin UI language
+    |--------------------------------------------------------------------------
+    | Same shared-state pattern as AdminLayout: read once on mount, then
+    | subscribe to LANGUAGE_EVENT so a change made anywhere (the layout's
+    | header switcher, the login page, etc.) is picked up here instantly,
+    | including across Inertia navigations within the same tab.
+    */
+
+    const [language, setLanguageState] = useState(getLanguage);
+
+    const t = translations[language] || translations.rw;
+
+    useEffect(() => {
+        const handleLanguageChange = (event) => {
+            setLanguageState(event.detail);
+        };
+
+        window.addEventListener(LANGUAGE_EVENT, handleLanguageChange);
+
+        return () => {
+            window.removeEventListener(LANGUAGE_EVENT, handleLanguageChange);
+        };
+    }, []);
+
     const [search, setSearch] = useState('');
 
     const destroy = (user) => {
-        if (
-            confirm(
-                `Remove "${user.name}" from the reader accounts? This action cannot be undone.`
-            )
-        ) {
+        if (confirm(t.destroyConfirm(user.name))) {
             router.delete(route('admin.users.destroy', user.id));
         }
     };
@@ -56,7 +249,7 @@ export default function Index({ users }) {
     };
 
     return (
-        <AdminLayout title="Reader Accounts">
+        <AdminLayout title={t.pageTitle}>
             <div className="readers-page">
 
                 {/* =====================================================
@@ -72,11 +265,9 @@ export default function Index({ users }) {
                         </div>
 
                         <div>
-                            <h1>Reader Accounts</h1>
+                            <h1>{t.pageTitle}</h1>
 
-                            <p>
-                                Manage public reader accounts and access.
-                            </p>
+                            <p>{t.pageSubtitle}</p>
                         </div>
 
                     </div>
@@ -86,7 +277,7 @@ export default function Index({ users }) {
                         className="create-btn"
                     >
                         <UserPlus size={18} />
-                        <span>New Reader</span>
+                        <span>{t.newReader}</span>
                     </Link>
 
                 </div>
@@ -103,7 +294,7 @@ export default function Index({ users }) {
                         </div>
 
                         <div>
-                            <strong>Success</strong>
+                            <strong>{t.success}</strong>
                             <p>{status}</p>
                         </div>
 
@@ -123,7 +314,7 @@ export default function Index({ users }) {
                         </div>
 
                         <div>
-                            <span>Total Readers</span>
+                            <span>{t.totalReaders}</span>
                             <strong>{users.total}</strong>
                         </div>
 
@@ -136,7 +327,7 @@ export default function Index({ users }) {
                         </div>
 
                         <div>
-                            <span>Current Page</span>
+                            <span>{t.currentPage}</span>
                             <strong>
                                 {users.current_page} / {users.last_page}
                             </strong>
@@ -151,8 +342,8 @@ export default function Index({ users }) {
                         </div>
 
                         <div>
-                            <span>Account Type</span>
-                            <strong>Reader</strong>
+                            <span>{t.accountType}</span>
+                            <strong>{t.reader}</strong>
                         </div>
 
                     </div>
@@ -170,15 +361,9 @@ export default function Index({ users }) {
                     <div className="readers-toolbar">
 
                         <div>
-                            <h2>All Reader Accounts</h2>
+                            <h2>{t.allAccounts}</h2>
 
-                            <p>
-                                {users.total}{' '}
-                                {users.total === 1
-                                    ? 'reader account'
-                                    : 'reader accounts'}{' '}
-                                registered
-                            </p>
+                            <p>{t.registeredCount(users.total)}</p>
                         </div>
 
                         <div className="search-box">
@@ -187,7 +372,7 @@ export default function Index({ users }) {
 
                             <input
                                 type="text"
-                                placeholder="Search by name or email..."
+                                placeholder={t.searchPlaceholder}
                                 value={search}
                                 onChange={(e) =>
                                     setSearch(e.target.value)
@@ -216,11 +401,10 @@ export default function Index({ users }) {
 
                             {search ? (
                                 <>
-                                    <h3>No readers found</h3>
+                                    <h3>{t.noReadersFoundTitle}</h3>
 
                                     <p>
-                                        We couldn't find an account matching
-                                        "{search}".
+                                        {t.noReadersFoundBody(search)}
                                     </p>
 
                                     <button
@@ -228,18 +412,14 @@ export default function Index({ users }) {
                                         className="clear-search"
                                         onClick={() => setSearch('')}
                                     >
-                                        Clear Search
+                                        {t.clearSearch}
                                     </button>
                                 </>
                             ) : (
                                 <>
-                                    <h3>No reader accounts yet</h3>
+                                    <h3>{t.noReadersYetTitle}</h3>
 
-                                    <p>
-                                        Create a reader account so members of
-                                        the public can log in and access
-                                        documents.
-                                    </p>
+                                    <p>{t.noReadersYetBody}</p>
 
                                     <Link
                                         href={route(
@@ -248,7 +428,7 @@ export default function Index({ users }) {
                                         className="empty-create-btn"
                                     >
                                         <UserPlus size={17} />
-                                        Create Reader Account
+                                        {t.createReaderAccount}
                                     </Link>
                                 </>
                             )}
@@ -268,12 +448,12 @@ export default function Index({ users }) {
 
                                     <thead>
                                         <tr>
-                                            <th>READER</th>
-                                            <th>EMAIL ADDRESS</th>
-                                            <th>ACCOUNT TYPE</th>
-                                            <th>CREATED</th>
+                                            <th>{t.colReader}</th>
+                                            <th>{t.colEmail}</th>
+                                            <th>{t.colAccountType}</th>
+                                            <th>{t.colCreated}</th>
                                             <th className="actions-header">
-                                                ACTIONS
+                                                {t.colActions}
                                             </th>
                                         </tr>
                                     </thead>
@@ -302,7 +482,8 @@ export default function Index({ users }) {
                                                             </div>
 
                                                             <div className="reader-id">
-                                                                Reader #{user.id}
+                                                                {t.readerHash}
+                                                                {user.id}
                                                             </div>
                                                         </div>
 
@@ -334,7 +515,7 @@ export default function Index({ users }) {
 
                                                         <UserRound size={12} />
 
-                                                        Reader
+                                                        {t.reader}
 
                                                     </span>
 
@@ -368,12 +549,14 @@ export default function Index({ users }) {
                                                                 user.id
                                                             )}
                                                             className="action-btn edit"
-                                                            title="Edit reader"
+                                                            title={
+                                                                t.editReader
+                                                            }
                                                         >
                                                             <Pencil size={16} />
 
                                                             <span>
-                                                                Edit
+                                                                {t.edit}
                                                             </span>
                                                         </Link>
 
@@ -383,12 +566,14 @@ export default function Index({ users }) {
                                                             onClick={() =>
                                                                 destroy(user)
                                                             }
-                                                            title="Delete reader"
+                                                            title={
+                                                                t.deleteReader
+                                                            }
                                                         >
                                                             <Trash2 size={16} />
 
                                                             <span>
-                                                                Delete
+                                                                {t.delete}
                                                             </span>
                                                         </button>
 
@@ -435,7 +620,8 @@ export default function Index({ users }) {
                                                     </div>
 
                                                     <div className="reader-id">
-                                                        Reader #{user.id}
+                                                        {t.readerHash}
+                                                        {user.id}
                                                     </div>
                                                 </div>
 
@@ -452,7 +638,7 @@ export default function Index({ users }) {
 
                                             <div className="mobile-meta-item">
 
-                                                <span>Email</span>
+                                                <span>{t.email}</span>
 
                                                 <div className="mobile-email">
                                                     <Mail size={13} />
@@ -464,7 +650,7 @@ export default function Index({ users }) {
 
                                             <div className="mobile-meta-item">
 
-                                                <span>Created</span>
+                                                <span>{t.created}</span>
 
                                                 <strong>
                                                     {user.created_at_date}
@@ -478,7 +664,7 @@ export default function Index({ users }) {
 
                                             <span className="role-badge">
                                                 <UserRound size={12} />
-                                                Reader Account
+                                                {t.readerAccountBadge}
                                             </span>
 
                                         </div>
@@ -493,7 +679,7 @@ export default function Index({ users }) {
                                                 className="action-btn edit"
                                             >
                                                 <Pencil size={16} />
-                                                Edit
+                                                {t.edit}
                                             </Link>
 
                                             <button
@@ -504,7 +690,7 @@ export default function Index({ users }) {
                                                 }
                                             >
                                                 <Trash2 size={16} />
-                                                Delete
+                                                {t.delete}
                                             </button>
 
                                         </div>

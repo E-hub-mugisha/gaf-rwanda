@@ -19,37 +19,53 @@ class LoginController extends Controller
     }
 
     public function store(Request $request)
-{
-    Log::info('LOGIN STORE REACHED', [
-        'email' => $request->email,
-    ]);
-
-    $credentials = $request->validate([
-        'email' => ['required', 'email'],
-        'password' => ['required'],
-    ]);
-
-    Log::info('LOGIN VALIDATION PASSED');
-
-    if (!Auth::attempt($credentials, $request->boolean('remember'))) {
-
-        Log::info('LOGIN FAILED');
-
-        throw ValidationException::withMessages([
-            'email' => 'The email or password you entered is incorrect.',
+    {
+        Log::info('LOGIN STORE REACHED', [
+            'email' => $request->email,
         ]);
+
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+
+        Log::info('LOGIN VALIDATION PASSED');
+
+        if (!Auth::attempt($credentials, $request->boolean('remember'))) {
+
+            Log::warning('LOGIN FAILED', [
+                'email' => $request->email,
+            ]);
+
+            throw ValidationException::withMessages([
+                'email' => 'The email or password you entered is incorrect.',
+            ]);
+        }
+
+        // Regenerate session after successful authentication
+        $request->session()->regenerate();
+
+        $user = Auth::user();
+
+        Log::info('LOGIN SUCCESS', [
+            'user_id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => $user->role,
+        ]);
+
+        /*
+    |--------------------------------------------------------------------------
+    | Redirect based on user role
+    |--------------------------------------------------------------------------
+    */
+
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+
+        return redirect()->route('documents.index');
     }
-
-    Log::info('LOGIN SUCCESS', [
-        'user_id' => Auth::id(),
-    ]);
-
-    $request->session()->regenerate();
-
-    Log::info('SESSION REGENERATED');
-
-    return redirect('/documents');
-}
 
     public function destroy(Request $request)
     {
