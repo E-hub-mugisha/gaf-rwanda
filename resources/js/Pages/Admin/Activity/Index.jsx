@@ -1,37 +1,1060 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import Pagination from '@/Components/Pagination';
+import { useMemo, useState } from 'react';
+import {
+    Activity,
+    FileText,
+    Languages,
+    Search,
+    User,
+    CalendarDays,
+    Clock3,
+    Eye,
+    ChevronRight,
+    X,
+} from 'lucide-react';
 
 export default function Index({ views }) {
+    const [search, setSearch] = useState('');
+
+    const filteredViews = useMemo(() => {
+        const query = search.trim().toLowerCase();
+
+        if (!query) {
+            return views.data;
+        }
+
+        return views.data.filter((view) => {
+            return (
+                view.user_name?.toLowerCase().includes(query) ||
+                view.document_title?.toLowerCase().includes(query) ||
+                view.language_label?.toLowerCase().includes(query) ||
+                view.viewed_at?.toLowerCase().includes(query)
+            );
+        });
+    }, [views.data, search]);
+
+    const totalViews = views.total ?? views.data.length;
+
+    const uniqueReaders = new Set(
+        views.data.map((view) => view.user_name)
+    ).size;
+
+    const uniqueDocuments = new Set(
+        views.data.map((view) => view.document_title)
+    ).size;
+
+    const getInitials = (name) => {
+        if (!name) return 'U';
+
+        return name
+            .trim()
+            .split(/\s+/)
+            .slice(0, 2)
+            .map((part) => part.charAt(0).toUpperCase())
+            .join('');
+    };
+
+    const getLanguageCode = (language) => {
+        if (!language) return '—';
+
+        const value = language.toLowerCase();
+
+        if (value.includes('english')) return 'EN';
+        if (value.includes('spanish')) return 'ES';
+        if (value.includes('kinyarwanda')) return 'RW';
+
+        return language.substring(0, 2).toUpperCase();
+    };
+
     return (
         <AdminLayout title="Activity Log">
-            <div className="topbar">
-                <h1>Activity Log</h1>
+            <div className="activity-page">
+
+                {/* ================= HEADER ================= */}
+                <div className="page-header">
+                    <div className="header-content">
+                        <div className="header-icon">
+                            <Activity size={23} />
+                        </div>
+
+                        <div>
+                            <div className="eyebrow">
+                                System Monitoring
+                            </div>
+
+                            <h1>Activity Log</h1>
+
+                            <p>
+                                Track document views and reader activity
+                                across the portal.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* ================= STATISTICS ================= */}
+                <div className="stats-grid">
+
+                    <div className="stat-card">
+                        <div className="stat-icon blue">
+                            <Eye size={20} />
+                        </div>
+
+                        <div className="stat-content">
+                            <span>Total Views</span>
+                            <strong>{totalViews}</strong>
+                            <small>Recorded document views</small>
+                        </div>
+                    </div>
+
+                    <div className="stat-card">
+                        <div className="stat-icon purple">
+                            <User size={20} />
+                        </div>
+
+                        <div className="stat-content">
+                            <span>Active Readers</span>
+                            <strong>{uniqueReaders}</strong>
+                            <small>Readers on this page</small>
+                        </div>
+                    </div>
+
+                    <div className="stat-card">
+                        <div className="stat-icon green">
+                            <FileText size={20} />
+                        </div>
+
+                        <div className="stat-content">
+                            <span>Documents</span>
+                            <strong>{uniqueDocuments}</strong>
+                            <small>Documents viewed</small>
+                        </div>
+                    </div>
+
+                    <div className="stat-card">
+                        <div className="stat-icon orange">
+                            <Clock3 size={20} />
+                        </div>
+
+                        <div className="stat-content">
+                            <span>Latest Activity</span>
+                            <strong>
+                                {views.data.length > 0 ? 'Active' : 'None'}
+                            </strong>
+                            <small>
+                                {views.data.length > 0
+                                    ? 'Recent reader activity'
+                                    : 'No activity recorded'}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                {/* ================= MAIN CARD ================= */}
+                <div className="activity-card">
+
+                    {/* TOOLBAR */}
+                    <div className="card-toolbar">
+                        <div className="toolbar-title">
+                            <div className="toolbar-icon">
+                                <Activity size={18} />
+                            </div>
+
+                            <div>
+                                <h2>Recent Activity</h2>
+                                <p>
+                                    A chronological record of document views
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="search-wrapper">
+                            <Search
+                                size={17}
+                                className="search-icon"
+                            />
+
+                            <input
+                                type="text"
+                                placeholder="Search activity..."
+                                value={search}
+                                onChange={(e) =>
+                                    setSearch(e.target.value)
+                                }
+                            />
+
+                            {search && (
+                                <button
+                                    type="button"
+                                    className="clear-search"
+                                    onClick={() => setSearch('')}
+                                    aria-label="Clear search"
+                                >
+                                    <X size={15} />
+                                </button>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* ================= TABLE ================= */}
+                    {views.data.length === 0 ? (
+                        <div className="empty-state">
+                            <div className="empty-icon">
+                                <Activity size={30} />
+                            </div>
+
+                            <h3>No activity recorded</h3>
+
+                            <p>
+                                Document views will appear here when readers
+                                access documents.
+                            </p>
+                        </div>
+                    ) : filteredViews.length === 0 ? (
+                        <div className="empty-state">
+                            <div className="empty-icon">
+                                <Search size={28} />
+                            </div>
+
+                            <h3>No matching activity</h3>
+
+                            <p>
+                                Try searching with a different reader,
+                                document, or language.
+                            </p>
+
+                            <button
+                                type="button"
+                                className="reset-button"
+                                onClick={() => setSearch('')}
+                            >
+                                Clear Search
+                            </button>
+                        </div>
+                    ) : (
+                        <>
+                            {/* DESKTOP TABLE */}
+                            <div className="table-wrapper">
+                                <table className="activity-table">
+                                    <thead>
+                                        <tr>
+                                            <th>READER</th>
+                                            <th>DOCUMENT</th>
+                                            <th>LANGUAGE</th>
+                                            <th>VIEWED</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {filteredViews.map((view) => (
+                                            <tr key={view.id}>
+
+                                                {/* READER */}
+                                                <td>
+                                                    <div className="reader-cell">
+                                                        <div className="reader-avatar">
+                                                            {getInitials(
+                                                                view.user_name
+                                                            )}
+                                                        </div>
+
+                                                        <div className="reader-info">
+                                                            <strong>
+                                                                {view.user_name}
+                                                            </strong>
+
+                                                            <span>
+                                                                Reader
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                                {/* DOCUMENT */}
+                                                <td>
+                                                    <div className="document-cell">
+                                                        <div className="document-icon">
+                                                            <FileText
+                                                                size={17}
+                                                            />
+                                                        </div>
+
+                                                        <div>
+                                                            <strong>
+                                                                {
+                                                                    view.document_title
+                                                                }
+                                                            </strong>
+
+                                                            <span>
+                                                                Document
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                                {/* LANGUAGE */}
+                                                <td>
+                                                    <div className="language-badge">
+                                                        <span className="language-code">
+                                                            {getLanguageCode(
+                                                                view.language_label
+                                                            )}
+                                                        </span>
+
+                                                        <span>
+                                                            {
+                                                                view.language_label
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                </td>
+
+                                                {/* VIEWED */}
+                                                <td>
+                                                    <div className="date-cell">
+                                                        <CalendarDays
+                                                            size={16}
+                                                        />
+
+                                                        <span>
+                                                            {view.viewed_at}
+                                                        </span>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <ChevronRight
+                                                        size={17}
+                                                        className="row-arrow"
+                                                    />
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {/* MOBILE CARDS */}
+                            <div className="mobile-activity-list">
+                                {filteredViews.map((view) => (
+                                    <div
+                                        className="mobile-activity-card"
+                                        key={view.id}
+                                    >
+                                        <div className="mobile-card-top">
+
+                                            <div className="reader-cell">
+                                                <div className="reader-avatar">
+                                                    {getInitials(
+                                                        view.user_name
+                                                    )}
+                                                </div>
+
+                                                <div className="reader-info">
+                                                    <strong>
+                                                        {view.user_name}
+                                                    </strong>
+
+                                                    <span>
+                                                        Reader
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div className="mobile-language">
+                                                {getLanguageCode(
+                                                    view.language_label
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        <div className="mobile-document">
+                                            <div className="document-icon">
+                                                <FileText size={17} />
+                                            </div>
+
+                                            <div>
+                                                <strong>
+                                                    {view.document_title}
+                                                </strong>
+
+                                                <span>
+                                                    {view.language_label}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div className="mobile-date">
+                                            <CalendarDays size={15} />
+                                            <span>
+                                                {view.viewed_at}
+                                            </span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* PAGINATION */}
+                            {!search && (
+                                <div className="pagination-container">
+                                    <Pagination links={views.links} />
+                                </div>
+                            )}
+                        </>
+                    )}
+                </div>
             </div>
 
-            <div className="card">
-                {views.data.length === 0 ? (
-                    <p className="empty">No document views recorded yet.</p>
-                ) : (
-                    <>
-                        <table>
-                            <thead>
-                                <tr><th>Reader</th><th>Document</th><th>Language</th><th>Viewed</th></tr>
-                            </thead>
-                            <tbody>
-                                {views.data.map((view) => (
-                                    <tr key={view.id}>
-                                        <td>{view.user_name}</td>
-                                        <td>{view.document_title}</td>
-                                        <td><span className="tag">{view.language_label}</span></td>
-                                        <td>{view.viewed_at}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        <Pagination links={views.links} />
-                    </>
-                )}
-            </div>
+            <style>{`
+                .activity-page {
+                    --blue: #5D89C8;
+                    --blue-dark: #466FA9;
+                    --blue-light: #EEF4FC;
+                    --ink: #172033;
+                    --muted: #718096;
+                    --border: #E5EAF1;
+                    --surface: #FFFFFF;
+                    --background: #F6F8FB;
+                    --purple: #8067B5;
+                    --green: #3D9B70;
+                    --orange: #D8914B;
+
+                    min-height: 100%;
+                    padding: 4px 0 40px;
+                    color: var(--ink);
+                }
+
+                /* HEADER */
+
+                .page-header {
+                    margin-bottom: 24px;
+                }
+
+                .header-content {
+                    display: flex;
+                    align-items: center;
+                    gap: 14px;
+                }
+
+                .header-icon {
+                    width: 46px;
+                    height: 46px;
+                    border-radius: 13px;
+                    background: var(--blue-light);
+                    color: var(--blue);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .eyebrow {
+                    font-size: 10px;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    letter-spacing: .1em;
+                    color: var(--blue);
+                    margin-bottom: 4px;
+                }
+
+                .page-header h1 {
+                    margin: 0;
+                    font-size: 27px;
+                    line-height: 1.2;
+                    font-weight: 800;
+                    letter-spacing: -.025em;
+                }
+
+                .page-header p {
+                    margin: 6px 0 0;
+                    color: var(--muted);
+                    font-size: 13px;
+                }
+
+                /* STATS */
+
+                .stats-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, minmax(0, 1fr));
+                    gap: 14px;
+                    margin-bottom: 20px;
+                }
+
+                .stat-card {
+                    min-width: 0;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    background: #fff;
+                    border: 1px solid var(--border);
+                    border-radius: 15px;
+                    padding: 17px;
+                    box-shadow: 0 4px 15px rgba(24, 43, 70, .035);
+                }
+
+                .stat-icon {
+                    width: 41px;
+                    height: 41px;
+                    border-radius: 11px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-shrink: 0;
+                }
+
+                .stat-icon.blue {
+                    background: #EEF4FC;
+                    color: var(--blue);
+                }
+
+                .stat-icon.purple {
+                    background: #F1EDFA;
+                    color: var(--purple);
+                }
+
+                .stat-icon.green {
+                    background: #EDF8F3;
+                    color: var(--green);
+                }
+
+                .stat-icon.orange {
+                    background: #FFF4E8;
+                    color: var(--orange);
+                }
+
+                .stat-content {
+                    min-width: 0;
+                }
+
+                .stat-content span {
+                    display: block;
+                    color: #7B8797;
+                    font-size: 10.5px;
+                    font-weight: 650;
+                    margin-bottom: 3px;
+                }
+
+                .stat-content strong {
+                    display: block;
+                    font-size: 21px;
+                    line-height: 1.1;
+                    font-weight: 800;
+                    color: var(--ink);
+                }
+
+                .stat-content small {
+                    display: block;
+                    margin-top: 4px;
+                    color: #A0A9B6;
+                    font-size: 9.5px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                /* MAIN CARD */
+
+                .activity-card {
+                    background: #fff;
+                    border: 1px solid var(--border);
+                    border-radius: 17px;
+                    overflow: hidden;
+                    box-shadow: 0 5px 20px rgba(24, 43, 70, .04);
+                }
+
+                /* TOOLBAR */
+
+                .card-toolbar {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 18px;
+                    padding: 18px 20px;
+                    border-bottom: 1px solid var(--border);
+                }
+
+                .toolbar-title {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    min-width: 0;
+                }
+
+                .toolbar-icon {
+                    width: 36px;
+                    height: 36px;
+                    border-radius: 10px;
+                    background: var(--blue-light);
+                    color: var(--blue);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-shrink: 0;
+                }
+
+                .toolbar-title h2 {
+                    margin: 0;
+                    font-size: 14px;
+                    font-weight: 800;
+                }
+
+                .toolbar-title p {
+                    margin: 3px 0 0;
+                    font-size: 10.5px;
+                    color: var(--muted);
+                }
+
+                /* SEARCH */
+
+                .search-wrapper {
+                    position: relative;
+                    width: 270px;
+                    flex-shrink: 0;
+                }
+
+                .search-wrapper input {
+                    width: 100%;
+                    height: 39px;
+                    box-sizing: border-box;
+                    border: 1px solid #DCE2EA;
+                    border-radius: 10px;
+                    outline: none;
+                    padding: 0 37px 0 37px;
+                    font-size: 12px;
+                    color: var(--ink);
+                    background: #FAFBFC;
+                    transition: .2s ease;
+                }
+
+                .search-wrapper input:focus {
+                    border-color: var(--blue);
+                    background: #fff;
+                    box-shadow: 0 0 0 3px rgba(93,137,200,.1);
+                }
+
+                .search-wrapper input::placeholder {
+                    color: #A0AAB7;
+                }
+
+                .search-icon {
+                    position: absolute;
+                    left: 12px;
+                    top: 11px;
+                    color: #8995A5;
+                    pointer-events: none;
+                }
+
+                .clear-search {
+                    position: absolute;
+                    right: 7px;
+                    top: 6px;
+                    width: 27px;
+                    height: 27px;
+                    border: 0;
+                    border-radius: 7px;
+                    background: transparent;
+                    color: #8995A5;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                }
+
+                .clear-search:hover {
+                    background: var(--blue-light);
+                    color: var(--blue);
+                }
+
+                /* TABLE */
+
+                .table-wrapper {
+                    width: 100%;
+                    overflow-x: auto;
+                }
+
+                .activity-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+
+                .activity-table th {
+                    padding: 13px 20px;
+                    background: #FAFBFC;
+                    border-bottom: 1px solid var(--border);
+                    color: #8994A4;
+                    text-align: left;
+                    font-size: 9.5px;
+                    font-weight: 800;
+                    letter-spacing: .065em;
+                    white-space: nowrap;
+                }
+
+                .activity-table td {
+                    padding: 14px 20px;
+                    border-bottom: 1px solid #EEF1F5;
+                    vertical-align: middle;
+                }
+
+                .activity-table tbody tr {
+                    transition: background .15s ease;
+                }
+
+                .activity-table tbody tr:hover {
+                    background: #FBFCFE;
+                }
+
+                .activity-table tbody tr:last-child td {
+                    border-bottom: 0;
+                }
+
+                /* READER */
+
+                .reader-cell {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    min-width: 160px;
+                }
+
+                .reader-avatar {
+                    width: 34px;
+                    height: 34px;
+                    border-radius: 10px;
+                    background: var(--blue-light);
+                    color: var(--blue);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 10px;
+                    font-weight: 800;
+                    flex-shrink: 0;
+                }
+
+                .reader-info {
+                    min-width: 0;
+                }
+
+                .reader-info strong {
+                    display: block;
+                    max-width: 180px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    color: #303B4D;
+                    font-size: 12px;
+                    font-weight: 750;
+                }
+
+                .reader-info span {
+                    display: block;
+                    color: #9AA4B2;
+                    font-size: 9.5px;
+                    margin-top: 2px;
+                }
+
+                /* DOCUMENT */
+
+                .document-cell {
+                    display: flex;
+                    align-items: center;
+                    gap: 9px;
+                    min-width: 210px;
+                }
+
+                .document-icon {
+                    width: 34px;
+                    height: 34px;
+                    border-radius: 9px;
+                    background: #F3F6FA;
+                    color: #66758A;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-shrink: 0;
+                }
+
+                .document-cell strong {
+                    display: block;
+                    max-width: 260px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    color: #344052;
+                    font-size: 12px;
+                    font-weight: 700;
+                }
+
+                .document-cell span {
+                    display: block;
+                    margin-top: 2px;
+                    color: #9AA4B2;
+                    font-size: 9.5px;
+                }
+
+                /* LANGUAGE */
+
+                .language-badge {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 7px;
+                    padding: 5px 8px 5px 5px;
+                    border: 1px solid #E1E7EF;
+                    background: #F9FAFC;
+                    border-radius: 8px;
+                    color: #5F6B7C;
+                    font-size: 10px;
+                    font-weight: 650;
+                    white-space: nowrap;
+                }
+
+                .language-code {
+                    width: 23px;
+                    height: 21px;
+                    border-radius: 6px;
+                    background: var(--blue-light);
+                    color: var(--blue);
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 8px;
+                    font-weight: 800;
+                }
+
+                /* DATE */
+
+                .date-cell {
+                    display: flex;
+                    align-items: center;
+                    gap: 7px;
+                    color: #697688;
+                    font-size: 11px;
+                    white-space: nowrap;
+                }
+
+                .date-cell svg {
+                    color: #94A0AE;
+                }
+
+                .row-arrow {
+                    color: #C2CAD4;
+                }
+
+                /* EMPTY */
+
+                .empty-state {
+                    min-height: 290px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                    padding: 35px 20px;
+                }
+
+                .empty-icon {
+                    width: 62px;
+                    height: 62px;
+                    border-radius: 17px;
+                    background: var(--blue-light);
+                    color: var(--blue);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-bottom: 15px;
+                }
+
+                .empty-state h3 {
+                    margin: 0;
+                    font-size: 15px;
+                    font-weight: 800;
+                    color: #344052;
+                }
+
+                .empty-state p {
+                    max-width: 390px;
+                    margin: 7px 0 15px;
+                    color: #8A95A5;
+                    font-size: 11.5px;
+                    line-height: 1.55;
+                }
+
+                .reset-button {
+                    border: 1px solid #DCE2EA;
+                    background: #fff;
+                    color: #596678;
+                    padding: 8px 13px;
+                    border-radius: 8px;
+                    font-size: 11px;
+                    font-weight: 700;
+                    cursor: pointer;
+                }
+
+                .reset-button:hover {
+                    border-color: var(--blue);
+                    color: var(--blue);
+                    background: var(--blue-light);
+                }
+
+                /* PAGINATION */
+
+                .pagination-container {
+                    padding: 15px 20px;
+                    border-top: 1px solid var(--border);
+                    background: #FCFDFE;
+                }
+
+                /* MOBILE */
+
+                .mobile-activity-list {
+                    display: none;
+                }
+
+                .mobile-activity-card {
+                    border-bottom: 1px solid #EEF1F5;
+                    padding: 16px;
+                }
+
+                .mobile-card-top {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    gap: 10px;
+                    margin-bottom: 15px;
+                }
+
+                .mobile-language {
+                    padding: 5px 8px;
+                    border-radius: 7px;
+                    background: var(--blue-light);
+                    color: var(--blue);
+                    font-size: 9px;
+                    font-weight: 800;
+                }
+
+                .mobile-document {
+                    display: flex;
+                    align-items: center;
+                    gap: 9px;
+                    margin-bottom: 12px;
+                }
+
+                .mobile-document strong {
+                    display: block;
+                    color: #344052;
+                    font-size: 12px;
+                    line-height: 1.35;
+                }
+
+                .mobile-document span {
+                    display: block;
+                    margin-top: 2px;
+                    color: #929DAC;
+                    font-size: 9.5px;
+                }
+
+                .mobile-date {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    color: #8994A4;
+                    font-size: 10px;
+                    padding-left: 43px;
+                }
+
+                /* RESPONSIVE */
+
+                @media (max-width: 1150px) {
+                    .stats-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                }
+
+                @media (max-width: 800px) {
+                    .card-toolbar {
+                        align-items: stretch;
+                        flex-direction: column;
+                    }
+
+                    .search-wrapper {
+                        width: 100%;
+                    }
+
+                    .table-wrapper {
+                        display: none;
+                    }
+
+                    .mobile-activity-list {
+                        display: block;
+                    }
+                }
+
+                @media (max-width: 600px) {
+                    .activity-page {
+                        padding-bottom: 25px;
+                    }
+
+                    .page-header h1 {
+                        font-size: 22px;
+                    }
+
+                    .page-header p {
+                        font-size: 11.5px;
+                    }
+
+                    .header-icon {
+                        width: 41px;
+                        height: 41px;
+                    }
+
+                    .stats-grid {
+                        grid-template-columns: 1fr 1fr;
+                        gap: 9px;
+                    }
+
+                    .stat-card {
+                        padding: 13px;
+                        gap: 9px;
+                    }
+
+                    .stat-icon {
+                        width: 35px;
+                        height: 35px;
+                    }
+
+                    .stat-content strong {
+                        font-size: 17px;
+                    }
+
+                    .stat-content small {
+                        display: none;
+                    }
+
+                    .stat-content span {
+                        font-size: 9.5px;
+                    }
+
+                    .card-toolbar {
+                        padding: 15px;
+                    }
+
+                    .pagination-container {
+                        padding: 13px 15px;
+                        overflow-x: auto;
+                    }
+                }
+
+                @media (max-width: 400px) {
+                    .stats-grid {
+                        grid-template-columns: 1fr;
+                    }
+
+                    .stat-content small {
+                        display: block;
+                    }
+                }
+            `}</style>
         </AdminLayout>
     );
 }

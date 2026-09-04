@@ -17,11 +17,11 @@ class DocumentController extends Controller
     {
         $documents = Document::with('versions')->latest()->paginate(10)->withQueryString();
 
-        $documents->getCollection()->transform(fn ($doc) => [
+        $documents->getCollection()->transform(fn($doc) => [
             'id' => $doc->id,
             'title' => $doc->title,
             'created_at_date' => $doc->created_at->format('d M Y'),
-            'versions' => $doc->versions->map(fn ($v) => [
+            'versions' => $doc->versions->map(fn($v) => [
                 'id' => $v->id,
                 'language' => $v->language,
                 'language_label' => $v->languageLabel(),
@@ -74,7 +74,7 @@ class DocumentController extends Controller
                 'id' => $document->id,
                 'title' => $document->title,
                 'description' => $document->description,
-                'versions' => $document->versions->map(fn ($v) => [
+                'versions' => $document->versions->map(fn($v) => [
                     'id' => $v->id,
                     'language' => $v->language,
                     'original_filename' => $v->original_filename,
@@ -161,5 +161,27 @@ class DocumentController extends Controller
         if (File::exists($fullPath)) {
             File::delete($fullPath);
         }
+    }
+
+    public function view($id)
+    {
+        $document = Document::with('versions')->findOrFail($id);
+
+        return Inertia::render('Admin/Documents/View', [
+            'document' => [
+                'id' => $document->id,
+                'title' => $document->title,
+                'description' => $document->description,
+                'created_at' => $document->created_at?->format('M d, Y'),
+                'versions' => $document->versions->map(function ($version) {
+                    return [
+                        'id' => $version->id,
+                        'language' => $version->language,
+                        'language_label' => $version->languageLabel(),
+                        'original_filename' => $version->original_filename,
+                    ];
+                })->values(),
+            ],
+        ]);
     }
 }

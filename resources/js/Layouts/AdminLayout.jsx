@@ -2,7 +2,10 @@ import { Head, Link, usePage, router } from '@inertiajs/react';
 
 export default function AdminLayout({ title, children }) {
     const { url } = usePage();
-    const isActive = (prefix) => url.startsWith(prefix);
+
+    const isActive = (prefix) => {
+        return url.startsWith(prefix);
+    };
 
     const logout = (e) => {
         e.preventDefault();
@@ -10,23 +13,1011 @@ export default function AdminLayout({ title, children }) {
     };
 
     return (
-        <div className="admin-shell">
+        <>
             {title && <Head title={title} />}
-            <aside className="sidebar">
-                <h2>Document Portal</h2>
-                <nav>
-                    <Link href={route('admin.dashboard')} className={isActive('/admin/dashboard') ? 'active' : ''}>Dashboard</Link>
-                    <Link href={route('admin.documents.index')} className={isActive('/admin/documents') ? 'active' : ''}>Documents</Link>
-                    <Link href={route('admin.users.index')} className={isActive('/admin/users') ? 'active' : ''}>Reader Accounts</Link>
-                    <Link href={route('admin.activity.index')} className={isActive('/admin/activity') ? 'active' : ''}>Activity Log</Link>
-                </nav>
-                <form onSubmit={logout}>
-                    <button type="submit" className="logout">Log out</button>
-                </form>
-            </aside>
-            <div className="admin-main">
-                {children}
+
+            <div className="ngo-admin">
+
+                {/* =========================
+                    SIDEBAR
+                ========================== */}
+                <aside className="ngo-sidebar">
+
+                    {/* Brand */}
+                    <div className="sidebar-brand">
+                        <div className="brand-mark">
+                            G
+                        </div>
+
+                        <div className="brand-text">
+                            <strong>GAF Rwanda</strong>
+                            <span>Document Portal</span>
+                        </div>
+                    </div>
+
+                    {/* Navigation */}
+                    <div className="sidebar-content">
+
+                        <div className="nav-label">
+                            MAIN MENU
+                        </div>
+
+                        <nav className="sidebar-nav">
+
+                            <Link
+                                href={route('admin.dashboard')}
+                                className={
+                                    isActive('/admin/dashboard')
+                                        ? 'nav-item active'
+                                        : 'nav-item'
+                                }
+                            >
+                                <span className="nav-icon">
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="1.8"
+                                    >
+                                        <rect x="3" y="3" width="7" height="7" rx="1" />
+                                        <rect x="14" y="3" width="7" height="7" rx="1" />
+                                        <rect x="3" y="14" width="7" height="7" rx="1" />
+                                        <rect x="14" y="14" width="7" height="7" rx="1" />
+                                    </svg>
+                                </span>
+
+                                <span>Dashboard</span>
+                            </Link>
+
+                            <Link
+                                href={route('admin.documents.index')}
+                                className={
+                                    isActive('/admin/documents')
+                                        ? 'nav-item active'
+                                        : 'nav-item'
+                                }
+                            >
+                                <span className="nav-icon">
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="1.8"
+                                    >
+                                        <path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H14l6 6v11.5A2.5 2.5 0 0 1 17.5 22h-11A2.5 2.5 0 0 1 4 19.5v-15z" />
+                                        <path d="M14 2v6h6" />
+                                        <path d="M8 13h8M8 17h6" />
+                                    </svg>
+                                </span>
+
+                                <span>Documents</span>
+                            </Link>
+
+                            <Link
+                                href={route('admin.users.index')}
+                                className={
+                                    isActive('/admin/users')
+                                        ? 'nav-item active'
+                                        : 'nav-item'
+                                }
+                            >
+                                <span className="nav-icon">
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="1.8"
+                                    >
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                                        <circle cx="9" cy="7" r="4" />
+                                        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                    </svg>
+                                </span>
+
+                                <span>Reader Accounts</span>
+                            </Link>
+
+                            <Link
+                                href={route('admin.activity.index')}
+                                className={
+                                    isActive('/admin/activity')
+                                        ? 'nav-item active'
+                                        : 'nav-item'
+                                }
+                            >
+                                <span className="nav-icon">
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="1.8"
+                                    >
+                                        <path d="M3 12h4l3-8 4 16 3-8h4" />
+                                    </svg>
+                                </span>
+
+                                <span>Activity Log</span>
+                            </Link>
+
+                        </nav>
+
+                        {/* Divider */}
+                        <div className="sidebar-divider"></div>
+
+                        {/* Portal info */}
+                        <div className="portal-info">
+                            <div className="portal-info-icon">
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="1.8"
+                                >
+                                    <circle cx="12" cy="12" r="9" />
+                                    <path d="M12 10v6" />
+                                    <path d="M12 7h.01" />
+                                </svg>
+                            </div>
+
+                            <div>
+                                <strong>Document Portal</strong>
+                                <span>Manage organizational resources</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {/* Sidebar Bottom */}
+                    <div className="sidebar-bottom">
+
+                        <div className="organization">
+                            <div className="organization-avatar">
+                                G
+                            </div>
+
+                            <div className="organization-info">
+                                <strong>GAF Rwanda</strong>
+                                <span>Administration</span>
+                            </div>
+                        </div>
+
+                        <form onSubmit={logout}>
+                            <button
+                                type="submit"
+                                className="logout-button"
+                            >
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="1.8"
+                                >
+                                    <path d="M10 17l5-5-5-5" />
+                                    <path d="M15 12H3" />
+                                    <path d="M21 3v18" />
+                                </svg>
+
+                                <span>Sign out</span>
+                            </button>
+                        </form>
+
+                    </div>
+                </aside>
+
+
+                {/* =========================
+                    MAIN AREA
+                ========================== */}
+                <main className="ngo-main">
+
+                    {/* Top Header */}
+                    <header className="ngo-header">
+
+                        <div className="header-left">
+                            <button
+                                type="button"
+                                className="mobile-menu"
+                                onClick={() => {
+                                    document
+                                        .querySelector('.ngo-sidebar')
+                                        ?.classList.toggle('mobile-open');
+
+                                    document
+                                        .querySelector('.sidebar-overlay')
+                                        ?.classList.toggle('show');
+                                }}
+                                aria-label="Open menu"
+                            >
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                >
+                                    <path d="M4 6h16M4 12h16M4 18h16" />
+                                </svg>
+                            </button>
+
+                            <div>
+                                <span className="header-label">
+                                    ADMINISTRATION
+                                </span>
+
+                                <h1>
+                                    {title || 'Dashboard'}
+                                </h1>
+                            </div>
+                        </div>
+
+                        <div className="header-right">
+
+                            <div className="header-status">
+                                <span className="status-dot"></span>
+                                System Online
+                            </div>
+
+                            <div className="header-avatar">
+                                G
+                            </div>
+
+                        </div>
+
+                    </header>
+
+
+                    {/* Page Content */}
+                    <div className="ngo-content">
+                        {children}
+                    </div>
+
+
+                    {/* Footer */}
+                    <footer className="ngo-footer">
+                        <span>
+                            © {new Date().getFullYear()} GAF Rwanda
+                        </span>
+
+                        <span className="footer-separator">
+                            •
+                        </span>
+
+                        <span>
+                            Document Management Portal
+                        </span>
+                    </footer>
+
+                </main>
+
+
+                {/* Mobile Overlay */}
+                <div
+                    className="sidebar-overlay"
+                    onClick={() => {
+                        document
+                            .querySelector('.ngo-sidebar')
+                            ?.classList.remove('mobile-open');
+
+                        document
+                            .querySelector('.sidebar-overlay')
+                            ?.classList.remove('show');
+                    }}
+                ></div>
+
             </div>
-        </div>
+
+
+            {/* =========================
+                STYLES
+            ========================== */}
+            <style>{`
+
+                * {
+                    box-sizing: border-box;
+                }
+
+                html,
+                body,
+                #app {
+                    margin: 0;
+                    min-height: 100%;
+                }
+
+                body {
+                    font-family:
+                        Inter,
+                        ui-sans-serif,
+                        system-ui,
+                        -apple-system,
+                        BlinkMacSystemFont,
+                        "Segoe UI",
+                        sans-serif;
+
+                    background: #f5f7fa;
+                    color: #172033;
+                }
+
+                button,
+                input,
+                textarea,
+                select {
+                    font-family: inherit;
+                }
+
+
+                /* =====================================
+                   MAIN SHELL
+                ====================================== */
+
+                .ngo-admin {
+                    min-height: 100vh;
+                    display: flex;
+                    background: #f5f7fa;
+                }
+
+
+                /* =====================================
+                   SIDEBAR
+                ====================================== */
+
+                .ngo-sidebar {
+                    width: 260px;
+                    height: 100vh;
+
+                    position: fixed;
+                    left: 0;
+                    top: 0;
+
+                    display: flex;
+                    flex-direction: column;
+
+                    background: #ffffff;
+
+                    border-right: 1px solid #e7ebf0;
+
+                    z-index: 100;
+                }
+
+
+                /* =====================================
+                   BRAND
+                ====================================== */
+
+                .sidebar-brand {
+                    height: 82px;
+
+                    padding: 0 24px;
+
+                    display: flex;
+                    align-items: center;
+
+                    border-bottom: 1px solid #edf0f4;
+                }
+
+                .brand-mark {
+                    width: 42px;
+                    height: 42px;
+
+                    flex-shrink: 0;
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    border-radius: 11px;
+
+                    background: #5d89c8;
+                    color: #ffffff;
+
+                    font-size: 19px;
+                    font-weight: 800;
+
+                    box-shadow:
+                        0 6px 15px rgba(93, 137, 200, .18);
+                }
+
+                .brand-text {
+                    margin-left: 12px;
+
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .brand-text strong {
+                    color: #172033;
+
+                    font-size: 15px;
+                    font-weight: 750;
+
+                    line-height: 1.3;
+                }
+
+                .brand-text span {
+                    margin-top: 2px;
+
+                    color: #8a94a5;
+
+                    font-size: 11px;
+                }
+
+
+                /* =====================================
+                   SIDEBAR CONTENT
+                ====================================== */
+
+                .sidebar-content {
+                    flex: 1;
+
+                    padding: 27px 15px;
+
+                    overflow-y: auto;
+                }
+
+                .nav-label {
+                    padding: 0 12px 10px;
+
+                    color: #a0a8b5;
+
+                    font-size: 10px;
+                    font-weight: 750;
+
+                    letter-spacing: 1.2px;
+                }
+
+                .sidebar-nav {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+                }
+
+                .nav-item {
+                    min-height: 45px;
+
+                    display: flex;
+                    align-items: center;
+
+                    gap: 12px;
+
+                    padding: 0 12px;
+
+                    border-radius: 9px;
+
+                    text-decoration: none;
+
+                    color: #667085;
+
+                    font-size: 13px;
+                    font-weight: 550;
+
+                    transition: .18s ease;
+                }
+
+                .nav-item:hover {
+                    background: #f3f6fa;
+                    color: #315f99;
+                }
+
+                .nav-item.active {
+                    background: #edf4fc;
+                    color: #315f99;
+
+                    font-weight: 700;
+                }
+
+                .nav-icon {
+                    width: 20px;
+                    height: 20px;
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    flex-shrink: 0;
+                }
+
+                .nav-icon svg {
+                    width: 19px;
+                    height: 19px;
+                }
+
+
+                /* =====================================
+                   SIDEBAR DIVIDER
+                ====================================== */
+
+                .sidebar-divider {
+                    height: 1px;
+
+                    margin: 25px 10px;
+
+                    background: #edf0f4;
+                }
+
+
+                /* =====================================
+                   PORTAL INFO
+                ====================================== */
+
+                .portal-info {
+                    display: flex;
+                    gap: 10px;
+
+                    margin: 0 8px;
+                    padding: 13px;
+
+                    border-radius: 10px;
+
+                    background: #f7f9fc;
+
+                    border: 1px solid #edf0f4;
+                }
+
+                .portal-info-icon {
+                    width: 26px;
+                    height: 26px;
+
+                    flex-shrink: 0;
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    border-radius: 7px;
+
+                    background: #e8f0fa;
+                    color: #5d89c8;
+                }
+
+                .portal-info-icon svg {
+                    width: 15px;
+                    height: 15px;
+                }
+
+                .portal-info strong {
+                    display: block;
+
+                    color: #374151;
+
+                    font-size: 11px;
+                    font-weight: 700;
+                }
+
+                .portal-info span {
+                    display: block;
+
+                    margin-top: 3px;
+
+                    color: #98a1af;
+
+                    font-size: 9px;
+                    line-height: 1.4;
+                }
+
+
+                /* =====================================
+                   SIDEBAR BOTTOM
+                ====================================== */
+
+                .sidebar-bottom {
+                    padding: 16px;
+
+                    border-top: 1px solid #edf0f4;
+                }
+
+                .organization {
+                    display: flex;
+                    align-items: center;
+
+                    gap: 10px;
+
+                    padding: 8px;
+                }
+
+                .organization-avatar {
+                    width: 34px;
+                    height: 34px;
+
+                    flex-shrink: 0;
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    border-radius: 9px;
+
+                    background: #eaf1fa;
+                    color: #315f99;
+
+                    font-size: 13px;
+                    font-weight: 800;
+                }
+
+                .organization-info {
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .organization-info strong {
+                    color: #374151;
+
+                    font-size: 11px;
+                    font-weight: 700;
+                }
+
+                .organization-info span {
+                    margin-top: 2px;
+
+                    color: #9aa3b0;
+
+                    font-size: 9px;
+                }
+
+                .logout-button {
+                    width: 100%;
+
+                    margin-top: 10px;
+
+                    height: 40px;
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    gap: 8px;
+
+                    border: 1px solid #e6eaf0;
+                    border-radius: 8px;
+
+                    background: #ffffff;
+
+                    color: #7b8495;
+
+                    font-size: 12px;
+                    font-weight: 600;
+
+                    cursor: pointer;
+
+                    transition: .18s ease;
+                }
+
+                .logout-button:hover {
+                    background: #fff7f7;
+                    border-color: #f1d3d3;
+                    color: #c24141;
+                }
+
+                .logout-button svg {
+                    width: 16px;
+                    height: 16px;
+                }
+
+
+                /* =====================================
+                   MAIN
+                ====================================== */
+
+                .ngo-main {
+                    width: calc(100% - 260px);
+
+                    min-height: 100vh;
+
+                    margin-left: 260px;
+
+                    display: flex;
+                    flex-direction: column;
+                }
+
+
+                /* =====================================
+                   HEADER
+                ====================================== */
+
+                .ngo-header {
+                    min-height: 82px;
+
+                    padding: 0 32px;
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+
+                    background: #ffffff;
+
+                    border-bottom: 1px solid #e7ebf0;
+                }
+
+                .header-left {
+                    display: flex;
+                    align-items: center;
+                    gap: 15px;
+                }
+
+                .header-label {
+                    display: block;
+
+                    margin-bottom: 3px;
+
+                    color: #9aa3b0;
+
+                    font-size: 9px;
+                    font-weight: 750;
+
+                    letter-spacing: 1.1px;
+                }
+
+                .ngo-header h1 {
+                    margin: 0;
+
+                    color: #172033;
+
+                    font-size: 21px;
+                    font-weight: 700;
+
+                    letter-spacing: -.4px;
+                }
+
+                .header-right {
+                    display: flex;
+                    align-items: center;
+                    gap: 18px;
+                }
+
+                .header-status {
+                    display: flex;
+                    align-items: center;
+                    gap: 7px;
+
+                    color: #7b8495;
+
+                    font-size: 11px;
+                }
+
+                .status-dot {
+                    width: 7px;
+                    height: 7px;
+
+                    border-radius: 50%;
+
+                    background: #43a76a;
+                }
+
+                .header-avatar {
+                    width: 38px;
+                    height: 38px;
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    border-radius: 50%;
+
+                    background: #5d89c8;
+
+                    color: #ffffff;
+
+                    font-size: 12px;
+                    font-weight: 750;
+                }
+
+
+                /* =====================================
+                   CONTENT
+                ====================================== */
+
+                .ngo-content {
+                    flex: 1;
+
+                    width: 100%;
+
+                    padding: 30px 32px;
+                }
+
+
+                /* =====================================
+                   FOOTER
+                ====================================== */
+
+                .ngo-footer {
+                    min-height: 52px;
+
+                    padding: 0 32px;
+
+                    display: flex;
+                    align-items: center;
+
+                    gap: 8px;
+
+                    border-top: 1px solid #e7ebf0;
+
+                    background: #ffffff;
+
+                    color: #9aa3b0;
+
+                    font-size: 10px;
+                }
+
+                .footer-separator {
+                    color: #c7cdd5;
+                }
+
+
+                /* =====================================
+                   MOBILE MENU
+                ====================================== */
+
+                .mobile-menu {
+                    display: none;
+
+                    width: 38px;
+                    height: 38px;
+
+                    align-items: center;
+                    justify-content: center;
+
+                    border: 1px solid #e3e7ed;
+                    border-radius: 8px;
+
+                    background: #ffffff;
+
+                    color: #526070;
+
+                    cursor: pointer;
+                }
+
+                .mobile-menu svg {
+                    width: 19px;
+                    height: 19px;
+                }
+
+                .sidebar-overlay {
+                    display: none;
+                }
+
+
+                /* =====================================
+                   TABLET
+                ====================================== */
+
+                @media (max-width: 1000px) {
+
+                    .ngo-sidebar {
+                        width: 230px;
+                    }
+
+                    .ngo-main {
+                        width: calc(100% - 230px);
+                        margin-left: 230px;
+                    }
+
+                    .ngo-content {
+                        padding: 25px;
+                    }
+
+                    .ngo-header {
+                        padding: 0 25px;
+                    }
+
+                    .ngo-footer {
+                        padding: 0 25px;
+                    }
+                }
+
+
+                /* =====================================
+                   MOBILE
+                ====================================== */
+
+                @media (max-width: 760px) {
+
+                    .ngo-sidebar {
+                        width: 275px;
+
+                        transform: translateX(-100%);
+
+                        transition: transform .25s ease;
+
+                        box-shadow:
+                            10px 0 35px rgba(20, 35, 55, .12);
+                    }
+
+                    .ngo-sidebar.mobile-open {
+                        transform: translateX(0);
+                    }
+
+                    .ngo-main {
+                        width: 100%;
+
+                        margin-left: 0;
+                    }
+
+                    .ngo-header {
+                        min-height: 72px;
+
+                        padding: 0 18px;
+                    }
+
+                    .mobile-menu {
+                        display: flex;
+                    }
+
+                    .header-label {
+                        display: none;
+                    }
+
+                    .ngo-header h1 {
+                        font-size: 18px;
+                    }
+
+                    .header-status {
+                        display: none;
+                    }
+
+                    .header-avatar {
+                        width: 35px;
+                        height: 35px;
+                    }
+
+                    .ngo-content {
+                        padding: 20px 16px;
+                    }
+
+                    .ngo-footer {
+                        min-height: 48px;
+
+                        padding: 0 16px;
+
+                        justify-content: center;
+
+                        text-align: center;
+
+                        flex-wrap: wrap;
+                    }
+
+                    .sidebar-overlay {
+                        position: fixed;
+                        inset: 0;
+
+                        z-index: 90;
+
+                        background: rgba(20, 30, 45, .35);
+
+                        backdrop-filter: blur(2px);
+                    }
+
+                    .sidebar-overlay.show {
+                        display: block;
+                    }
+                }
+
+
+                /* =====================================
+                   SMALL PHONES
+                ====================================== */
+
+                @media (max-width: 420px) {
+
+                    .ngo-header {
+                        padding: 0 14px;
+                    }
+
+                    .header-left {
+                        gap: 10px;
+                    }
+
+                    .ngo-header h1 {
+                        font-size: 17px;
+                    }
+
+                    .ngo-content {
+                        padding: 16px 12px;
+                    }
+
+                    .ngo-footer {
+                        font-size: 9px;
+                    }
+                }
+
+            `}</style>
+        </>
     );
 }

@@ -1,7 +1,14 @@
 import { Head, useForm } from '@inertiajs/react';
 
 export default function Login({ status }) {
-    const { data, setData, post, processing, errors, clearErrors } = useForm({
+    const {
+        data,
+        setData,
+        post,
+        processing,
+        errors,
+        clearErrors,
+    } = useForm({
         email: '',
         password: '',
         remember: false,
@@ -17,7 +24,6 @@ export default function Login({ status }) {
         });
     };
 
-    // Determine whether the email error is an authentication error
     const isAuthenticationError =
         errors.email &&
         (
@@ -32,479 +38,289 @@ export default function Login({ status }) {
             <Head title="Sign In" />
 
             <div className="login-page">
+                <div className="login-card">
 
-                {/* =========================================
-                    LEFT BRANDING PANEL
-                ========================================= */}
-                <div className="login-brand">
+                    {/* Logo */}
+                    <div className="login-logo">
+                        <span>G</span>
+                    </div>
 
-                    <div className="brand-content">
-
-                        <div className="brand-logo">
-                            <span>G</span>
-                        </div>
-
-                        <div className="brand-name">
-                            GAF Rwanda
-                        </div>
-
-                        <h1>
-                            Your documents,
-                            <span> organized.</span>
-                        </h1>
+                    {/* Header */}
+                    <div className="login-header">
+                        <h1>Welcome back</h1>
 
                         <p>
-                            Securely access, manage and collaborate on your
-                            organization's documents from one place.
+                            Sign in to your GAF Rwanda account
                         </p>
-
-                        <div className="brand-features">
-
-                            <div className="feature">
-                                <div className="feature-icon">✓</div>
-
-                                <div>
-                                    <strong>
-                                        Secure document management
-                                    </strong>
-
-                                    <small>
-                                        Keep important files protected and organized.
-                                    </small>
-                                </div>
-                            </div>
-
-                            <div className="feature">
-                                <div className="feature-icon">✓</div>
-
-                                <div>
-                                    <strong>
-                                        Easy access
-                                    </strong>
-
-                                    <small>
-                                        Find the documents you need quickly.
-                                    </small>
-                                </div>
-                            </div>
-
-                            <div className="feature">
-                                <div className="feature-icon">✓</div>
-
-                                <div>
-                                    <strong>
-                                        Built for organizations
-                                    </strong>
-
-                                    <small>
-                                        Simple collaboration for your team.
-                                    </small>
-                                </div>
-                            </div>
-
-                        </div>
                     </div>
 
-                    <div className="brand-footer">
-                        © {new Date().getFullYear()} GAF Rwanda. All rights reserved.
-                    </div>
-                </div>
+                    {/* Authentication Error */}
+                    {isAuthenticationError && (
+                        <div className="alert alert-error" role="alert">
+                            <div className="alert-icon">!</div>
 
+                            <div className="alert-content">
+                                <strong>Sign in failed</strong>
 
-                {/* =========================================
-                    LOGIN AREA
-                ========================================= */}
-                <div className="login-area">
-
-                    <div className="login-container">
-
-                        {/* Mobile logo */}
-                        <div className="mobile-logo">
-
-                            <div className="brand-logo">
-                                <span>G</span>
+                                <p>{errors.email}</p>
                             </div>
-
-                            <strong>
-                                GAF Rwanda
-                            </strong>
-
                         </div>
+                    )}
 
-
-                        {/* Header */}
-                        <div className="login-header">
-
-                            <div className="welcome">
-                                Welcome back
-                            </div>
-
-                            <h2>
-                                Sign in to your account
-                            </h2>
-
-                            <p>
-                                Enter your credentials to continue to the
-                                document portal.
-                            </p>
-
-                        </div>
-
-
-                        {/* =========================================
-                            AUTHENTICATION ERROR
-                        ========================================= */}
-                        {isAuthenticationError && (
-                            <div
-                                className="alert alert-error"
-                                role="alert"
-                            >
-                                <div className="alert-icon">
-                                    !
-                                </div>
+                    {/* Other Errors */}
+                    {Object.keys(errors).length > 0 &&
+                        !isAuthenticationError &&
+                        !errors.email && (
+                            <div className="alert alert-error" role="alert">
+                                <div className="alert-icon">!</div>
 
                                 <div className="alert-content">
-
-                                    <strong>
-                                        Sign in failed
-                                    </strong>
+                                    <strong>Please check the form</strong>
 
                                     <p>
-                                        {errors.email}
-                                    </p>
-
-                                </div>
-                            </div>
-                        )}
-
-
-                        {/* Other errors */}
-                        {Object.keys(errors).length > 0 &&
-                            !isAuthenticationError &&
-                            !errors.email &&
-                            (
-                                <div
-                                    className="alert alert-error"
-                                    role="alert"
-                                >
-                                    <div className="alert-icon">
-                                        !
-                                    </div>
-
-                                    <div className="alert-content">
-
-                                        <strong>
-                                            Please check the form
-                                        </strong>
-
-                                        <p>
-                                            Some information needs your attention.
-                                        </p>
-
-                                    </div>
-                                </div>
-                            )
-                        }
-
-
-                        {/* Status */}
-                        {status && (
-                            <div
-                                className="alert alert-success"
-                                role="status"
-                            >
-                                <div className="alert-icon">
-                                    ✓
-                                </div>
-
-                                <div className="alert-content">
-                                    <strong>
-                                        Success
-                                    </strong>
-
-                                    <p>
-                                        {status}
+                                        Some information needs your attention.
                                     </p>
                                 </div>
                             </div>
                         )}
 
+                    {/* Success Status */}
+                    {status && (
+                        <div className="alert alert-success" role="status">
+                            <div className="alert-icon">✓</div>
 
-                        {/* =========================================
-                            FORM
-                        ========================================= */}
-                        <form
-                            onSubmit={submit}
-                            className="login-form"
-                        >
+                            <div className="alert-content">
+                                <strong>Success</strong>
 
-                            {/* EMAIL */}
-                            <div className="form-group">
+                                <p>{status}</p>
+                            </div>
+                        </div>
+                    )}
 
-                                <label htmlFor="email">
-                                    Email address
-                                </label>
+                    {/* Login Form */}
+                    <form onSubmit={submit} className="login-form">
 
-                                <div
-                                    className={`input-wrapper ${
-                                        errors.email && !isAuthenticationError
-                                            ? 'has-error'
-                                            : ''
-                                    }`}
-                                >
+                        {/* Email */}
+                        <div className="form-group">
+                            <label htmlFor="email">
+                                Email address
+                            </label>
 
-                                    <span className="input-icon">
+                            <div
+                                className={`input-wrapper ${
+                                    errors.email && !isAuthenticationError
+                                        ? 'has-error'
+                                        : ''
+                                }`}
+                            >
+                                <span className="input-icon">
+                                    <svg
+                                        width="18"
+                                        height="18"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="1.8"
+                                    >
+                                        <rect
+                                            x="3"
+                                            y="5"
+                                            width="18"
+                                            height="14"
+                                            rx="2"
+                                        />
+                                        <path d="m3 7 9 6 9-6" />
+                                    </svg>
+                                </span>
 
-                                        <svg
-                                            width="19"
-                                            height="19"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeWidth="1.8"
-                                        >
-                                            <rect
-                                                x="3"
-                                                y="5"
-                                                width="18"
-                                                height="14"
-                                                rx="2"
-                                            />
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    placeholder="you@example.com"
+                                    autoComplete="email"
+                                    autoFocus
+                                    value={data.email}
+                                    onChange={(e) => {
+                                        setData('email', e.target.value);
 
-                                            <path d="m3 7 9 6 9-6" />
-                                        </svg>
-
-                                    </span>
-
-                                    <input
-                                        type="email"
-                                        id="email"
-                                        name="email"
-                                        placeholder="you@example.com"
-                                        autoComplete="email"
-                                        autoFocus
-                                        value={data.email}
-                                        onChange={(e) => {
-                                            setData('email', e.target.value);
-
-                                            if (errors.email) {
-                                                clearErrors('email');
-                                            }
-                                        }}
-                                        className={
-                                            errors.email &&
-                                            !isAuthenticationError
-                                                ? 'input-error'
-                                                : ''
+                                        if (errors.email) {
+                                            clearErrors('email');
                                         }
-                                    />
+                                    }}
+                                    className={
+                                        errors.email &&
+                                        !isAuthenticationError
+                                            ? 'input-error'
+                                            : ''
+                                    }
+                                />
 
-                                    {/* Error icon */}
-                                    {errors.email &&
-                                        !isAuthenticationError && (
-                                            <span className="input-error-icon">
-                                                !
-                                            </span>
-                                        )}
-
-                                </div>
-
-                                {/* Email validation error */}
                                 {errors.email &&
                                     !isAuthenticationError && (
-                                        <div className="field-error">
-                                            <span>!</span>
-                                            {errors.email}
-                                        </div>
-                                    )}
-
-                            </div>
-
-
-                            {/* PASSWORD */}
-                            <div className="form-group">
-
-                                <div className="label-row">
-
-                                    <label htmlFor="password">
-                                        Password
-                                    </label>
-
-                                </div>
-
-                                <div
-                                    className={`input-wrapper ${
-                                        errors.password
-                                            ? 'has-error'
-                                            : ''
-                                    }`}
-                                >
-
-                                    <span className="input-icon">
-
-                                        <svg
-                                            width="19"
-                                            height="19"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeWidth="1.8"
-                                        >
-                                            <rect
-                                                x="4"
-                                                y="10"
-                                                width="16"
-                                                height="11"
-                                                rx="2"
-                                            />
-
-                                            <path d="M8 10V7a4 4 0 0 1 8 0v3" />
-                                        </svg>
-
-                                    </span>
-
-                                    <input
-                                        type="password"
-                                        id="password"
-                                        name="password"
-                                        placeholder="Enter your password"
-                                        autoComplete="current-password"
-                                        value={data.password}
-                                        onChange={(e) => {
-                                            setData(
-                                                'password',
-                                                e.target.value
-                                            );
-
-                                            if (errors.password) {
-                                                clearErrors('password');
-                                            }
-                                        }}
-                                        className={
-                                            errors.password
-                                                ? 'input-error'
-                                                : ''
-                                        }
-                                    />
-
-                                    {errors.password && (
                                         <span className="input-error-icon">
                                             !
                                         </span>
                                     )}
+                            </div>
 
-                                </div>
-
-                                {/* Password error */}
-                                {errors.password && (
+                            {errors.email &&
+                                !isAuthenticationError && (
                                     <div className="field-error">
                                         <span>!</span>
-                                        {errors.password}
+                                        {errors.email}
                                     </div>
                                 )}
-
-                            </div>
-
-
-                            {/* REMEMBER ME */}
-                            <div className="form-options">
-
-                                <label className="remember">
-
-                                    <input
-                                        type="checkbox"
-                                        checked={data.remember}
-                                        onChange={(e) =>
-                                            setData(
-                                                'remember',
-                                                e.target.checked
-                                            )
-                                        }
-                                    />
-
-                                    <span className="custom-checkbox">
-                                        {data.remember && '✓'}
-                                    </span>
-
-                                    <span>
-                                        Remember me
-                                    </span>
-
-                                </label>
-
-                            </div>
-
-
-                            {/* LOGIN BUTTON */}
-                            <button
-                                type="submit"
-                                className="login-button"
-                                disabled={processing}
-                            >
-
-                                {processing ? (
-                                    <>
-                                        <span className="spinner"></span>
-
-                                        <span>
-                                            Signing in...
-                                        </span>
-                                    </>
-                                ) : (
-                                    <>
-                                        <span>
-                                            Sign in
-                                        </span>
-
-                                        <span className="arrow">
-                                            →
-                                        </span>
-                                    </>
-                                )}
-
-                            </button>
-
-                        </form>
-
-
-                        {/* SECURITY */}
-                        <div className="login-security">
-
-                            <svg
-                                width="15"
-                                height="15"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                            >
-                                <rect
-                                    x="4"
-                                    y="10"
-                                    width="16"
-                                    height="11"
-                                    rx="2"
-                                />
-
-                                <path d="M8 10V7a4 4 0 0 1 8 0v3" />
-                            </svg>
-
-                            <span>
-                                Your connection is secure and encrypted
-                            </span>
-
                         </div>
 
+                        {/* Password */}
+                        <div className="form-group">
+                            <label htmlFor="password">
+                                Password
+                            </label>
+
+                            <div
+                                className={`input-wrapper ${
+                                    errors.password
+                                        ? 'has-error'
+                                        : ''
+                                }`}
+                            >
+                                <span className="input-icon">
+                                    <svg
+                                        width="18"
+                                        height="18"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="1.8"
+                                    >
+                                        <rect
+                                            x="4"
+                                            y="10"
+                                            width="16"
+                                            height="11"
+                                            rx="2"
+                                        />
+
+                                        <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+                                    </svg>
+                                </span>
+
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    placeholder="Enter your password"
+                                    autoComplete="current-password"
+                                    value={data.password}
+                                    onChange={(e) => {
+                                        setData(
+                                            'password',
+                                            e.target.value
+                                        );
+
+                                        if (errors.password) {
+                                            clearErrors('password');
+                                        }
+                                    }}
+                                    className={
+                                        errors.password
+                                            ? 'input-error'
+                                            : ''
+                                    }
+                                />
+
+                                {errors.password && (
+                                    <span className="input-error-icon">
+                                        !
+                                    </span>
+                                )}
+                            </div>
+
+                            {errors.password && (
+                                <div className="field-error">
+                                    <span>!</span>
+                                    {errors.password}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Remember Me */}
+                        <div className="form-options">
+                            <label className="remember">
+                                <input
+                                    type="checkbox"
+                                    checked={data.remember}
+                                    onChange={(e) =>
+                                        setData(
+                                            'remember',
+                                            e.target.checked
+                                        )
+                                    }
+                                />
+
+                                <span className="custom-checkbox">
+                                    {data.remember && '✓'}
+                                </span>
+
+                                <span>Remember me</span>
+                            </label>
+                        </div>
+
+                        {/* Login Button */}
+                        <button
+                            type="submit"
+                            className="login-button"
+                            disabled={processing}
+                        >
+                            {processing ? (
+                                <>
+                                    <span className="spinner"></span>
+
+                                    <span>Signing in...</span>
+                                </>
+                            ) : (
+                                <span>Sign in</span>
+                            )}
+                        </button>
+                    </form>
+
+                    {/* Security */}
+                    <div className="login-security">
+                        <svg
+                            width="15"
+                            height="15"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                        >
+                            <rect
+                                x="4"
+                                y="10"
+                                width="16"
+                                height="11"
+                                rx="2"
+                            />
+
+                            <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+                        </svg>
+
+                        <span>
+                            Your connection is secure and encrypted
+                        </span>
                     </div>
+
+                    {/* Footer */}
+                    <div className="login-footer">
+                        © {new Date().getFullYear()} GAF Rwanda
+                    </div>
+
                 </div>
             </div>
 
-
-            {/* =========================================
-                STYLES
-            ========================================= */}
             <style>{`
-
                 * {
                     box-sizing: border-box;
                 }
@@ -520,260 +336,70 @@ export default function Login({ status }) {
                         "Segoe UI",
                         sans-serif;
 
-                    background: #f6f8fb;
+                    background: #f5f7fa;
                     color: #172033;
                 }
 
                 .login-page {
                     min-height: 100vh;
+                    width: 100%;
                     display: flex;
-                    background: #fff;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 30px 20px;
+                    background: #f5f7fa;
                 }
 
-
-                /* =========================================
-                   BRAND
-                ========================================= */
-
-                .login-brand {
-                    width: 48%;
-                    min-height: 100vh;
-                    padding: 55px 7%;
-
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: space-between;
-
-                    position: relative;
-                    overflow: hidden;
-
-                    background:
-                        radial-gradient(
-                            circle at 80% 15%,
-                            rgba(93, 137, 200, .25),
-                            transparent 32%
-                        ),
-                        linear-gradient(
-                            145deg,
-                            #315f99 0%,
-                            #4e7fba 48%,
-                            #5d89c8 100%
-                        );
+                .login-card {
+                    width: 100%;
+                    max-width: 430px;
+                    background: #ffffff;
+                    border: 1px solid #e8ecf1;
+                    border-radius: 18px;
+                    padding: 42px 40px 32px;
+                    box-shadow:
+                        0 20px 50px rgba(20, 35, 55, 0.08);
                 }
 
-                .login-brand::before {
-                    content: "";
+                /* LOGO */
 
-                    position: absolute;
-
-                    width: 430px;
-                    height: 430px;
-
-                    border: 1px solid rgba(255,255,255,.12);
-
-                    border-radius: 50%;
-
-                    right: -200px;
-                    bottom: -120px;
-                }
-
-                .login-brand::after {
-                    content: "";
-
-                    position: absolute;
-
-                    width: 300px;
-                    height: 300px;
-
-                    border: 1px solid rgba(255,255,255,.08);
-
-                    border-radius: 50%;
-
-                    right: -80px;
-                    bottom: -30px;
-                }
-
-                .brand-content,
-                .brand-footer {
-                    position: relative;
-                    z-index: 2;
-                }
-
-                .brand-logo {
+                .login-logo {
                     width: 52px;
                     height: 52px;
-
-                    border-radius: 15px;
-
-                    background: rgba(255,255,255,.16);
-
-                    border: 1px solid rgba(255,255,255,.22);
+                    margin: 0 auto 24px;
 
                     display: flex;
                     align-items: center;
                     justify-content: center;
 
+                    border-radius: 14px;
+
+                    background: #5d89c8;
                     color: white;
 
-                    font-size: 25px;
+                    font-size: 23px;
                     font-weight: 800;
 
-                    box-shadow: 0 10px 30px rgba(0,0,0,.12);
+                    box-shadow:
+                        0 8px 20px rgba(93, 137, 200, .22);
                 }
 
-                .brand-name {
-                    margin-top: 15px;
-
-                    color: white;
-
-                    font-size: 19px;
-                    font-weight: 700;
-
-                    letter-spacing: -.3px;
-                }
-
-                .brand-content h1 {
-                    max-width: 550px;
-
-                    margin: 105px 0 20px;
-
-                    color: white;
-
-                    font-size: clamp(42px, 4vw, 66px);
-
-                    line-height: 1.02;
-
-                    letter-spacing: -2.8px;
-
-                    font-weight: 750;
-                }
-
-                .brand-content h1 span {
-                    display: block;
-
-                    color: rgba(255,255,255,.72);
-                }
-
-                .brand-content > p {
-                    max-width: 510px;
-
-                    color: rgba(255,255,255,.78);
-
-                    font-size: 16px;
-
-                    line-height: 1.75;
-
-                    margin-bottom: 45px;
-                }
-
-                .brand-features {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 20px;
-                }
-
-                .feature {
-                    display: flex;
-
-                    align-items: flex-start;
-
-                    gap: 14px;
-
-                    color: white;
-                }
-
-                .feature-icon {
-                    width: 27px;
-                    height: 27px;
-
-                    border-radius: 50%;
-
-                    background: rgba(255,255,255,.16);
-
-                    display: flex;
-
-                    justify-content: center;
-                    align-items: center;
-
-                    font-size: 13px;
-
-                    flex-shrink: 0;
-                }
-
-                .feature strong {
-                    display: block;
-
-                    font-size: 14px;
-
-                    margin-bottom: 3px;
-                }
-
-                .feature small {
-                    color: rgba(255,255,255,.62);
-
-                    font-size: 12px;
-                }
-
-                .brand-footer {
-                    color: rgba(255,255,255,.55);
-
-                    font-size: 12px;
-                }
-
-
-                /* =========================================
-                   LOGIN AREA
-                ========================================= */
-
-                .login-area {
-                    flex: 1;
-
-                    display: flex;
-
-                    align-items: center;
-
-                    justify-content: center;
-
-                    padding: 50px;
-                }
-
-                .login-container {
-                    width: 100%;
-                    max-width: 440px;
-                }
-
-                .mobile-logo {
-                    display: none;
-                }
+                /* HEADER */
 
                 .login-header {
-                    margin-bottom: 32px;
+                    text-align: center;
+                    margin-bottom: 30px;
                 }
 
-                .welcome {
-                    color: #5d89c8;
-
-                    font-size: 13px;
-
-                    font-weight: 700;
-
-                    text-transform: uppercase;
-
-                    letter-spacing: 1.2px;
-
-                    margin-bottom: 9px;
-                }
-
-                .login-header h2 {
-                    margin: 0 0 10px;
-
-                    font-size: 31px;
-
-                    line-height: 1.2;
-
-                    letter-spacing: -1px;
+                .login-header h1 {
+                    margin: 0 0 9px;
 
                     color: #172033;
+
+                    font-size: 28px;
+                    line-height: 1.2;
+                    letter-spacing: -.7px;
+                    font-weight: 750;
                 }
 
                 .login-header p {
@@ -782,126 +408,90 @@ export default function Login({ status }) {
                     color: #7b8495;
 
                     font-size: 14px;
-
                     line-height: 1.6;
                 }
 
-
-                /* =========================================
-                   ALERT
-                ========================================= */
+                /* ALERTS */
 
                 .alert {
                     display: flex;
-
                     align-items: flex-start;
+                    gap: 11px;
 
-                    gap: 12px;
+                    padding: 13px 14px;
+                    margin-bottom: 22px;
 
-                    padding: 14px 15px;
-
-                    border-radius: 12px;
-
-                    margin-bottom: 24px;
+                    border-radius: 10px;
 
                     font-size: 13px;
-
-                    animation: alertIn .25s ease;
-                }
-
-                @keyframes alertIn {
-                    from {
-                        opacity: 0;
-                        transform: translateY(-5px);
-                    }
-
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
                 }
 
                 .alert-error {
-                    background: #fff4f4;
-
+                    background: #fff5f5;
                     border: 1px solid #fecaca;
-
                     color: #b42318;
                 }
 
                 .alert-success {
                     background: #f0fdf4;
-
                     border: 1px solid #bbf7d0;
-
                     color: #15803d;
                 }
 
                 .alert-icon {
-                    width: 23px;
-                    height: 23px;
-
-                    border-radius: 50%;
-
-                    display: flex;
-
-                    align-items: center;
-                    justify-content: center;
-
-                    font-weight: 800;
+                    width: 22px;
+                    height: 22px;
 
                     flex-shrink: 0;
 
-                    background: rgba(180,35,24,.09);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    border-radius: 50%;
+
+                    background: rgba(180, 35, 24, .09);
+
+                    font-size: 12px;
+                    font-weight: 800;
                 }
 
                 .alert-success .alert-icon {
-                    background: rgba(21,128,61,.09);
+                    background: rgba(21, 128, 61, .09);
                 }
 
                 .alert-content strong {
                     display: block;
-
-                    font-size: 13px;
-
                     margin-bottom: 3px;
+                    font-size: 13px;
                 }
 
                 .alert-content p {
                     margin: 0;
-
                     font-size: 12px;
-
                     line-height: 1.5;
                 }
 
-
-                /* =========================================
-                   FORM
-                ========================================= */
+                /* FORM */
 
                 .login-form {
                     display: flex;
-
                     flex-direction: column;
-
-                    gap: 22px;
+                    gap: 20px;
                 }
 
                 .form-group {
                     display: flex;
-
                     flex-direction: column;
                 }
 
                 .form-group label {
-                    font-size: 13px;
-
-                    font-weight: 650;
+                    margin-bottom: 8px;
 
                     color: #30394a;
 
-                    margin-bottom: 8px;
+                    font-size: 13px;
+                    font-weight: 650;
                 }
 
                 .input-wrapper {
@@ -910,39 +500,35 @@ export default function Login({ status }) {
 
                 .input-icon {
                     position: absolute;
-
                     left: 15px;
                     top: 50%;
 
                     transform: translateY(-50%);
 
-                    color: #9ba4b3;
-
                     display: flex;
 
-                    pointer-events: none;
+                    color: #9ba4b3;
 
+                    pointer-events: none;
                     z-index: 2;
                 }
 
                 .input-wrapper input {
                     width: 100%;
-
-                    height: 52px;
+                    height: 50px;
 
                     border: 1px solid #dfe4eb;
-
-                    border-radius: 11px;
+                    border-radius: 10px;
 
                     outline: none;
 
                     background: #fbfcfd;
 
-                    padding: 0 45px;
-
-                    font-size: 14px;
+                    padding: 0 44px;
 
                     color: #172033;
+
+                    font-size: 14px;
 
                     transition: .2s ease;
                 }
@@ -957,69 +543,52 @@ export default function Login({ status }) {
 
                 .input-wrapper input:focus {
                     background: white;
-
                     border-color: #5d89c8;
 
                     box-shadow:
-                        0 0 0 4px rgba(93,137,200,.11);
+                        0 0 0 4px rgba(93, 137, 200, .10);
                 }
 
-                .input-wrapper.has-error input,
-                .input-wrapper input.input-error {
+                .input-wrapper input.input-error,
+                .input-wrapper.has-error input {
                     border-color: #ef4444;
-
                     background: #fffafa;
-                }
-
-                .input-wrapper.has-error input:focus {
-                    border-color: #ef4444;
-
-                    box-shadow:
-                        0 0 0 4px rgba(239,68,68,.10);
                 }
 
                 .input-error-icon {
                     position: absolute;
 
-                    right: 15px;
-
+                    right: 14px;
                     top: 50%;
 
                     transform: translateY(-50%);
 
-                    width: 20px;
-                    height: 20px;
+                    width: 19px;
+                    height: 19px;
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
 
                     border-radius: 50%;
 
                     background: #ef4444;
-
                     color: white;
 
-                    display: flex;
-
-                    align-items: center;
-
-                    justify-content: center;
-
-                    font-size: 12px;
-
+                    font-size: 11px;
                     font-weight: 800;
                 }
 
                 .field-error {
                     display: flex;
-
                     align-items: center;
-
                     gap: 6px;
+
+                    margin-top: 6px;
 
                     color: #dc2626;
 
                     font-size: 12px;
-
-                    margin-top: 7px;
-
                     line-height: 1.4;
                 }
 
@@ -1027,37 +596,27 @@ export default function Login({ status }) {
                     width: 15px;
                     height: 15px;
 
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
                     border-radius: 50%;
 
                     background: #fee2e2;
 
-                    display: flex;
-
-                    align-items: center;
-
-                    justify-content: center;
-
                     font-size: 10px;
-
                     font-weight: 800;
-
-                    flex-shrink: 0;
                 }
 
-
-                /* =========================================
-                   REMEMBER
-                ========================================= */
+                /* REMEMBER */
 
                 .form-options {
-                    margin-top: -4px;
+                    margin-top: -2px;
                 }
 
                 .remember {
                     display: inline-flex;
-
                     align-items: center;
-
                     gap: 9px;
 
                     cursor: pointer;
@@ -1065,17 +624,12 @@ export default function Login({ status }) {
                     color: #667085;
 
                     font-size: 13px;
-
                     user-select: none;
-
-                    position: relative;
                 }
 
                 .remember input {
                     position: absolute;
-
                     opacity: 0;
-
                     pointer-events: none;
                 }
 
@@ -1083,20 +637,16 @@ export default function Login({ status }) {
                     width: 18px;
                     height: 18px;
 
-                    border: 1.5px solid #cbd2dc;
-
-                    border-radius: 5px;
-
                     display: flex;
-
                     align-items: center;
-
                     justify-content: center;
+
+                    border: 1.5px solid #cbd2dc;
+                    border-radius: 5px;
 
                     color: white;
 
                     font-size: 11px;
-
                     font-weight: 800;
 
                     transition: .15s ease;
@@ -1104,42 +654,33 @@ export default function Login({ status }) {
 
                 .remember input:checked + .custom-checkbox {
                     background: #5d89c8;
-
                     border-color: #5d89c8;
                 }
 
-
-                /* =========================================
-                   BUTTON
-                ========================================= */
+                /* BUTTON */
 
                 .login-button {
-                    height: 53px;
+                    width: 100%;
+                    height: 50px;
 
                     border: 0;
-
-                    border-radius: 11px;
+                    border-radius: 10px;
 
                     background: #5d89c8;
-
                     color: white;
 
                     font-size: 14px;
-
                     font-weight: 700;
 
                     cursor: pointer;
 
                     display: flex;
-
                     align-items: center;
-
                     justify-content: center;
-
-                    gap: 12px;
+                    gap: 10px;
 
                     box-shadow:
-                        0 10px 25px rgba(93,137,200,.24);
+                        0 8px 20px rgba(93, 137, 200, .20);
 
                     transition: .2s ease;
                 }
@@ -1150,27 +691,16 @@ export default function Login({ status }) {
                     transform: translateY(-1px);
 
                     box-shadow:
-                        0 14px 30px rgba(93,137,200,.3);
+                        0 11px 25px rgba(93, 137, 200, .25);
+                }
+
+                .login-button:active:not(:disabled) {
+                    transform: translateY(0);
                 }
 
                 .login-button:disabled {
                     opacity: .7;
-
                     cursor: not-allowed;
-
-                    transform: none;
-                }
-
-                .arrow {
-                    font-size: 20px;
-
-                    line-height: 1;
-
-                    transition: transform .2s ease;
-                }
-
-                .login-button:hover .arrow {
-                    transform: translateX(3px);
                 }
 
                 .spinner {
@@ -1178,7 +708,6 @@ export default function Login({ status }) {
                     height: 17px;
 
                     border: 2px solid rgba(255,255,255,.35);
-
                     border-top-color: white;
 
                     border-radius: 50%;
@@ -1192,24 +721,17 @@ export default function Login({ status }) {
                     }
                 }
 
-
-                /* =========================================
-                   SECURITY
-                ========================================= */
+                /* SECURITY */
 
                 .login-security {
-                    margin-top: 27px;
-
-                    padding-top: 22px;
+                    margin-top: 24px;
+                    padding-top: 20px;
 
                     border-top: 1px solid #edf0f4;
 
                     display: flex;
-
                     align-items: center;
-
                     justify-content: center;
-
                     gap: 7px;
 
                     color: #98a1af;
@@ -1217,83 +739,36 @@ export default function Login({ status }) {
                     font-size: 11px;
                 }
 
+                /* FOOTER */
 
-                /* =========================================
-                   RESPONSIVE
-                ========================================= */
+                .login-footer {
+                    margin-top: 18px;
 
-                @media (max-width: 900px) {
+                    text-align: center;
 
-                    .login-brand {
-                        width: 42%;
+                    color: #a0a8b5;
 
-                        padding: 40px;
-                    }
-
-                    .brand-content h1 {
-                        margin-top: 80px;
-
-                        font-size: 42px;
-                    }
-
-                    .login-area {
-                        padding: 35px;
-                    }
+                    font-size: 11px;
                 }
 
+                /* RESPONSIVE */
 
-                @media (max-width: 700px) {
-
+                @media (max-width: 480px) {
                     .login-page {
-                        display: block;
-
-                        min-height: 100vh;
+                        padding: 20px 15px;
                     }
 
-                    .login-brand {
-                        display: none;
+                    .login-card {
+                        padding: 34px 24px 27px;
+                        border-radius: 15px;
+                        box-shadow:
+                            0 12px 35px rgba(20, 35, 55, .07);
                     }
 
-                    .login-area {
-                        min-height: 100vh;
-
-                        padding: 30px 22px;
-
-                        align-items: center;
-                    }
-
-                    .mobile-logo {
-                        display: flex;
-
-                        align-items: center;
-
-                        gap: 12px;
-
-                        margin-bottom: 55px;
-
-                        color: #172033;
-
-                        font-size: 18px;
-                    }
-
-                    .mobile-logo .brand-logo {
-                        width: 42px;
-                        height: 42px;
-
-                        border-radius: 12px;
-
-                        background: #5d89c8;
-
-                        border: 0;
-
-                        font-size: 20px;
-                    }
-
-                    .login-header h2 {
-                        font-size: 27px;
+                    .login-header h1 {
+                        font-size: 26px;
                     }
                 }
-
             `}</style>
         </>
     );
