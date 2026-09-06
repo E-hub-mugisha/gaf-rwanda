@@ -14,6 +14,10 @@ Route::get('/', function () {
     return Inertia::render('UserPage/Index');
 })->name('guided-act-feel');
 
+Route::get('/mental-health/agahinda-gakabije', function () {
+    return Inertia::render('Health/Depression');
+})->name('mental-health.depression')->middleware('auth');
+
 Route::get('/login', fn() => redirect()->route('login'));
 
 // ---- Guest ----

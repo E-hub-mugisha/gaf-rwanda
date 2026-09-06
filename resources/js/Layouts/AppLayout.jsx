@@ -1,6 +1,7 @@
-import { Head, Link, usePage, router } from '@inertiajs/react';
+import { Head, Link, usePage, router } from "@inertiajs/react";
 import {
     FileText,
+    HeartPulse,
     LogOut,
     User,
     ChevronDown,
@@ -9,82 +10,95 @@ import {
     X,
     Globe,
     Check,
-} from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
-import { getLanguage, setLanguage as persistLanguage, LANGUAGE_EVENT } from '@/lib/language';
+} from "lucide-react";
+
+import { useEffect, useMemo, useState } from "react";
+import {
+    getLanguage,
+    setLanguage as persistLanguage,
+    LANGUAGE_EVENT,
+} from "@/lib/language";
 
 const translations = {
     rw: {
-        documents: 'Inyandiko',
-        knowledgeResources: 'Ubumenyi & Umutungo',
-        reader: 'Usoma',
-        logOut: 'Sohoka',
-        language: 'Ururimi',
-        documentPortal: 'Portal y’Inyandiko',
-        signedInAs: 'Winjiye nka',
-        readerAccount: 'Konti y’Usoma',
+        documents: "Inyandiko",
+        knowledgeResources: "Ubumenyi & Umutungo",
+        mentalHealth: "Ubuzima bwo mu Mutwe",
+        reader: "Usoma",
+        logOut: "Sohoka",
+        language: "Ururimi",
+        documentPortal: "Portal y’Inyandiko",
+        signedInAs: "Winjiye nka",
+        readerAccount: "Konti y’Usoma",
+
         languageNames: {
-            rw: 'Kinyarwanda',
-            en: 'English',
-            fr: 'Français',
-            nl: 'Nederlands',
+            rw: "Kinyarwanda",
+            en: "English",
+            fr: "Français",
+            nl: "Nederlands",
         },
     },
 
     en: {
-        documents: 'Documents',
-        knowledgeResources: 'Knowledge & Resources',
-        reader: 'Reader',
-        logOut: 'Log out',
-        language: 'Language',
-        documentPortal: 'Document Portal',
-        signedInAs: 'Signed in as',
-        readerAccount: 'Reader Account',
+        documents: "Documents",
+        knowledgeResources: "Knowledge & Resources",
+        mentalHealth: "Mental Health",
+        reader: "Reader",
+        logOut: "Log out",
+        language: "Language",
+        documentPortal: "Document Portal",
+        signedInAs: "Signed in as",
+        readerAccount: "Reader Account",
+
         languageNames: {
-            rw: 'Kinyarwanda',
-            en: 'English',
-            fr: 'Français',
-            nl: 'Nederlands',
+            rw: "Kinyarwanda",
+            en: "English",
+            fr: "Français",
+            nl: "Nederlands",
         },
     },
 
     fr: {
-        documents: 'Documents',
-        knowledgeResources: 'Savoir & Ressources',
-        reader: 'Lecteur',
-        logOut: 'Se déconnecter',
-        language: 'Langue',
-        documentPortal: 'Portail documentaire',
-        signedInAs: 'Connecté en tant que',
-        readerAccount: 'Compte lecteur',
+        documents: "Documents",
+        knowledgeResources: "Savoir & Ressources",
+        mentalHealth: "Santé mentale",
+        reader: "Lecteur",
+        logOut: "Se déconnecter",
+        language: "Langue",
+        documentPortal: "Portail documentaire",
+        signedInAs: "Connecté en tant que",
+        readerAccount: "Compte lecteur",
+
         languageNames: {
-            rw: 'Kinyarwanda',
-            en: 'English',
-            fr: 'Français',
-            nl: 'Nederlands',
+            rw: "Kinyarwanda",
+            en: "English",
+            fr: "Français",
+            nl: "Nederlands",
         },
     },
 
     nl: {
-        documents: 'Documenten',
-        knowledgeResources: 'Kennis & Middelen',
-        reader: 'Lezer',
-        logOut: 'Uitloggen',
-        language: 'Taal',
-        documentPortal: 'Documentenportaal',
-        signedInAs: 'Ingelogd als',
-        readerAccount: 'Lezersaccount',
+        documents: "Documenten",
+        knowledgeResources: "Kennis & Middelen",
+        mentalHealth: "Geestelijke gezondheid",
+        reader: "Lezer",
+        logOut: "Uitloggen",
+        language: "Taal",
+        documentPortal: "Documentenportaal",
+        signedInAs: "Ingelogd als",
+        readerAccount: "Lezersaccount",
+
         languageNames: {
-            rw: 'Kinyarwanda',
-            en: 'English',
-            fr: 'Français',
-            nl: 'Nederlands',
+            rw: "Kinyarwanda",
+            en: "English",
+            fr: "Français",
+            nl: "Nederlands",
         },
     },
 };
 
 export default function AppLayout({ title, children }) {
-    const { props } = usePage();
+    const { props, url } = usePage();
     const user = props.auth?.user;
 
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -130,19 +144,19 @@ export default function AppLayout({ title, children }) {
     };
 
     const initials = useMemo(() => {
-        if (!user?.name) return 'U';
+        if (!user?.name) return "U";
 
         return user.name
             .trim()
             .split(/\s+/)
             .slice(0, 2)
             .map((part) => part.charAt(0).toUpperCase())
-            .join('');
+            .join("");
     }, [user?.name]);
 
     const logout = (e) => {
         e.preventDefault();
-        router.post(route('logout'));
+        router.post(route("logout"));
     };
 
     return (
@@ -150,14 +164,12 @@ export default function AppLayout({ title, children }) {
             {title && <Head title={title} />}
 
             <div className="public-layout">
-
                 {/* ================= HEADER ================= */}
                 <header className="public-header">
                     <div className="header-inner">
-
                         {/* BRAND */}
                         <Link
-                            href={route('documents.index')}
+                            href={route("documents.index")}
                             className="brand"
                             onClick={() => setMobileMenuOpen(false)}
                         >
@@ -174,20 +186,32 @@ export default function AppLayout({ title, children }) {
                         {/* DESKTOP NAVIGATION */}
                         <nav className="desktop-nav">
                             <Link
-                                href={route('documents.index')}
-                                className="nav-link active"
+                                href={route("documents.index")}
+                                className={`nav-link ${
+                                    url.startsWith("/documents") ? "active" : ""
+                                }`}
                             >
                                 <FileText size={16} />
                                 {t.documents}
+                            </Link>
+
+                            <Link
+                                href={route("mental-health.depression")}
+                                className={`nav-link ${
+                                    url.startsWith("/mental-health")
+                                        ? "active"
+                                        : ""
+                                }`}
+                            >
+                                <HeartPulse size={16} />
+                                {t.mentalHealth}
                             </Link>
                         </nav>
 
                         {/* USER AREA */}
                         <div className="user-area">
-
                             {/* Language Switcher */}
                             <div className="header-language">
-
                                 <button
                                     type="button"
                                     className="header-language-button"
@@ -198,72 +222,63 @@ export default function AppLayout({ title, children }) {
                                 >
                                     <Globe size={14} />
 
-                                    <span>
-                                        {language.toUpperCase()}
-                                    </span>
+                                    <span>{language.toUpperCase()}</span>
 
                                     <ChevronDown
                                         size={11}
                                         className={
                                             languageOpen
-                                                ? 'language-chevron open'
-                                                : 'language-chevron'
+                                                ? "language-chevron open"
+                                                : "language-chevron"
                                         }
                                     />
                                 </button>
 
                                 {languageOpen && (
                                     <div className="header-language-menu">
-
                                         <div className="language-menu-title">
                                             {t.language}
                                         </div>
 
-                                        {Object.entries(
-                                            t.languageNames
-                                        ).map(([code, name]) => (
-                                            <button
-                                                type="button"
-                                                key={code}
-                                                className={
-                                                    language === code
-                                                        ? 'language-option active'
-                                                        : 'language-option'
-                                                }
-                                                onClick={() =>
-                                                    changeLanguage(code)
-                                                }
-                                            >
-                                                <span className="language-code">
-                                                    {code.toUpperCase()}
-                                                </span>
+                                        {Object.entries(t.languageNames).map(
+                                            ([code, name]) => (
+                                                <button
+                                                    type="button"
+                                                    key={code}
+                                                    className={
+                                                        language === code
+                                                            ? "language-option active"
+                                                            : "language-option"
+                                                    }
+                                                    onClick={() =>
+                                                        changeLanguage(code)
+                                                    }
+                                                >
+                                                    <span className="language-code">
+                                                        {code.toUpperCase()}
+                                                    </span>
 
-                                                <span className="language-name">
-                                                    {name}
-                                                </span>
+                                                    <span className="language-name">
+                                                        {name}
+                                                    </span>
 
-                                                {language === code && (
-                                                    <Check size={13} />
-                                                )}
-                                            </button>
-                                        ))}
-
+                                                    {language === code && (
+                                                        <Check size={13} />
+                                                    )}
+                                                </button>
+                                            ),
+                                        )}
                                     </div>
                                 )}
-
                             </div>
 
                             <div className="header-divider"></div>
 
                             <div className="user-profile">
-                                <div className="user-avatar">
-                                    {initials}
-                                </div>
+                                <div className="user-avatar">{initials}</div>
 
                                 <div className="user-details">
-                                    <strong>
-                                        {user?.name || 'Reader'}
-                                    </strong>
+                                    <strong>{user?.name || "Reader"}</strong>
 
                                     <span>
                                         <ShieldCheck size={11} />
@@ -295,9 +310,7 @@ export default function AppLayout({ title, children }) {
                         <button
                             type="button"
                             className="mobile-menu-button"
-                            onClick={() =>
-                                setMobileMenuOpen(!mobileMenuOpen)
-                            }
+                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                             aria-label="Toggle navigation"
                         >
                             {mobileMenuOpen ? (
@@ -312,14 +325,27 @@ export default function AppLayout({ title, children }) {
                     {mobileMenuOpen && (
                         <div className="mobile-menu">
                             <Link
-                                href={route('documents.index')}
-                                className="mobile-nav-link"
-                                onClick={() =>
-                                    setMobileMenuOpen(false)
-                                }
+                                href={route("documents.index")}
+                                className={`mobile-nav-link ${
+                                    url.startsWith("/documents") ? "active" : ""
+                                }`}
+                                onClick={() => setMobileMenuOpen(false)}
                             >
                                 <FileText size={17} />
                                 {t.documents}
+                            </Link>
+
+                            <Link
+                                href={route("mental-health.depression")}
+                                className={`mobile-nav-link ${
+                                    url.startsWith("/mental-health")
+                                        ? "active"
+                                        : ""
+                                }`}
+                                onClick={() => setMobileMenuOpen(false)}
+                            >
+                                <HeartPulse size={17} />
+                                {t.mentalHealth}
                             </Link>
 
                             {/* Mobile Language Switcher */}
@@ -329,56 +355,47 @@ export default function AppLayout({ title, children }) {
                                 </div>
 
                                 <div className="mobile-language-options">
-                                    {Object.entries(
-                                        t.languageNames
-                                    ).map(([code, name]) => (
-                                        <button
-                                            type="button"
-                                            key={code}
-                                            className={
-                                                language === code
-                                                    ? 'mobile-language-option active'
-                                                    : 'mobile-language-option'
-                                            }
-                                            onClick={() =>
-                                                changeLanguage(code)
-                                            }
-                                        >
-                                            <span className="language-code">
-                                                {code.toUpperCase()}
-                                            </span>
+                                    {Object.entries(t.languageNames).map(
+                                        ([code, name]) => (
+                                            <button
+                                                type="button"
+                                                key={code}
+                                                className={
+                                                    language === code
+                                                        ? "mobile-language-option active"
+                                                        : "mobile-language-option"
+                                                }
+                                                onClick={() =>
+                                                    changeLanguage(code)
+                                                }
+                                            >
+                                                <span className="language-code">
+                                                    {code.toUpperCase()}
+                                                </span>
 
-                                            <span>{name}</span>
+                                                <span>{name}</span>
 
-                                            {language === code && (
-                                                <Check size={13} />
-                                            )}
-                                        </button>
-                                    ))}
+                                                {language === code && (
+                                                    <Check size={13} />
+                                                )}
+                                            </button>
+                                        ),
+                                    )}
                                 </div>
                             </div>
 
                             <div className="mobile-user">
-                                <div className="user-avatar">
-                                    {initials}
-                                </div>
+                                <div className="user-avatar">{initials}</div>
 
                                 <div>
-                                    <strong>
-                                        {user?.name || 'Reader'}
-                                    </strong>
+                                    <strong>{user?.name || "Reader"}</strong>
 
-                                    <span>
-                                        {user?.email || ''}
-                                    </span>
+                                    <span>{user?.email || ""}</span>
                                 </div>
                             </div>
 
                             <form onSubmit={logout}>
-                                <button
-                                    type="submit"
-                                    className="mobile-logout"
-                                >
+                                <button type="submit" className="mobile-logout">
                                     <LogOut size={17} />
                                     {t.logOut}
                                 </button>
@@ -388,9 +405,7 @@ export default function AppLayout({ title, children }) {
                 </header>
 
                 {/* ================= MAIN ================= */}
-                <main className="public-main">
-                    {children}
-                </main>
+                <main className="public-main">{children}</main>
 
                 {/* ================= FOOTER ================= */}
                 <footer className="public-footer">
@@ -400,24 +415,18 @@ export default function AppLayout({ title, children }) {
                                 <FileText size={15} />
                             </div>
 
-                            <span>
-                                {t.documentPortal}
-                            </span>
+                            <span>{t.documentPortal}</span>
                         </div>
 
                         <div className="footer-right">
                             <span>
-                                {t.signedInAs}{' '}
-                                <strong>
-                                    {user?.name || 'Reader'}
-                                </strong>
+                                {t.signedInAs}{" "}
+                                <strong>{user?.name || "Reader"}</strong>
                             </span>
 
                             <span className="footer-dot"></span>
 
-                            <span>
-                                {t.readerAccount}
-                            </span>
+                            <span>{t.readerAccount}</span>
                         </div>
                     </div>
                 </footer>
@@ -1040,6 +1049,14 @@ export default function AppLayout({ title, children }) {
                         padding-right: 12px;
                     }
                 }
+                    .mobile-nav-link {
+    margin-bottom: 7px;
+}
+
+.mobile-nav-link.active {
+    background: var(--blue);
+    color: white;
+}
             `}</style>
         </>
     );
