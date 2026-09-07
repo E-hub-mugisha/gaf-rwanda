@@ -1,105 +1,113 @@
-import { Head, Link, usePage, router } from '@inertiajs/react';
-import { useEffect, useState } from 'react';
-import { getLanguage, setLanguage as persistLanguage, LANGUAGE_EVENT } from '@/lib/language';
+import { Head, Link, usePage, router } from "@inertiajs/react";
+import { useEffect, useState } from "react";
+import {
+    getLanguage,
+    setLanguage as persistLanguage,
+    LANGUAGE_EVENT,
+} from "@/lib/language";
 
 const translations = {
     rw: {
-        language: 'Ururimi',
-        mainMenu: 'MENU NKURU',
-        dashboard: 'Imbonerahamwe',
-        documents: 'Inyandiko',
-        readerAccounts: 'Konti z’Abasoma',
-        activity: 'Ibikorwa',
-        portalInfo: 'Portal y’Inyandiko',
-        portalDescription: 'Gucunga umutungo w’umuryango',
-        administration: 'UBUYOBOZI',
-        systemOnline: 'Sisitemu irakora',
-        signOut: 'Sohoka',
-        administrator: 'Umuyobozi',
-        reader: 'Usoma',
-        user: 'Umukoresha',
-        securePortal: 'Portal yizewe',
-        documentManagement: 'Portal yo Gucunga Inyandiko',
+        language: "Ururimi",
+        mainMenu: "MENU NKURU",
+        dashboard: "Imbonerahamwe",
+        documents: "Inyandiko",
+        mentalHealth: "Ubuzima bwo mu Mutwe",
+        readerAccounts: "Konti z’Abasoma",
+        activity: "Ibikorwa",
+        portalInfo: "Portal y’Inyandiko",
+        portalDescription: "Gucunga umutungo w’umuryango",
+        administration: "UBUYOBOZI",
+        systemOnline: "Sisitemu irakora",
+        signOut: "Sohoka",
+        administrator: "Umuyobozi",
+        reader: "Usoma",
+        user: "Umukoresha",
+        securePortal: "Portal yizewe",
+        documentManagement: "Portal yo Gucunga Inyandiko",
         languageNames: {
-            rw: 'Kinyarwanda',
-            en: 'English',
-            fr: 'Français',
-            nl: 'Nederlands',
+            rw: "Kinyarwanda",
+            en: "English",
+            fr: "Français",
+            nl: "Nederlands",
         },
     },
 
     en: {
-        language: 'Language',
-        mainMenu: 'MAIN MENU',
-        dashboard: 'Dashboard',
-        documents: 'Documents',
-        readerAccounts: 'Reader Accounts',
-        activity: 'Activity Log',
-        portalInfo: 'Document Portal',
-        portalDescription: 'Manage organizational resources',
-        administration: 'ADMINISTRATION',
-        systemOnline: 'System Online',
-        signOut: 'Sign out',
-        administrator: 'Administrator',
-        reader: 'Reader',
-        user: 'User',
-        securePortal: 'Secure Portal',
-        documentManagement: 'Document Management Portal',
+        language: "Language",
+        mainMenu: "MAIN MENU",
+        dashboard: "Dashboard",
+        documents: "Documents",
+        mentalHealth: "Mental Health",
+        readerAccounts: "Reader Accounts",
+        activity: "Activity Log",
+        portalInfo: "Document Portal",
+        portalDescription: "Manage organizational resources",
+        administration: "ADMINISTRATION",
+        systemOnline: "System Online",
+        signOut: "Sign out",
+        administrator: "Administrator",
+        reader: "Reader",
+        user: "User",
+        securePortal: "Secure Portal",
+        documentManagement: "Document Management Portal",
         languageNames: {
-            rw: 'Kinyarwanda',
-            en: 'English',
-            fr: 'Français',
-            nl: 'Nederlands',
+            rw: "Kinyarwanda",
+            en: "English",
+            fr: "Français",
+            nl: "Nederlands",
         },
     },
 
     fr: {
-        language: 'Langue',
-        mainMenu: 'MENU PRINCIPAL',
-        dashboard: 'Tableau de bord',
-        documents: 'Documents',
-        readerAccounts: 'Comptes lecteurs',
-        activity: 'Journal des activités',
-        portalInfo: 'Portail documentaire',
-        portalDescription: 'Gérer les ressources de l’organisation',
-        administration: 'ADMINISTRATION',
-        systemOnline: 'Système en ligne',
-        signOut: 'Se déconnecter',
-        administrator: 'Administrateur',
-        reader: 'Lecteur',
-        user: 'Utilisateur',
-        securePortal: 'Portail sécurisé',
-        documentManagement: 'Portail de gestion des documents',
+        language: "Langue",
+        mainMenu: "MENU PRINCIPAL",
+        dashboard: "Tableau de bord",
+        documents: "Documents",
+        mentalHealth: "Santé mentale",
+        readerAccounts: "Comptes lecteurs",
+        activity: "Journal des activités",
+        portalInfo: "Portail documentaire",
+        portalDescription: "Gérer les ressources de l’organisation",
+        administration: "ADMINISTRATION",
+        systemOnline: "Système en ligne",
+        signOut: "Se déconnecter",
+        administrator: "Administrateur",
+        reader: "Lecteur",
+        user: "Utilisateur",
+        securePortal: "Portail sécurisé",
+        documentManagement: "Portail de gestion des documents",
         languageNames: {
-            rw: 'Kinyarwanda',
-            en: 'English',
-            fr: 'Français',
-            nl: 'Nederlands',
+            rw: "Kinyarwanda",
+            en: "English",
+            fr: "Français",
+            nl: "Nederlands",
         },
     },
 
     nl: {
-        language: 'Taal',
-        mainMenu: 'HOOFDMENU',
-        dashboard: 'Dashboard',
-        documents: 'Documenten',
-        readerAccounts: 'Lezersaccounts',
-        activity: 'Activiteitenlogboek',
-        portalInfo: 'Documentenportaal',
-        portalDescription: 'Organisatiemiddelen beheren',
-        administration: 'ADMINISTRATIE',
-        systemOnline: 'Systeem online',
-        signOut: 'Uitloggen',
-        administrator: 'Beheerder',
-        reader: 'Lezer',
-        user: 'Gebruiker',
-        securePortal: 'Veilig portaal',
-        documentManagement: 'Documentbeheerportaal',
+        language: "Taal",
+        mainMenu: "HOOFDMENU",
+        dashboard: "Dashboard",
+        documents: "Documenten",
+        mentalHealth: "Geestelijke gezondheid",
+        readerAccounts: "Lezersaccounts",
+        activity: "Activiteitenlogboek",
+        portalInfo: "Documentenportaal",
+        portalDescription: "Organisatiemiddelen beheren",
+        administration: "ADMINISTRATIE",
+        systemOnline: "Systeem online",
+        signOut: "Uitloggen",
+        administrator: "Beheerder",
+        reader: "Lezer",
+        user: "Gebruiker",
+        securePortal: "Veilig portaal",
+        documentManagement: "Documentbeheerportaal",
         languageNames: {
-            rw: 'Kinyarwanda',
-            en: 'English',
-            fr: 'Français',
-            nl: 'Nederlands',
+            rw: "Kinyarwanda",
+            en: "English",
+            fr: "Français",
+            nl: "Nederlands",
         },
     },
 };
@@ -159,11 +167,11 @@ export default function AdminLayout({ title, children }) {
 
     const logout = (e) => {
         e.preventDefault();
-        router.post(route('logout'));
+        router.post(route("logout"));
     };
 
     const getInitials = (name) => {
-        if (!name) return 'A';
+        if (!name) return "A";
 
         const parts = name.trim().split(/\s+/);
 
@@ -172,63 +180,50 @@ export default function AdminLayout({ title, children }) {
         }
 
         return (
-            parts[0].charAt(0) +
-            parts[parts.length - 1].charAt(0)
+            parts[0].charAt(0) + parts[parts.length - 1].charAt(0)
         ).toUpperCase();
     };
 
     const initials = getInitials(user?.name);
 
     const roleLabel =
-        user?.role === 'admin'
+        user?.role === "admin"
             ? t.administrator
-            : user?.role === 'user'
-                ? t.reader
-                : user?.role || t.user;
+            : user?.role === "user"
+              ? t.reader
+              : user?.role || t.user;
 
     return (
         <>
             {title && <Head title={title} />}
 
             <div className="ngo-admin">
-
                 {/* =====================================================
                     SIDEBAR
                 ====================================================== */}
 
                 <aside className="ngo-sidebar">
-
                     {/* Brand */}
                     <div className="sidebar-brand">
-
-                        <div className="brand-mark">
-                            G
-                        </div>
+                        <div className="brand-mark">G</div>
 
                         <div className="brand-text">
                             <strong>GAF Rwanda</strong>
-                            <span>Document Portal</span>
                         </div>
-
                     </div>
-
 
                     {/* Sidebar Content */}
                     <div className="sidebar-content">
-
-                        <div className="nav-label">
-                            {t.mainMenu}
-                        </div>
+                        <div className="nav-label">{t.mainMenu}</div>
 
                         <nav className="sidebar-nav">
-
                             {/* Dashboard */}
                             <Link
-                                href={route('admin.dashboard')}
+                                href={route("admin.dashboard")}
                                 className={
-                                    isActive('/admin/dashboard')
-                                        ? 'nav-item active'
-                                        : 'nav-item'
+                                    isActive("/admin/dashboard")
+                                        ? "nav-item active"
+                                        : "nav-item"
                                 }
                             >
                                 <span className="nav-icon">
@@ -275,14 +270,13 @@ export default function AdminLayout({ title, children }) {
                                 <span>{t.dashboard}</span>
                             </Link>
 
-
                             {/* Documents */}
                             <Link
-                                href={route('admin.documents.index')}
+                                href={route("admin.documents.index")}
                                 className={
-                                    isActive('/admin/documents')
-                                        ? 'nav-item active'
-                                        : 'nav-item'
+                                    isActive("/admin/documents")
+                                        ? "nav-item active"
+                                        : "nav-item"
                                 }
                             >
                                 <span className="nav-icon">
@@ -303,14 +297,52 @@ export default function AdminLayout({ title, children }) {
                                 <span>{t.documents}</span>
                             </Link>
 
+                            {/* Mental Health */}
+                            <Link
+                                href={route("admin.mental-health.depression")}
+                                className={
+                                    isActive("/admin/mental-health")
+                                        ? "nav-item active"
+                                        : "nav-item"
+                                }
+                            >
+                                <span className="nav-icon">
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="1.8"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    >
+                                        {/* Brain / mental health icon */}
+                                        <path d="M9.5 3.5a3.5 3.5 0 0 0-3.4 4.3A3.5 3.5 0 0 0 5 14.5a3.5 3.5 0 0 0 4.5 5.3" />
+
+                                        <path d="M14.5 3.5a3.5 3.5 0 0 1 3.4 4.3A3.5 3.5 0 0 1 19 14.5a3.5 3.5 0 0 1-4.5 5.3" />
+
+                                        <path d="M9.5 3.5v17" />
+                                        <path d="M14.5 3.5v17" />
+
+                                        <path d="M6.5 8h3" />
+                                        <path d="M14.5 8h3" />
+
+                                        <path d="M6 14h3.5" />
+                                        <path d="M14.5 14H18" />
+
+                                        <path d="M9.5 11h5" />
+                                    </svg>
+                                </span>
+
+                                <span>{t.mentalHealth}</span>
+                            </Link>
 
                             {/* Reader Accounts */}
                             <Link
-                                href={route('admin.users.index')}
+                                href={route("admin.users.index")}
                                 className={
-                                    isActive('/admin/users')
-                                        ? 'nav-item active'
-                                        : 'nav-item'
+                                    isActive("/admin/users")
+                                        ? "nav-item active"
+                                        : "nav-item"
                                 }
                             >
                                 <span className="nav-icon">
@@ -322,11 +354,7 @@ export default function AdminLayout({ title, children }) {
                                     >
                                         <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
 
-                                        <circle
-                                            cx="9"
-                                            cy="7"
-                                            r="4"
-                                        />
+                                        <circle cx="9" cy="7" r="4" />
 
                                         <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
 
@@ -337,14 +365,13 @@ export default function AdminLayout({ title, children }) {
                                 <span>{t.readerAccounts}</span>
                             </Link>
 
-
                             {/* Activity */}
                             <Link
-                                href={route('admin.activity.index')}
+                                href={route("admin.activity.index")}
                                 className={
-                                    isActive('/admin/activity')
-                                        ? 'nav-item active'
-                                        : 'nav-item'
+                                    isActive("/admin/activity")
+                                        ? "nav-item active"
+                                        : "nav-item"
                                 }
                             >
                                 <span className="nav-icon">
@@ -360,49 +387,31 @@ export default function AdminLayout({ title, children }) {
 
                                 <span>{t.activity}</span>
                             </Link>
-
                         </nav>
-
                     </div>
-
 
                     {/* =================================================
                         SIDEBAR USER
                     ================================================== */}
 
                     <div className="sidebar-bottom">
-
                         <div className="admin-profile">
-
-                            <div className="admin-avatar">
-                                {initials}
-                            </div>
+                            <div className="admin-avatar">{initials}</div>
 
                             <div className="admin-profile-info">
-
-                                <strong>
-                                    {user?.name || t.administrator}
-                                </strong>
+                                <strong>{user?.name || t.administrator}</strong>
 
                                 <span>
-                                    {user?.email || 'admin@example.com'}
+                                    {user?.email || "admin@example.com"}
                                 </span>
 
-                                <small>
-                                    {roleLabel}
-                                </small>
-
+                                <small>{roleLabel}</small>
                             </div>
-
                         </div>
-
 
                         {/* Logout */}
                         <form onSubmit={logout}>
-                            <button
-                                type="submit"
-                                className="logout-button"
-                            >
+                            <button type="submit" className="logout-button">
                                 <svg
                                     viewBox="0 0 24 24"
                                     fill="none"
@@ -419,34 +428,28 @@ export default function AdminLayout({ title, children }) {
                                 <span>{t.signOut}</span>
                             </button>
                         </form>
-
                     </div>
-
                 </aside>
-
 
                 {/* =====================================================
                     MAIN
                 ====================================================== */}
 
                 <main className="ngo-main">
-
                     {/* Header */}
                     <header className="ngo-header">
-
                         <div className="header-left">
-
                             <button
                                 type="button"
                                 className="mobile-menu"
                                 onClick={() => {
                                     document
-                                        .querySelector('.ngo-sidebar')
-                                        ?.classList.toggle('mobile-open');
+                                        .querySelector(".ngo-sidebar")
+                                        ?.classList.toggle("mobile-open");
 
                                     document
-                                        .querySelector('.sidebar-overlay')
-                                        ?.classList.toggle('show');
+                                        .querySelector(".sidebar-overlay")
+                                        ?.classList.toggle("show");
                                 }}
                                 aria-label="Open menu"
                             >
@@ -461,29 +464,21 @@ export default function AdminLayout({ title, children }) {
                             </button>
 
                             <div>
-
                                 <span className="header-label">
                                     {t.administration}
                                 </span>
 
-                                <h1>
-                                    {title || t.dashboard}
-                                </h1>
-
+                                <h1>{title || t.dashboard}</h1>
                             </div>
-
                         </div>
-
 
                         {/* =================================================
                             HEADER RIGHT
                         ================================================== */}
 
                         <div className="header-right">
-
                             {/* Language Switcher */}
                             <div className="header-language">
-
                                 <button
                                     type="button"
                                     className="header-language-button"
@@ -500,26 +495,20 @@ export default function AdminLayout({ title, children }) {
                                         stroke="currentColor"
                                         strokeWidth="1.7"
                                     >
-                                        <circle
-                                            cx="12"
-                                            cy="12"
-                                            r="9"
-                                        />
+                                        <circle cx="12" cy="12" r="9" />
 
                                         <path d="M3 12h18" />
 
                                         <path d="M12 3c2.2 2.4 3.3 5.4 3.3 9s-1.1 6.6-3.3 9c-2.2-2.4-3.3-5.4-3.3-9S9.8 5.4 12 3Z" />
                                     </svg>
 
-                                    <span>
-                                        {language.toUpperCase()}
-                                    </span>
+                                    <span>{language.toUpperCase()}</span>
 
                                     <svg
                                         className={
                                             languageOpen
-                                                ? 'language-chevron open'
-                                                : 'language-chevron'
+                                                ? "language-chevron open"
+                                                : "language-chevron"
                                         }
                                         width="11"
                                         height="11"
@@ -532,144 +521,110 @@ export default function AdminLayout({ title, children }) {
                                     </svg>
                                 </button>
 
-
                                 {languageOpen && (
                                     <div className="header-language-menu">
-
                                         <div className="language-menu-title">
                                             {t.language}
                                         </div>
 
-                                        {Object.entries(
-                                            t.languageNames
-                                        ).map(([code, name]) => (
-                                            <button
-                                                type="button"
-                                                key={code}
-                                                className={
-                                                    language === code
-                                                        ? 'language-option active'
-                                                        : 'language-option'
-                                                }
-                                                onClick={() =>
-                                                    changeLanguage(code)
-                                                }
-                                            >
-                                                <span className="language-code">
-                                                    {code.toUpperCase()}
-                                                </span>
+                                        {Object.entries(t.languageNames).map(
+                                            ([code, name]) => (
+                                                <button
+                                                    type="button"
+                                                    key={code}
+                                                    className={
+                                                        language === code
+                                                            ? "language-option active"
+                                                            : "language-option"
+                                                    }
+                                                    onClick={() =>
+                                                        changeLanguage(code)
+                                                    }
+                                                >
+                                                    <span className="language-code">
+                                                        {code.toUpperCase()}
+                                                    </span>
 
-                                                <span className="language-name">
-                                                    {name}
-                                                </span>
+                                                    <span className="language-name">
+                                                        {name}
+                                                    </span>
 
-                                                {language === code && (
-                                                    <svg
-                                                        width="14"
-                                                        height="14"
-                                                        viewBox="0 0 24 24"
-                                                        fill="none"
-                                                        stroke="currentColor"
-                                                        strokeWidth="2.5"
-                                                    >
-                                                        <path d="m5 12 4 4L19 6" />
-                                                    </svg>
-                                                )}
-                                            </button>
-                                        ))}
-
+                                                    {language === code && (
+                                                        <svg
+                                                            width="14"
+                                                            height="14"
+                                                            viewBox="0 0 24 24"
+                                                            fill="none"
+                                                            stroke="currentColor"
+                                                            strokeWidth="2.5"
+                                                        >
+                                                            <path d="m5 12 4 4L19 6" />
+                                                        </svg>
+                                                    )}
+                                                </button>
+                                            ),
+                                        )}
                                     </div>
                                 )}
-
                             </div>
-
 
                             {/* System Status */}
                             <div className="header-status">
-
                                 <span className="status-dot"></span>
 
                                 {t.systemOnline}
-
                             </div>
-
 
                             {/* User */}
                             <div className="header-user">
-
                                 <div className="header-user-info">
-
                                     <strong>
                                         {user?.name || t.administrator}
                                     </strong>
 
                                     <span>
-                                        {user?.email || 'admin@example.com'}
+                                        {user?.email || "admin@example.com"}
                                     </span>
-
                                 </div>
 
-                                <div className="header-avatar">
-                                    {initials}
-                                </div>
-
+                                <div className="header-avatar">{initials}</div>
                             </div>
-
                         </div>
-
                     </header>
 
-
                     {/* Page Content */}
-                    <div className="ngo-content">
-                        {children}
-                    </div>
-
+                    <div className="ngo-content">{children}</div>
 
                     {/* Footer */}
                     <footer className="ngo-footer">
+                        <span>© {new Date().getFullYear()} GAF Rwanda</span>
 
-                        <span>
-                            © {new Date().getFullYear()} GAF Rwanda
-                        </span>
+                        <span className="footer-separator">•</span>
 
-                        <span className="footer-separator">
-                            •
-                        </span>
+                        <span>{t.documentManagement}</span>
 
-                        <span>
-                            {t.documentManagement}
-                        </span>
-
-                        <span className="footer-separator">
-                            •
-                        </span>
+                        <span className="footer-separator">•</span>
 
                         <span className="footer-user">
                             {user?.name || t.administrator}
                         </span>
-
                     </footer>
-
                 </main>
-
 
                 {/* Mobile Overlay */}
                 <div
                     className="sidebar-overlay"
                     onClick={() => {
                         document
-                            .querySelector('.ngo-sidebar')
-                            ?.classList.remove('mobile-open');
+                            .querySelector(".ngo-sidebar")
+                            ?.classList.remove("mobile-open");
 
                         document
-                            .querySelector('.sidebar-overlay')
-                            ?.classList.remove('show');
+                            .querySelector(".sidebar-overlay")
+                            ?.classList.remove("show");
                     }}
                 ></div>
-
             </div>
-
 
             {/* =========================================================
                 STYLES

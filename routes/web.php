@@ -96,9 +96,13 @@ Route::middleware(['auth', 'admin'])
         // Analytics
         Route::post('/analytics/chat', [AnalyticsController::class, 'chat'])
             ->name('analytics.chat');
+
+        Route::get('/mental-health/agahinda-gakabije', function () {
+            return Inertia::render('Admin/Documents/Depression');
+        })->name('mental-health.depression');
     });
 
-    // route to create admin user if no admin user exists
-    Route::get('/admin/create-admin-user', [UserController::class, 'createAdminUser'])
-        ->name('admin.create-admin-user')
-        ->middleware('admin.create-admin-user');
+// route to create admin user if no admin user exists
+Route::get('/admin/create-admin-user', [UserController::class, 'createAdminUser'])
+    ->name('admin.create-admin-user')
+    ->middleware('admin.create-admin-user');
