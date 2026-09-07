@@ -64,7 +64,7 @@ class LoginController extends Controller
             return redirect()->route('admin.dashboard');
         }
 
-        return redirect()->route('documents.index');
+        return redirect()->route('mental-health.depression');
     }
 
     public function destroy(Request $request)
