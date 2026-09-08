@@ -299,9 +299,11 @@ export default function AdminLayout({ title, children }) {
 
                             {/* Mental Health */}
                             <Link
-                                href={route("admin.mental-health.depression")}
+                                href={route(
+                                    "admin.health-content.depression.show",
+                                )}
                                 className={
-                                    isActive("/admin/mental-health")
+                                    isActive("/admin/health-content/depression")
                                         ? "nav-item active"
                                         : "nav-item"
                                 }
@@ -315,7 +317,6 @@ export default function AdminLayout({ title, children }) {
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
                                     >
-                                        {/* Brain / mental health icon */}
                                         <path d="M9.5 3.5a3.5 3.5 0 0 0-3.4 4.3A3.5 3.5 0 0 0 5 14.5a3.5 3.5 0 0 0 4.5 5.3" />
 
                                         <path d="M14.5 3.5a3.5 3.5 0 0 1 3.4 4.3A3.5 3.5 0 0 1 19 14.5a3.5 3.5 0 0 1-4.5 5.3" />

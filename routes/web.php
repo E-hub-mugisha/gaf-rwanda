@@ -4,8 +4,10 @@ use App\Http\Controllers\Admin\ActivityController;
 use App\Http\Controllers\Admin\AnalyticsController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
+use App\Http\Controllers\Admin\HealthContentController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\DepressionController;
 use App\Http\Controllers\DocumentController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -14,9 +16,10 @@ Route::get('/', function () {
     return Inertia::render('UserPage/Index');
 })->name('guided-act-feel');
 
-Route::get('/mental-health/agahinda-gakabije', function () {
-    return Inertia::render('Health/Depression');
-})->name('mental-health.depression')->middleware('auth');
+Route::get('/mental-health/depression', [
+    DepressionController::class,
+    'show'
+])->name('mental-health.depression')->middleware('auth');
 
 Route::get('/login', fn() => redirect()->route('login'));
 
@@ -97,9 +100,20 @@ Route::middleware(['auth', 'admin'])
         Route::post('/analytics/chat', [AnalyticsController::class, 'chat'])
             ->name('analytics.chat');
 
-        Route::get('/mental-health/agahinda-gakabije', function () {
-            return Inertia::render('Admin/Documents/Depression');
-        })->name('mental-health.depression');
+        Route::get(
+            '/health-content/depression',
+            [HealthContentController::class, 'show']
+        )->name('health-content.depression.show');
+
+        Route::get(
+            '/health-content/depression/edit',
+            [HealthContentController::class, 'edit']
+        )->name('health-content.depression.edit');
+
+        Route::put(
+            '/health-content/depression',
+            [HealthContentController::class, 'update']
+        )->name('health-content.depression.update');
     });
 
 // route to create admin user if no admin user exists

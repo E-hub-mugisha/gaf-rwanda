@@ -16,5 +16,6 @@ class DatabaseSeeder extends Seeder
     {
         // adminUserSeeder
         $this->call(AdminUserSeeder::class);
+        $this->call(HealthContentSeeder::class);
     }
 }
