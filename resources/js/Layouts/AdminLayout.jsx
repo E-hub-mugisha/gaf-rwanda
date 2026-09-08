@@ -4,7 +4,9 @@ import {
     getLanguage,
     setLanguage as persistLanguage,
     LANGUAGE_EVENT,
-} from "@/lib/language";
+} from "@/lib/Language";
+
+import { BarChart3 } from "lucide-react";
 
 const translations = {
     rw: {
@@ -14,6 +16,7 @@ const translations = {
         documents: "Inyandiko",
         mentalHealth: "Ubuzima bwo mu Mutwe",
         readerAccounts: "Konti z’Abasoma",
+        analytics: "Isesengura",
         activity: "Ibikorwa",
         portalInfo: "Portal y’Inyandiko",
         portalDescription: "Gucunga umutungo w’umuryango",
@@ -40,6 +43,7 @@ const translations = {
         documents: "Documents",
         mentalHealth: "Mental Health",
         readerAccounts: "Reader Accounts",
+        analytics: "Analytics",
         activity: "Activity Log",
         portalInfo: "Document Portal",
         portalDescription: "Manage organizational resources",
@@ -66,6 +70,7 @@ const translations = {
         documents: "Documents",
         mentalHealth: "Santé mentale",
         readerAccounts: "Comptes lecteurs",
+        analytics: "Analytique",
         activity: "Journal des activités",
         portalInfo: "Portail documentaire",
         portalDescription: "Gérer les ressources de l’organisation",
@@ -92,11 +97,12 @@ const translations = {
         documents: "Documenten",
         mentalHealth: "Geestelijke gezondheid",
         readerAccounts: "Lezersaccounts",
+        analytics: "Analyse",
         activity: "Activiteitenlogboek",
         portalInfo: "Documentenportaal",
         portalDescription: "Organisatiemiddelen beheren",
         administration: "ADMINISTRATIE",
-        systemOnline: "Systeem online",
+        systemOnline: "System online",
         signOut: "Uitloggen",
         administrator: "Beheerder",
         reader: "Lezer",
@@ -271,7 +277,7 @@ export default function AdminLayout({ title, children }) {
                             </Link>
 
                             {/* Documents */}
-                            <Link
+                            {/* <Link
                                 href={route("admin.documents.index")}
                                 className={
                                     isActive("/admin/documents")
@@ -295,7 +301,7 @@ export default function AdminLayout({ title, children }) {
                                 </span>
 
                                 <span>{t.documents}</span>
-                            </Link>
+                            </Link> */}
 
                             {/* Mental Health */}
                             <Link
@@ -364,6 +370,22 @@ export default function AdminLayout({ title, children }) {
                                 </span>
 
                                 <span>{t.readerAccounts}</span>
+                            </Link>
+
+                            {/* Analytics */}
+                            <Link
+                                href={route("admin.analytics.index")}
+                                className={
+                                    isActive("/admin/analytics")
+                                        ? "nav-item active"
+                                        : "nav-item"
+                                }
+                            >
+                                <span className="nav-icon">
+                                    <BarChart3 size={18} />
+                                </span>
+
+                                <span>{t.analytics}</span>
                             </Link>
 
                             {/* Activity */}

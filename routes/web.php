@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DepressionController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\PageViewController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -39,6 +40,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/documents/{document}', [DocumentController::class, 'show'])->name('documents.show');
     Route::get('/documents/{document}/view/{language}', [DocumentController::class, 'stream'])->name('documents.stream');
 });
+
+Route::middleware('auth')->post('/page-views', [
+    PageViewController::class,
+    'store'
+])->name('page-views.store');
 
 // ---- Admin area ----
 Route::middleware(['auth', 'admin'])
@@ -114,6 +120,11 @@ Route::middleware(['auth', 'admin'])
             '/health-content/depression',
             [HealthContentController::class, 'update']
         )->name('health-content.depression.update');
+
+        Route::get('/analytics', [
+            AnalyticsController::class,
+            'index',
+        ])->name('analytics.index');
     });
 
 // route to create admin user if no admin user exists
