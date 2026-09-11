@@ -10,9 +10,9 @@ const translations = {
             "Injira kugira ngo ubashe gukoresha konti yawe ya Guided Act & Feel Rwanda.",
         email: "Imeyili",
         emailPlaceholder: "urugero@example.com",
-        password: "Ijambobanga",
-        passwordPlaceholder: "Andika ijambobanga ryawe",
-        remember: "Nyibuke",
+        password: "Ijambo ry' ibanga",
+        passwordPlaceholder: "Andika ijambo ry' ibanga ryawe",
+        remember: "Ibuka imyirondoro yange",
         signIn: "Injira",
         signingIn: "Kwinjira...",
         signInFailed: "Kwinjira ntibyashobotse",
@@ -20,7 +20,7 @@ const translations = {
         checkFormText: "Hari amakuru amwe agomba gukosorwa.",
         success: "Byagenze neza",
         secureConnection: "Uburyo bwo kwinjira buratekanye",
-        encrypted: "Amakuru yawe ararinzwe kandi arabitswe mu mutekano.",
+        encrypted: "Amakuru yawe azabikwa muburyo bw' ibanga.",
     },
 
     en: {
@@ -258,11 +258,9 @@ export default function Login({ status }) {
                     ========================================= */}
 
                     <div className="login-header">
-                        <span className="welcome-label">{t.secureAccess}</span>
 
                         <h1>{t.welcome}</h1>
 
-                        <p>{t.subtitle}</p>
                     </div>
 
                     {/* =========================================
@@ -566,8 +564,7 @@ export default function Login({ status }) {
                         </div>
 
                         <div>
-                            <strong>{t.secureConnection}</strong>
-
+                            
                             <span>{t.encrypted}</span>
                         </div>
                     </div>

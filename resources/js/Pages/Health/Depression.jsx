@@ -16,6 +16,7 @@ import {
     Sparkles,
     Stethoscope,
     Users,
+    Weight,
 } from "lucide-react";
 
 import { getLanguage, LANGUAGE_EVENT } from "@/lib/Language";
@@ -30,131 +31,119 @@ const content = {
     rw: {
         metaTitle: "Agahinda Gakabije | Ubuzima bwo mu Mutwe",
 
-        heroEyebrow: "UBUZIMA BWO MU MUTWE",
         heroTitle: "AGAHINDA GAKABIJE",
-        heroDescription:
-            "Menya byinshi ku gahinda gakabije, ibimenyetso byako, uko gashobora kugira ingaruka ku buzima ndetse n'akamaro ko gushaka ubufasha hakiri kare.",
-        heroPrimary: "Soma byinshi",
-        heroSecondary: "Shaka ubufasha",
+        heroDescription: "Gusobanukirwa Agahinda gakabije (Depression)",
 
         introEyebrow: "UBUMENYI KU GAHINDA GAKABIJE",
-        introTitle:
-            "Gusobanukirwa agahinda gakabije ni intambwe ya mbere yo gushaka ubufasha.",
+        introTitle: "Gusobanukirwa Agahinda gakabije (Depression)",
         introText:
-            "Agahinda gakabije ni imwe mu ndwara zo mu mutwe ikunze kugaragara ku bantu benshi ku isi. Gashobora kugira ingaruka ku buzima bwa buri munsi, ku mibanire n'abandi ndetse no ku bushobozi bwo gukora ibikorwa bisanzwe.",
+            "Agahinda gakabije ni imwe mu ndwara zo mu mutwe zikunze kugaragara no kwibasira abantu benshi kwisi. Abantu bagera kuri miliyoni 350 b'imyaka itandukanye bafite iki kibazo ku isi hose. Agahinda gakabije gatuma abantu benshi badashobora gukora imirimo yabo ya buri munsi neza, kandi ibi bikaba bibangamira ubuzima bw'abantu kurusha ibindi byose. Iyo umuntu afite agahinda gakabije, ntikagira ingaruka kuri we gusa, ahubwo gashobora no kugira ingaruka ku bantu ba hafi akunda, urugero nk'umuryango, inshuti, abo bigana cyangwa abo bakorana.",
         introText2:
-            "Kumenya ibimenyetso no kumenya igihe cyo gushaka ubufasha bishobora gufasha umuntu kubona ubufasha bukwiye hakiri kare.",
+            "Agahinda gakabije gashobora gutangira umuntu akiri muto, kandi gakunze kugaragara cyane mu bagore kurusha mu bagabo.",
 
         factsEyebrow: "IMIBARE Y'INGENZI",
-        factsTitle: "Agahinda gakabije ni ikibazo kigomba kwitabwaho.",
+        factsTitle: "IMIBARE Y'INGENZI",
         facts: [
             {
                 value: "350M+",
-                label: "Abantu ku isi babana n'agahinda gakabije",
+                label: "Abantu ku isi bafite agahinda gakabije",
             },
             {
                 value: "9.1%",
-                label: "By'abaturage mu Rwanda bagize major depressive episode",
+                label: "By'abaturage mu Rwanda bafite agahinda gakabije",
             },
             {
                 value: "17.8%",
-                label: "By'abacitse ku icumu rya Jenoside bagize major depressive episode",
+                label: "By'abarokotse Jenoside yakorewe abatutsi mu 1994 mu Rwanda, bafite agahinda gakabije",
             },
             {
-                value: "15–29",
-                label: "Imyaka aho kwiyahura ari imwe mu mpamvu zikomeye z'urupfu",
+                value: "15 – 29",
+                label: "Ikigero cy’imyaka abantu benshi bakunze kwiyahura kubera agahinda gakabije ku isi hose",
             },
         ],
 
         rwandaEyebrow: "MU RWANDA",
         rwandaTitle: "Agahinda gakabije mu Rwanda",
         rwandaText:
-            "Ubushakashatsi ku buzima bwo mu mutwe bwakorewe mu Rwanda mu 2025 bugaragaza ko 9.1% by'abaturage muri rusange bagize nibura igice cy'agahinda gakabije (major depressive episode).",
+            "Ubushakashatsi ku buzima bwo mu mutwe mu Rwanda bwo mu 2025 (Rwanda Mental Health Survey 2025) bwerekanye ko 9.1% by’abaturage muri rusange bafite agahinda gakabije (major depressive episode), mu gihe iki kigero cyageze kuri 17.8% mu barokotse Jenoside yakorewe Abatutsi mu 1994",
         rwandaText2:
-            "Mu barokotse Jenoside yakorewe Abatutsi mu 1994, 17.8% bagize igice cy'agahinda gakabije. Muri aba barokotse, 21.4% ni abagore naho 11.3% ni abagabo.",
+            "Ubushakashatsi kandi bwerekanye ko agahinda gakabije kari hejuru mu bagore kurusha abagabo, cyane cyane mu barokotse Jenoside yakorewe Abatutsi mu 1994, aho kari kuri 21.4% mu bagore ugereranyije na 11.3% mu bagabo.",
 
         symptomsEyebrow: "IBIMENYETSO",
-        symptomsTitle: "Ibimenyetso by'agahinda gakabije",
+        symptomsTitle: "Ibimenyetso by’agahinda gakabije",
         symptomsIntro:
-            "Ibimenyetso bishobora gutandukana ku muntu umwe n'undi. Iyo bimara igihe kandi bigira ingaruka ku mikorere ya buri munsi, ni ngombwa gushaka inama y'umuhanga.",
+            "Iyo umuntu afite agahinda gakabije, ashobora kugira ibi bimenyetso bikurikira:",
+        symptomsIntro2:
+            "Kuba umuntu afite agahinda gakabije bimutesha umurongo mu mibereho ye ya buri munsi. Urugero: bimubuza gukora akazi, kwiga iyo ari umunyeshuri, ndetse bishobora no kumubuza gukora uturimo tworoheje twa buri munsi, nko kwiyuhagira cyangwa kwiyitaho muri rusange. Agahinda gakabije gashobora kugaruka kenshi, cyane cyane iyo katavuwe hakiri kare, mu gihe kagaragaye.",
         symptoms: [
-            "Kubabara umutima cyangwa kutagira icyo wifuza.",
-            "Kubura ubushake bwo gukora ibikorwa bisanzwe.",
-            "Kwiheba cyangwa intege nke bigira ingaruka ku bikorwa bya buri munsi.",
-            "Kumva ufite icyaha cyangwa kwiyumva nta gaciro ufite.",
-            "Guhinduka mu buryo bwo gusinzira cyangwa kurya.",
-            "Kunanirwa cyane.",
-            "Kugira ingorane mu gutekereza cyangwa kwibanda ku kintu.",
-            "Kudashobora gukora neza akazi, kwiga cyangwa kwiyitaho.",
-            "Agahinda gakabije gashobora kongera kugaruka iyo kadavuwe cyangwa kadakemuwe hakiri kare.",
+            "Kumva ubabaye cyane mu mutima cyangwa ukumva nta kintu na kimwe ushaka.",
+            "Kutagira ubushake bwo gukora ibintu, ndetse n'ibyo wari usanzwe ukunda gukora",
+            "Gucika intege ku buryo udashobora gukora imirimo yawe ya buri munsi.",
+            "Kwishinja icyaha cyangwa kumva nta gaciro ugifite mu buzima.",
+            "Kudashobora gusinzira neza cyangwa gutakaza ubushake bwo kurya.",
+            "Guhora wumva unaniwe cyane.",
+            "Kudashobora gutekereza neza cyangwa kwibanda ku kintu runaka.",
         ],
 
         severityEyebrow: "UBUREMERE",
         severityTitle:
-            "Agahinda gakabije gashobora kugira urwego rutandukanye.",
+            "Ubukana bw’agahinda gakabije ndetse no kongera kugaruka kwako (relapse)",
+        relapse1:
+            "Agahinda gakabije gashobora gushyirwa mu byiciro bitatu by’ubukana hagendewe ku bimenyetso umuntu agaragaza.",
         severity: [
             {
-                title: "Gake",
+                title: "Agahinda gakabije ko ku rwego rworoheje (mild)",
                 description:
-                    "Ibimenyetso bishobora kuba bike ariko bikagira ingaruka ku mikorere ya buri munsi.",
+                    "Karangwa n'ibimenyetso bike bigaragara ariko ntibibangamira ubuzima busanzwe bwa buri munsi. urugero: gukora akazi, kubana n'inshuti n'umuryango ndetse nibindi.",
             },
             {
-                title: "Gaciriritse",
+                title: "Agahinda gakabije ko ku rwego ruri m'urugero (moderate)",
                 description:
-                    "Ibimenyetso bishobora kuba byinshi kandi bigatangira kugira ingaruka zikomeye ku buzima bwa buri munsi.",
+                    "Gashobora gutuma umuntu agira ingorane mu gukora imirimo/akazi ke ka buri munsi, cyangwa bikabangamira imibanire ye n’umuryango cyangwa inshuti ze, ariko  ntibihungabanya burundu imikorere ye ya buri munsi muri rusange.",
             },
             {
-                title: "Gakomeye",
+                title: "Agahinda gakabije ko ku rwego rukabije (severe)",
                 description:
-                    "Ibimenyetso biba byinshi kandi bishobora kugira ingaruka zikomeye ku buzima no ku mikorere y'umuntu.",
+                    " Gatuma umuntu adashobora gukora imirimo ye ya buri munsi. Urugero; ntago abasha gukora akazi, ntago abasha kubana neza n’umuryango we ndetse n’inshuti ze muri rusange, cyangwa gukurikirana ibikorwa byo mu rugo nkuko bisanzwe. N’iyo ashoboye gukora, imikorere ye iba yaragabanutse cyane.",
             },
         ],
-        relapse:
-            "Agahinda gakabije gashobora kongera kugaruka, bityo gutangira ubufasha no kuvurwa hakiri kare ni ingenzi.",
+        relapse2:
+            "Agahinda gakabije gashobora kongera kugaruka, cyane cyane iyo kadakurikiranwe kuva kagitangira/kakigaragara. Niyo mpamvu, kuvura agahinda gakabije kuva mu ntangiriro y’uko kagaragaye ari iby’ingenzi cyane.",
 
-        causesEyebrow: "IMPAMVU N'UKUKUMIRA",
-        causesTitle: "Ibintu bishobora kugira uruhare mu gahinda gakabije",
+        causesEyebrow: "IMPAMVU N'UBURYO WAKWIRINDA",
+        causesTitle: "Ibitera agahinda gakabije n’uburyo wakwirinda ",
         causesIntro:
-            "Agahinda gakabije gashobora guterwa cyangwa kongerwa n'ibintu bitandukanye. Gusobanukirwa ibi bintu bishobora gufasha mu gushaka ubufasha no kwirinda ibibazo bikomeye.",
-        causes: [
-            {
-                title: "Imibanire n'amarangamutima",
-                text: "Imibanire n'abandi, amarangamutima n'imitekerereze bishobora kugira uruhare ku buzima bwo mu mutwe.",
-            },
-            {
-                title: "Ibyabaye bikomeye",
-                text: "Kubura uwo ukunda, guhura n'ihungabana cyangwa gutakaza akazi bishobora kongera ibyago byo kugira agahinda gakabije.",
-            },
-            {
-                title: "Ubuzima bw'umubiri",
-                text: "Ibibazo by'ubuzima bw'umubiri, urugero nk'indwara z'umutima, bishobora kugira uruhare mu gutera agahinda gakabije.",
-            },
-            {
-                title: "Imibereho myiza",
-                text: "Agahinda gakabije gashobora kugira ingaruka ku buzima, imibereho myiza no ku mikorere y'umuntu.",
-            },
+            "Agahinda gakabije gashobora guterwa n’ihuriro cyangwa urusobe bw’ibintu bitandukanye biba mubuzima bw’umuntu. Ibi bishobora kuba ihuriro riri hagati y’imibanire n’abandi, ibyiyumo cyangwa se imitekerereze, ndetse n’imiterere y’umubiri w’umuntu. Niyo mpamvu abantu bahuye n’ibihe bikomeye cyangwa bibabaje mu buzima baba bafite ibyago byinshi byo kurwara agahinda gakabije ",
+        causesIntro2:
+            "Agahinda gakabije gashobora gutera umubabaro ukomeye, bikarushaho kwangiza imiterere y’ubuzima, imibereho n’imikorere y’umuntu.",
+
+        causesIntro2:
+            "Ibibazo by’ubuzima bw’umubiri na byo bishobora kugira uruhare mu kugaragara kw’agahinda gakabije. Urugero: indwara y’umutima ishobora gutuma uyifite arwara agahinda gakabije, kandi ku rundi ruhande, ako gahinda gakabije gashobora kurushaho kuzahaza indwara y’umutima kubera guhangayikishwa n’iyo ndwara.",
+
+        preventionTitle: "Ikitonderwa",
+        preventionText:
+            " Iyo agahinda gakabije kageze ku rwego rukabije cyane, gashobora gutuma umuntu yiyahura. Buri mwaka, abantu barenga 800,000 bapfa bazize kwiyahura ku isi hose. Kwiyahura kandi niyo mpamvu ya kabiri y'impfu mu bantu bafite imyaka 15–29",
+
+        adviceEyebrow: "Inama zibyo wakora",
+        adviceTitle: "Inama zagufasha guhangana n’agahinda gakabije",
+        advice: [
+            "Menya ibimenyetso by’agahinda gakabije ufite; nta mpamvu yo guterwa isoni no kuba ubifite.",
+            "Kora ibikorwa ukunda, nk’imyidagaduro cyangwa ibindi bikorwa wishimira, buri gihe.",
+            "Shaka abantu ushobora kuganiriza kandi mugakorana ibikorwa hamwe.",
+            "Kora imyitozo ngororamubiri buri gihe.",
         ],
 
-        preventionTitle: "Kwirinda no kwita ku buzima bwo mu mutwe",
-        preventionText:
-            "Kwirinda bishobora gukorwa binyuze mu kwigishwa no guhugurwa ku mitekerereze myiza no gukora imyitozo ngororamubiri buri gihe.",
-
-        adviceEyebrow: "INAMA",
-        adviceTitle: "Icyo wakora",
-        advice: [
-            "Menya ibimenyetso by'agahinda gakabije kandi wirinde kugira isoni zo gushaka ubufasha.",
-            "Jya ukora ibikorwa bishimisha cyangwa imyidagaduro.",
-            "Shaka abantu mwaganira cyangwa mugakorana ibikorwa.",
-            "Kora imyitozo ngororamubiri buri gihe.",
-            "Shaka ubufasha kwa muganga, umuganga w'indwara zo mu mutwe cyangwa undi muhanga mu buzima bwo mu mutwe.",
-            "Menya ibimenyetso by'agahinda gakabije ku bagize umuryango cyangwa inshuti, ubashishikarize gushaka ubufasha.",
-            "Umva kandi ushyigikire abantu bafite agahinda gakabije n'abo babana.",
+        advice2Title: "Ni iki twakora kugira ngo dutsinde agahinda gakabije?",
+        advice2: [
+            "Kugisha inama muganga, umuganga w’indwara zo mu mutwe cyangwa inzobere mu by’imitekerereze igihe wumva ufite ibimenyetso by’agahinda gakabije. ",
+            "Kwitoza kugira ubushishozi bwo gutahura kugaragara kw’agahinda gakabije (depression) mu muryango, mu nshuti, cyangwa mu bo muziranye, kandi ukabashishikariza gushaka ubufasha bakeneye.",
+            "Kumva kandi ugashyigikira abantu bafite agahinda gakabije ndetse n’abantu babo ba hafi.",
         ],
 
         supportEyebrow: "SHAKA UBUFASHA",
-        supportTitle: "Nta mpamvu yo guhangana n'agahinda gakabije wenyine.",
-        supportText:
-            "Kuganira n'umuntu wizewe cyangwa umuhanga mu buzima bwo mu mutwe bishobora kuba intambwe ikomeye yo kubona ubufasha bukwiye.",
+        supportTitle:
+            "Uramutse ukeneye ubufasha cyangwa ugize ikibazo, watwandikira tukagufasha kuvugana n'inzobere mu by'imitekerereze.",
+        supportText: "Twandikire kuri nimero: +250 786535362 (whatsapp).",
         supportButton: "Shaka ubufasha",
 
         important: "ICY'INGENZI",
@@ -840,7 +829,7 @@ export default function Depression() {
 
                 .depression-hero {
                     position: relative;
-                    min-height: 620px;
+                    // min-height: 620px;
                     display: flex;
                     align-items: center;
                     isolation: isolate;
@@ -1016,11 +1005,11 @@ export default function Depression() {
                 /* SHARED */
 
                 .section {
-                    padding: 92px 0;
+                    padding: 20px 0;
                 }
 
                 .section-soft {
-                    background: var(--mental-sand);
+                    background: #5d89c81a;
                 }
 
                 .section-blue {
@@ -1046,20 +1035,21 @@ export default function Depression() {
                 }
 
                 .section-title {
-                    max-width: 730px;
+                    // max-width: 730px;
                     margin: 0;
-                    font-size: clamp(29px, 4vw, 43px);
+                    font-size: clamp(29px, 4vw, 30px);
                     line-height: 1.07;
                     letter-spacing: -.035em;
                     font-weight: 780;
                 }
 
                 .section-lead {
-                    max-width: 720px;
+                    // max-width: 720px;
                     margin: 20px 0 0;
                     color: var(--mental-muted);
-                    font-size: 14px;
+                    font-size: 15px;
                     line-height: 1.85;
+                    margin-bottom: 15px;
                 }
 
                 .decorative-mark {
@@ -1091,14 +1081,14 @@ export default function Depression() {
 
                 .intro-grid {
                     display: grid;
-                    grid-template-columns: .95fr 1.05fr;
-                    gap: 75px;
+                    // grid-template-columns: .95fr 2.05fr;
+                    // gap: 75px;
                     align-items: center;
                 }
 
                 .intro-visual {
                     position: relative;
-                    min-height: 470px;
+                    min-height: 370px;
                 }
 
                 .intro-image {
@@ -1107,12 +1097,7 @@ export default function Depression() {
                     overflow: hidden;
                     border-radius: 18px;
                     background:
-                        linear-gradient(
-                            135deg,
-                            rgba(93,137,200,.20),
-                            rgba(24,35,51,.10)
-                        ),
-                        url("/images/medium-shot-smiley-friends-hugging.jpg")
+                        url("/images/man.png")
                         center / cover no-repeat;
                 }
 
@@ -1120,11 +1105,11 @@ export default function Depression() {
                     content: "";
                     position: absolute;
                     inset: 0;
-                    background: linear-gradient(
-                        145deg,
-                        rgba(23,48,79,.08),
-                        rgba(93,137,200,.25)
-                    );
+                    // background: linear-gradient(
+                    //     145deg,
+                    //     rgba(23,48,79,.08),
+                    //     rgba(93,137,200,.25)
+                    // );
                 }
 
                 .intro-accent {
@@ -1238,7 +1223,7 @@ export default function Depression() {
                 .fact-label {
                     margin-top: 17px;
                     color: var(--mental-muted);
-                    font-size: 11.5px;
+                    font-size: 15px;
                     line-height: 1.65;
                 }
 
@@ -1246,7 +1231,7 @@ export default function Depression() {
 
                 .rwanda-grid {
                     display: grid;
-                    grid-template-columns: .85fr 1.15fr;
+                    // grid-template-columns: .85fr 1.15fr;
                     gap: 75px;
                     align-items: center;
                 }
@@ -1352,7 +1337,7 @@ export default function Depression() {
 
                 .symptoms-layout {
                     display: grid;
-                    grid-template-columns: .85fr 1.15fr;
+                    // grid-template-columns: .85fr 1.15fr;
                     gap: 70px;
                     align-items: start;
                 }
@@ -1393,13 +1378,13 @@ export default function Depression() {
                     display: grid;
                     place-items: center;
                     border-radius: 8px;
-                    background: var(--mental-blue-soft);
-                    color: var(--mental-blue);
+                    background: #E5B83C;
+                    color: #5D89C8;
                 }
 
                 .symptom-item span {
                     color: #4F5B6C;
-                    font-size: 12px;
+                    font-size: 15px;
                     line-height: 1.65;
                 }
 
@@ -1410,7 +1395,7 @@ export default function Depression() {
                     justify-content: space-between;
                     align-items: end;
                     gap: 35px;
-                    margin-bottom: 40px;
+                    // margin-bottom: 40px;
                 }
 
                 .severity-grid {
@@ -1428,24 +1413,24 @@ export default function Depression() {
                 }
 
                 .severity-icon {
-                    width: 43px;
-                    height: 43px;
+                    width: 30px;
+                    height: 30px;
                     display: grid;
                     place-items: center;
                     margin-bottom: 20px;
                     border-radius: 12px;
-                    background: var(--mental-blue-soft);
-                    color: var(--mental-blue);
+                    background: #638C70;
+                    color: #638C70;
                 }
 
                 .severity-card:nth-child(2) .severity-icon {
-                    background: #F4F0E2;
-                    color: #A27C20;
+                    background: #E5B83C;
+                    color: #E5B83C;
                 }
 
                 .severity-card:nth-child(3) .severity-icon {
-                    background: #F4E8E7;
-                    color: #A4544D;
+                    background: #c33d32;
+                    color: #c33d32;
                 }
 
                 .severity-card h3 {
@@ -1456,7 +1441,7 @@ export default function Depression() {
                 .severity-card p {
                     margin: 12px 0 0;
                     color: var(--mental-muted);
-                    font-size: 12px;
+                    font-size: 15px;
                     line-height: 1.75;
                 }
 
@@ -1528,7 +1513,7 @@ export default function Depression() {
                     grid-template-columns: auto 1fr;
                     align-items: center;
                     gap: 23px;
-                    margin-top: 25px;
+                    // margin-top: 25px;
                     padding: 26px 29px;
                     border-radius: 16px;
                     color: #fff;
@@ -1552,7 +1537,7 @@ export default function Depression() {
                 .prevention-panel p {
                     margin: 6px 0 0;
                     color: rgba(255,255,255,.74);
-                    font-size: 11px;
+                    font-size: 15px;
                     line-height: 1.65;
                 }
 
@@ -1634,9 +1619,9 @@ export default function Depression() {
                     backdrop-filter: blur(8px);
                 }
 
-                .advice-item:last-child {
-                    grid-column: span 2;
-                }
+                // .advice-item:last-child {
+                //     grid-column: span 2;
+                // }
 
                 .advice-number {
                     flex: 0 0 auto;
@@ -1644,16 +1629,16 @@ export default function Depression() {
                     height: 29px;
                     display: grid;
                     place-items: center;
-                    border-radius: 50%;
-                    background: rgba(255,255,255,.16);
-                    font-size: 10px;
+                    border-radius: 10px;
+                    background: #E5B83C;
+                    font-size: 15px;
                     font-weight: 800;
                 }
 
                 .advice-item p {
                     margin: 1px 0 0;
                     color: rgba(255,255,255,.87);
-                    font-size: 11.5px;
+                    font-size: 15px;
                     line-height: 1.7;
                 }
 
@@ -1705,7 +1690,7 @@ export default function Depression() {
                     position: relative;
                     margin: 0 auto;
                     max-width: 650px;
-                    font-size: clamp(27px, 4vw, 40px);
+                    // font-size: clamp(27px, 4vw, 25px);
                     line-height: 1.08;
                     letter-spacing: -.03em;
                 }
@@ -1715,7 +1700,7 @@ export default function Depression() {
                     max-width: 620px;
                     margin: 18px auto 0;
                     color: rgba(255,255,255,.76);
-                    font-size: 13px;
+                    font-size: 15px;
                     line-height: 1.8;
                 }
 
@@ -2048,6 +2033,13 @@ export default function Depression() {
                         bottom: 20px;
                     }
                 }
+                    p {
+    margin: 12px 0 0;
+    color: var(--mental-muted);
+    font-size: 15px;
+    line-height: 1.75;
+    margin-bottom: 15px;
+
             `}</style>
 
             <div className="depression-page">
@@ -2056,8 +2048,6 @@ export default function Depression() {
                 ===================================================== */}
                 <section className="depression-hero">
                     <div className="hero-inner">
-                        <div className="hero-kicker">{t.heroEyebrow}</div>
-
                         <h1 className="hero-title">{t.heroTitle}</h1>
 
                         <div className="hero-divider">
@@ -2065,31 +2055,6 @@ export default function Depression() {
                         </div>
 
                         <p className="hero-description">{t.heroDescription}</p>
-
-                        <div className="hero-actions">
-                            <button
-                                type="button"
-                                className="hero-button hero-button-primary"
-                                onClick={() => scrollTo("overview")}
-                            >
-                                {t.heroPrimary}
-                                <ArrowDown size={14} />
-                            </button>
-
-                            <button
-                                type="button"
-                                className="hero-button hero-button-secondary"
-                                onClick={() => scrollTo("support")}
-                            >
-                                {t.heroSecondary}
-                                <HeartHandshake size={14} />
-                            </button>
-                        </div>
-                    </div>
-
-                    <div className="hero-scroll">
-                        <span>Scroll</span>
-                        <ArrowDown size={14} />
                     </div>
                 </section>
 
@@ -2099,29 +2064,9 @@ export default function Depression() {
                 <section id="overview" className="section">
                     <div className="container">
                         <div className="intro-grid">
-                            <div className="intro-visual">
+                            {/* <div className="intro-visual">
                                 <div className="intro-image" />
-
-                                <div className="intro-accent" />
-
-                                <div className="intro-card">
-                                    <div className="intro-card-icon">
-                                        <Brain size={19} />
-                                    </div>
-
-                                    <strong>{t.introEyebrow}</strong>
-
-                                    <span>
-                                        {language === "rw"
-                                            ? "Ubumenyi bushobora gufasha abantu gushaka ubufasha hakiri kare."
-                                            : language === "fr"
-                                              ? "La connaissance peut aider à demander de l'aide plus tôt."
-                                              : language === "nl"
-                                                ? "Inzicht kan helpen om eerder ondersteuning te zoeken."
-                                                : "Knowledge can help people seek support earlier."}
-                                    </span>
-                                </div>
-                            </div>
+                            </div> */}
 
                             <div className="intro-copy">
                                 <SectionLabel>{t.introEyebrow}</SectionLabel>
@@ -2141,72 +2086,28 @@ export default function Depression() {
                 </section>
 
                 {/* =====================================================
-                    KEY FACTS
+                    CAUSES & PREVENTION
                 ===================================================== */}
-                <section className="section section-soft">
+                <section className="section">
                     <div className="container">
-                        <div className="facts-heading">
-                            <div>
-                                <SectionLabel>{t.factsEyebrow}</SectionLabel>
-
-                                <h2 className="section-title">
-                                    {t.factsTitle}
-                                </h2>
+                        <div className="prevention-panel">
+                            <div className="prevention-icon">
+                                <ShieldCheck size={23} />
                             </div>
-                        </div>
+                            <div>
+                                <h3>{t.preventionTitle}</h3>
 
-                        <div className="facts-grid">
-                            {t.facts.map((fact, index) => (
-                                <article className="fact-card" key={index}>
-                                    <div className="fact-number">
-                                        {fact.value}
-                                    </div>
-
-                                    <div className="fact-label">
-                                        {fact.label}
-                                    </div>
-                                </article>
-                            ))}
+                                <p>{t.preventionText}</p>
+                            </div>
                         </div>
                     </div>
                 </section>
-
                 {/* =====================================================
                     RWANDA
                 ===================================================== */}
                 <section className="section">
                     <div className="container">
                         <div className="rwanda-grid">
-                            <div className="rwanda-art">
-                                <DepressionArtwork />
-
-                                <div className="rwanda-stat rwanda-stat-one">
-                                    <strong>9.1%</strong>
-                                    <span>
-                                        {language === "rw"
-                                            ? "Abaturage muri rusange"
-                                            : language === "fr"
-                                              ? "Population générale"
-                                              : language === "nl"
-                                                ? "Algemene bevolking"
-                                                : "General population"}
-                                    </span>
-                                </div>
-
-                                <div className="rwanda-stat rwanda-stat-two">
-                                    <strong>17.8%</strong>
-                                    <span>
-                                        {language === "rw"
-                                            ? "Abacitse ku icumu"
-                                            : language === "fr"
-                                              ? "Survivants"
-                                              : language === "nl"
-                                                ? "Overlevenden"
-                                                : "Survivors"}
-                                    </span>
-                                </div>
-                            </div>
-
                             <div className="rwanda-copy">
                                 <SectionLabel>{t.rwandaEyebrow}</SectionLabel>
 
@@ -2248,6 +2149,8 @@ export default function Depression() {
                                     </div>
                                 </div>
                             </div>
+
+                           
                         </div>
                     </div>
                 </section>
@@ -2270,18 +2173,33 @@ export default function Depression() {
                                 <p className="section-lead">
                                     {t.symptomsIntro}
                                 </p>
-                            </div>
 
-                            <div className="symptoms-list">
-                                {t.symptoms.map((symptom, index) => (
-                                    <div className="symptom-item" key={index}>
-                                        <div className="symptom-icon">
-                                            <CheckCircle2 size={15} />
+                                <div className="symptoms-list">
+                                    {t.symptoms.map((symptom, index) => (
+                                        <div
+                                            className="symptom-item"
+                                            key={index}
+                                        >
+                                            <div className="symptom-icon">
+                                                <CheckCircle2 size={15} />
+                                            </div>
+
+                                            <span>{symptom}</span>
                                         </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-                                        <span>{symptom}</span>
-                                    </div>
-                                ))}
+                <section className="section">
+                    <div className="container">
+                        <div className="prevention-panel">
+                            <div>
+                                <p style={{ fontWeight: 600, fontSize: 16 }}>
+                                    {t.symptomsIntro2}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -2294,13 +2212,15 @@ export default function Depression() {
                     <div className="container">
                         <div className="severity-header">
                             <div>
-                                <SectionLabel>{t.severityEyebrow}</SectionLabel>
+                                {/* <SectionLabel>{t.severityEyebrow}</SectionLabel> */}
 
                                 <h2 className="section-title">
                                     {t.severityTitle}
                                 </h2>
                             </div>
                         </div>
+                        <DecorativeMark />
+                        <p>{t.relapse1}</p>
 
                         <div className="severity-grid">
                             {t.severity.map((item, index) => (
@@ -2321,11 +2241,17 @@ export default function Depression() {
                                 </article>
                             ))}
                         </div>
+                    </div>
+                </section>
 
-                        <div className="relapse-note">
-                            <Sparkles size={18} />
-
-                            <p>{t.relapse}</p>
+                <section className="section">
+                    <div className="container">
+                        <div className="prevention-panel">
+                            <div>
+                                <p style={{ fontWeight: 600, fontSize: 16 }}>
+                                    {t.relapse2}
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -2339,39 +2265,35 @@ export default function Depression() {
 
                         <h2 className="section-title">{t.causesTitle}</h2>
 
-                        <p className="section-lead">{t.causesIntro}</p>
+<DecorativeMark />
+                        <p>
+                            {t.causesIntro}{" "}
+                            <em>
+                                (urugero: gupfusha uwo wakundaga, guhura
+                                n'ibintu bihungabanya umutima, cyangwa gutakaza
+                                akazi)
+                            </em>
+                            .
+                        </p>
 
-                        <div className="causes-grid">
-                            {t.causes.map((cause, index) => (
-                                <article className="cause-card" key={index}>
-                                    <div className="cause-icon">
-                                        {index === 0 ? (
-                                            <Users size={18} />
-                                        ) : index === 1 ? (
-                                            <HeartPulse size={18} />
-                                        ) : index === 2 ? (
-                                            <Stethoscope size={18} />
-                                        ) : (
-                                            <ShieldCheck size={18} />
-                                        )}
-                                    </div>
+                        <p>{t.causesIntro2}</p>
 
-                                    <h3>{cause.title}</h3>
-
-                                    <p>{cause.text}</p>
-                                </article>
-                            ))}
-                        </div>
+                        <p>{t.causesIntro3}</p>
 
                         <div className="prevention-panel">
-                            <div className="prevention-icon">
-                                <ShieldCheck size={23} />
-                            </div>
-
                             <div>
-                                <h3>{t.preventionTitle}</h3>
+                                <h3>Kwirinda</h3>
 
-                                <p>{t.preventionText}</p>
+                                <p>
+                                    Agahinda gakabije gashobora gukumirwa
+                                    binyuze muri gahunda cyangwa ibikorwa
+                                    bitandukanye. Urugero: kwitabira inyigisho
+                                    cyangwa amahugurwa yo kwiga uko wagira
+                                    ubushobozi bwo gutekereza mu buryo bwiza,
+                                    cyangwa gukora imyitozo ngororangingo
+                                    ihoraho hagamijwe kubungabunga ubuzima bwo
+                                    mu mutwe n’ubw’umubiri.{" "}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -2386,23 +2308,13 @@ export default function Depression() {
                             <SectionLabel light>{t.adviceEyebrow}</SectionLabel>
 
                             <h2 className="section-title">{t.adviceTitle}</h2>
-
-                            <p className="section-lead">
-                                {language === "rw"
-                                    ? "Hari intambwe zoroshye zishobora gufasha umuntu uri mu bihe bikomeye."
-                                    : language === "fr"
-                                      ? "Certaines étapes simples peuvent aider une personne qui traverse une période difficile."
-                                      : language === "nl"
-                                        ? "Enkele eenvoudige stappen kunnen iemand helpen die een moeilijke periode doormaakt."
-                                        : "There are practical steps that can help someone going through a difficult period."}
-                            </p>
                         </div>
-
+<DecorativeMark />
                         <div className="advice-list">
                             {t.advice.map((item, index) => (
                                 <div className="advice-item" key={index}>
                                     <div className="advice-number">
-                                        {String(index + 1).padStart(2, "0")}
+                                        <CheckCircle2 size={15} />
                                     </div>
 
                                     <p>{item}</p>
@@ -2412,87 +2324,80 @@ export default function Depression() {
                     </div>
                 </section>
 
-                {/* =====================================================
-                    SUPPORT
-                ===================================================== */}
-                <section id="support" className="section">
+                <section className="section section-soft">
                     <div className="container">
-                        <div className="support-wrap">
-                            <div className="support-card">
-                                <div className="support-icon">
-                                    <HeartHandshake size={25} />
-                                </div>
+                        <div className="symptoms-layout">
+                            <div className="symptoms-intro">
+                                <SectionLabel>{t.adviceEyebrow}</SectionLabel>
 
-                                <div className="section-label section-label-light">
-                                    <span className="label-line" />
-                                    <span>{t.supportEyebrow}</span>
-                                </div>
+                                <h2 className="section-title">
+                                    {t.advice2Title}
+                                </h2>
 
-                                <h2>{t.supportTitle}</h2>
+                                <DecorativeMark />
 
-                                <p>{t.supportText}</p>
+                                <p className="section-lead">{t.advice2Intro}</p>
 
-                                <a href="#support" className="support-button">
-                                    {t.supportButton}
-                                    <ArrowUp size={14} />
-                                </a>
-                            </div>
+                                <div className="symptoms-list">
+                                    {t.advice2.map((advice2, index) => (
+                                        <div
+                                            className="symptom-item"
+                                            key={index}
+                                        >
+                                            <div className="symptom-icon">
+                                                <CheckCircle2 size={15} />
+                                            </div>
 
-                            <div className="important-box">
-                                <div className="important-icon">
-                                    <AlertTriangle size={17} />
-                                </div>
-
-                                <div>
-                                    <strong>{t.important}</strong>
-
-                                    <p>{t.importantText}</p>
+                                            <span>{advice2}</span>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
-
-                            <div className="urgent-note">{t.urgent}</div>
                         </div>
                     </div>
                 </section>
 
                 {/* =====================================================
-                    FOOTER
+                    KEY FACTS
                 ===================================================== */}
-                <footer className="mental-footer">
+                <section className="section section-soft">
                     <div className="container">
-                        <div className="footer-inner">
-                            <div className="footer-brand">
-                                <div className="footer-mark">
-                                    <Brain size={18} />
-                                </div>
-
-                                <div>
-                                    <strong>
-                                        {language === "rw"
-                                            ? "Ubuzima bwo mu Mutwe"
-                                            : language === "fr"
-                                              ? "Santé mentale"
-                                              : language === "nl"
-                                                ? "Geestelijke gezondheid"
-                                                : "Mental Health"}
-                                    </strong>
-
-                                    <span>
-                                        {language === "rw"
-                                            ? "Ubumenyi • Ubufasha • Kubaho neza"
-                                            : language === "fr"
-                                              ? "Connaissance • Soutien • Bien-être"
-                                              : language === "nl"
-                                                ? "Kennis • Ondersteuning • Welzijn"
-                                                : "Knowledge • Support • Wellbeing"}
-                                    </span>
-                                </div>
+                        <div className="facts-heading">
+                            <div>
+                                <SectionLabel>{t.factsEyebrow}</SectionLabel>
                             </div>
+                        </div>
 
-                            <div className="footer-copy">{t.importantText}</div>
+                        <div className="facts-grid">
+                            {t.facts.map((fact, index) => (
+                                <article className="fact-card" key={index}>
+                                    <div className="fact-number">
+                                        {fact.value}
+                                    </div>
+
+                                    <div className="fact-label">
+                                        {fact.label}
+                                    </div>
+                                </article>
+                            ))}
                         </div>
                     </div>
-                </footer>
+                </section>
+
+                {/* =====================================================
+                                    SUPPORT
+                                ===================================================== */}
+                <section id="support" className="section">
+                    <div className="container">
+                        <div className="support-wrap">
+                            <div className="support-card">
+                                <h2>{t.supportTitle}</h2>
+
+                                <p>{t.supportText}</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
                 {/* =====================================================
                     BACK TO TOP
