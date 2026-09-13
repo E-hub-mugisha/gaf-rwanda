@@ -1,1 +1,0 @@
-import{j as r,L as s}from"./app-DSoONET_.js";function n({links:a}){return!a||a.length<=3?null:r.jsx("div",{className:"pagination",children:a.map((e,t)=>e.url?r.jsx(s,{href:e.url,className:e.active?"active":"",dangerouslySetInnerHTML:{__html:e.label},preserveScroll:!0},t):r.jsx("span",{style:{opacity:.4},dangerouslySetInnerHTML:{__html:e.label}},t))})}export{n as P};
