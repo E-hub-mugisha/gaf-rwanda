@@ -224,7 +224,7 @@ export default function AdminLayout({ title, children }) {
 
                         <nav className="sidebar-nav">
                             {/* Dashboard */}
-                            <Link
+                            {/* <Link
                                 href={route("admin.dashboard")}
                                 className={
                                     isActive("/admin/dashboard")
@@ -274,7 +274,7 @@ export default function AdminLayout({ title, children }) {
                                 </span>
 
                                 <span>{t.dashboard}</span>
-                            </Link>
+                            </Link> */}
 
                             {/* Documents */}
                             {/* <Link
@@ -304,7 +304,7 @@ export default function AdminLayout({ title, children }) {
                             </Link> */}
 
                             {/* Mental Health */}
-                            <Link
+                            {/* <Link
                                 href={route(
                                     "admin.health-content.depression.show",
                                 )}
@@ -341,7 +341,7 @@ export default function AdminLayout({ title, children }) {
                                 </span>
 
                                 <span>{t.mentalHealth}</span>
-                            </Link>
+                            </Link> */}
 
                             {/* Reader Accounts */}
                             <Link
@@ -389,7 +389,7 @@ export default function AdminLayout({ title, children }) {
                             </Link>
 
                             {/* Activity */}
-                            <Link
+                            {/* <Link
                                 href={route("admin.activity.index")}
                                 className={
                                     isActive("/admin/activity")
@@ -409,7 +409,7 @@ export default function AdminLayout({ title, children }) {
                                 </span>
 
                                 <span>{t.activity}</span>
-                            </Link>
+                            </Link> */}
                         </nav>
                     </div>
 

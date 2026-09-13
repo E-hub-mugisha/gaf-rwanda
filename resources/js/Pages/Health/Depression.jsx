@@ -114,9 +114,7 @@ const content = {
         causesTitle: "Ibitera agahinda gakabije n’uburyo wakwirinda ",
         causesIntro:
             "Agahinda gakabije gashobora guterwa n’ihuriro cyangwa urusobe bw’ibintu bitandukanye biba mubuzima bw’umuntu. Ibi bishobora kuba ihuriro riri hagati y’imibanire n’abandi, ibyiyumo cyangwa se imitekerereze, ndetse n’imiterere y’umubiri w’umuntu. Niyo mpamvu abantu bahuye n’ibihe bikomeye cyangwa bibabaje mu buzima baba bafite ibyago byinshi byo kurwara agahinda gakabije ",
-        causesIntro2:
-            "Agahinda gakabije gashobora gutera umubabaro ukomeye, bikarushaho kwangiza imiterere y’ubuzima, imibereho n’imikorere y’umuntu.",
-
+        
         causesIntro2:
             "Ibibazo by’ubuzima bw’umubiri na byo bishobora kugira uruhare mu kugaragara kw’agahinda gakabije. Urugero: indwara y’umutima ishobora gutuma uyifite arwara agahinda gakabije, kandi ku rundi ruhande, ako gahinda gakabije gashobora kurushaho kuzahaza indwara y’umutima kubera guhangayikishwa n’iyo ndwara.",
 

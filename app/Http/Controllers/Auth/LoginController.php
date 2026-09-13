@@ -61,7 +61,7 @@ class LoginController extends Controller
     */
 
         if ($user->role === 'admin') {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.analytics.index');
         }
 
         return redirect()->route('mental-health.depression');
