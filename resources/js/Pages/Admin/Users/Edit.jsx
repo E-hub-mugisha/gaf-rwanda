@@ -671,8 +671,8 @@ export default function Edit({ user }) {
 
             <style>{`
                 .edit-user-page {
-                    --blue: #5D89C8;
-                    --blue-dark: #466FA9;
+                    --blue: #20603d;
+                    --blue-dark: #174a2f;
                     --blue-light: #EEF4FC;
                     --ink: #172033;
                     --muted: #718096;
@@ -719,7 +719,7 @@ export default function Edit({ user }) {
 
                 .back-button:hover {
                     color: var(--blue);
-                    border-color: #C9D9EE;
+                    border-color: #d1e6da;
                     background: var(--blue-light);
                     transform: translateX(-2px);
                 }
@@ -887,7 +887,7 @@ export default function Edit({ user }) {
 
                 .input-wrapper input:focus {
                     border-color: var(--blue);
-                    box-shadow: 0 0 0 3px rgba(93, 137, 200, .12);
+                    box-shadow: 0 0 0 3px rgba(32, 96, 61, .12);
                 }
 
                 .input-icon {
@@ -973,7 +973,7 @@ export default function Edit({ user }) {
                     display: flex;
                     gap: 11px;
                     padding: 13px 14px;
-                    border: 1px solid #DDE8F6;
+                    border: 1px solid #e3f0e9;
                     background: #F5F8FD;
                     border-radius: 11px;
                     margin-top: 5px;
@@ -983,7 +983,7 @@ export default function Edit({ user }) {
                     width: 31px;
                     height: 31px;
                     border-radius: 8px;
-                    background: #E5EFFB;
+                    background: #ebf4ef;
                     color: var(--blue);
                     display: flex;
                     align-items: center;
@@ -1047,7 +1047,7 @@ export default function Edit({ user }) {
                     border: 1px solid var(--blue);
                     background: var(--blue);
                     color: #fff;
-                    box-shadow: 0 5px 13px rgba(93, 137, 200, .22);
+                    box-shadow: 0 5px 13px rgba(32, 96, 61, .22);
                 }
 
                 .save-button:hover:not(:disabled) {
@@ -1139,7 +1139,7 @@ export default function Edit({ user }) {
                     background: linear-gradient(
                         135deg,
                         var(--blue),
-                        #779DD0
+                        #20603d
                     );
                     color: #fff;
                     display: flex;
@@ -1147,7 +1147,7 @@ export default function Edit({ user }) {
                     justify-content: center;
                     font-weight: 800;
                     font-size: 15px;
-                    box-shadow: 0 5px 12px rgba(93,137,200,.2);
+                    box-shadow: 0 5px 12px rgba(32, 96, 61,.2);
                     flex-shrink: 0;
                 }
 
@@ -1237,14 +1237,14 @@ export default function Edit({ user }) {
                     gap: 11px;
                     padding: 15px;
                     background: #F5F8FC;
-                    border: 1px solid #DEE8F4;
+                    border: 1px solid #e2f0e8;
                     border-radius: 14px;
                 }
 
                 .info-card-icon {
                     width: 31px;
                     height: 31px;
-                    background: #E5EFFB;
+                    background: #ebf4ef;
                     color: var(--blue);
                     border-radius: 8px;
                     display: flex;

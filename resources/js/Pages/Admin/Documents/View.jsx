@@ -529,8 +529,8 @@ export default function View({ document }) {
             <style>{`
 
                 .document-view-page {
-                    --primary: #5D89C8;
-                    --primary-dark: #416FAE;
+                    --primary: #20603d;
+                    --primary-dark: #174a2f;
                     --text: #172033;
                     --muted: #718096;
                     --border: #E5EAF1;
@@ -587,7 +587,7 @@ export default function View({ document }) {
                     align-items: center;
                     justify-content: center;
                     border-radius: 13px;
-                    background: #EAF1FC;
+                    background: #eff7f3;
                     color: var(--primary);
                 }
 
@@ -629,7 +629,7 @@ export default function View({ document }) {
                     gap: 7px;
                     height: 38px;
                     padding: 0 14px;
-                    border: 1px solid #DCE3ED;
+                    border: 1px solid #ddece3;
                     border-radius: 9px;
                     background: white;
                     color: #526581;
@@ -640,7 +640,7 @@ export default function View({ document }) {
                 }
 
                 .secondary-btn:hover {
-                    border-color: #BFD0E7;
+                    border-color: #c5e1d1;
                     background: #F8FAFD;
                     color: var(--primary-dark);
                 }
@@ -686,7 +686,7 @@ export default function View({ document }) {
                     align-items: center;
                     justify-content: center;
                     border-radius: 9px;
-                    background: #EDF3FC;
+                    background: #f1f8f4;
                     color: var(--primary);
                 }
 
@@ -763,15 +763,15 @@ export default function View({ document }) {
                 }
 
                 .language-option:hover {
-                    border-color: #C9D8EB;
+                    border-color: #cfe5d9;
                     background: #F7FAFE;
                 }
 
                 .language-option.active {
-                    border-color: #9EBBE0;
-                    background: #EDF4FD;
+                    border-color: #abd3bc;
+                    background: #f2f8f5;
                     color: var(--primary-dark);
-                    box-shadow: 0 0 0 2px rgba(93, 137, 200, .07);
+                    box-shadow: 0 0 0 2px rgba(32, 96, 61, .07);
                 }
 
                 .language-avatar {
@@ -782,14 +782,14 @@ export default function View({ document }) {
                     align-items: center;
                     justify-content: center;
                     border-radius: 8px;
-                    background: #E5ECF7;
-                    color: #5275A6;
+                    background: #e9f3ed;
+                    color: #174a2f;
                     font-size: 9px;
                     font-weight: 800;
                 }
 
                 .language-option.active .language-avatar {
-                    background: #D9E7F8;
+                    background: #e2efe8;
                     color: var(--primary-dark);
                 }
 
@@ -903,7 +903,7 @@ export default function View({ document }) {
                     gap: 6px;
                     height: 32px;
                     padding: 0 10px;
-                    border: 1px solid #DCE3ED;
+                    border: 1px solid #ddece3;
                     border-radius: 7px;
                     background: white;
                     color: #526581;
@@ -965,7 +965,7 @@ export default function View({ document }) {
                     justify-content: center;
                     margin-bottom: 15px;
                     border-radius: 18px;
-                    background: #EDF3FC;
+                    background: #f1f8f4;
                     color: var(--primary);
                 }
 

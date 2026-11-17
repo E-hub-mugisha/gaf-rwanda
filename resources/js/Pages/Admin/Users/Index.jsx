@@ -726,8 +726,8 @@ export default function Index({ users }) {
             <style>{`
 
                 .readers-page {
-                    --primary: #5D89C8;
-                    --primary-dark: #416FAE;
+                    --primary: #20603d;
+                    --primary-dark: #174a2f;
                     --text: #172033;
                     --muted: #718096;
                     --border: #E5EAF1;
@@ -767,7 +767,7 @@ export default function Index({ users }) {
 
                     border-radius: 13px;
 
-                    background: #EAF1FC;
+                    background: #eff7f3;
                     color: var(--primary);
                 }
 
@@ -809,12 +809,8 @@ export default function Index({ users }) {
                     font-weight: 650;
 
                     box-shadow:
-                        0 4px 12px rgba(
-                            93,
-                            137,
-                            200,
-                            .20
-                        );
+                        0 4px 12px rgba(32, 96, 61,
+                            .20);
 
                     transition: .2s ease;
                 }
@@ -923,8 +919,8 @@ export default function Index({ users }) {
                 }
 
                 .stat-icon.blue {
-                    background: #EAF1FC;
-                    color: #5D89C8;
+                    background: #eff7f3;
+                    color: #20603d;
                 }
 
                 .stat-icon.green {
@@ -1034,7 +1030,7 @@ export default function Index({ users }) {
 
                     box-shadow:
                         0 0 0 3px
-                        rgba(93, 137, 200, .10);
+                        rgba(32, 96, 61, .10);
                 }
 
                 .search-box input {
@@ -1132,8 +1128,8 @@ export default function Index({ users }) {
                     background:
                         linear-gradient(
                             135deg,
-                            #EAF1FC,
-                            #DCE9F8
+                            #eff7f3,
+                            #e4f0e9
                         );
 
                     color: var(--primary-dark);
@@ -1204,7 +1200,7 @@ export default function Index({ users }) {
 
                     background: #EEF4FC;
 
-                    color: #5275A6;
+                    color: #174a2f;
 
                     font-size: 10px;
 
@@ -1275,17 +1271,17 @@ export default function Index({ users }) {
                 }
 
                 .action-btn.edit {
-                    color: #4C72A9;
+                    color: #174a2f;
 
-                    border-color: #DCE8F8;
+                    border-color: #e4f0e9;
 
                     background: #F7FAFE;
                 }
 
                 .action-btn.edit:hover {
-                    background: #EAF1FC;
+                    background: #eff7f3;
 
-                    border-color: #C6D8EE;
+                    border-color: #cfe5d9;
                 }
 
                 .action-btn.delete {
@@ -1324,7 +1320,7 @@ export default function Index({ users }) {
 
                     border-radius: 18px;
 
-                    background: #EDF3FC;
+                    background: #f1f8f4;
 
                     color: var(--primary);
                 }

@@ -1801,9 +1801,9 @@ export default function Edit({ page }) {
             <style>{`
 
                 .cms-editor-page {
-                    --brand: #5d89c8;
-                    --brand-dark: #416fae;
-                    --brand-light: #edf4fc;
+                    --brand: #20603d;
+                    --brand-dark: #174a2f;
+                    --brand-light: #f1f8f4;
                     --text: #172033;
                     --muted: #7d8898;
                     --border: #e5e9ef;
@@ -2006,7 +2006,7 @@ export default function Edit({ page }) {
 
                 .language-tab.active {
                     background: var(--brand-light);
-                    border-color: #d9e7f7;
+                    border-color: #e1efe7;
                     color: var(--brand);
                 }
 
@@ -2605,10 +2605,10 @@ export default function Edit({ page }) {
                     padding: 14px;
                     background: linear-gradient(
                         135deg,
-                        #edf4fc,
+                        #f1f8f4,
                         #f5f8fc
                     );
-                    border: 1px solid #dce8f6;
+                    border: 1px solid #e2f0e8;
                     display: flex;
                     align-items: flex-start;
                     gap: 10px;
@@ -2629,7 +2629,7 @@ export default function Edit({ page }) {
 
                 .editor-tip strong {
                     display: block;
-                    color: #3e5878;
+                    color: #174a2f;
                     font-size: 10px;
                     margin-bottom: 3px;
                 }
@@ -2723,7 +2723,7 @@ export default function Edit({ page }) {
                     font-size: 10px;
                     font-weight: 750;
                     cursor: pointer;
-                    box-shadow: 0 5px 13px rgba(93,137,200,.2);
+                    box-shadow: 0 5px 13px rgba(32, 96, 61,.2);
                 }
 
                 .save-button:hover:not(:disabled) {

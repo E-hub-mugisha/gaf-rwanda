@@ -1007,8 +1007,8 @@ export default function Edit({ document }) {
 
             <style>{`
                 .edit-page {
-                    --primary: #5D89C8;
-                    --primary-dark: #416FAE;
+                    --primary: #20603d;
+                    --primary-dark: #174a2f;
                     --text: #172033;
                     --muted: #718096;
                     --border: #E5E9F0;
@@ -1049,7 +1049,7 @@ export default function Edit({ document }) {
 
                 .back-button:hover {
                     color: var(--primary);
-                    border-color: #CBD8EA;
+                    border-color: #d0e5d9;
                     background: #F9FBFE;
                 }
 
@@ -1112,7 +1112,7 @@ export default function Edit({ document }) {
                     align-items: center;
                     justify-content: center;
                     border-radius: 10px;
-                    background: #EAF1FC;
+                    background: #eff7f3;
                     color: var(--primary);
                 }
 
@@ -1242,7 +1242,7 @@ export default function Edit({ document }) {
                 }
 
                 .heading-icon.blue {
-                    background: #EAF1FC;
+                    background: #eff7f3;
                     color: var(--primary);
                 }
 
@@ -1328,7 +1328,7 @@ export default function Edit({ document }) {
                 .form-group textarea:focus {
                     border-color: var(--primary);
                     background: white;
-                    box-shadow: 0 0 0 3px rgba(93, 137, 200, .09);
+                    box-shadow: 0 0 0 3px rgba(32, 96, 61, .09);
                 }
 
                 .form-group input::placeholder,
@@ -1400,7 +1400,7 @@ export default function Edit({ document }) {
                 }
 
                 .version-card.replacement {
-                    border-color: #BED3ED;
+                    border-color: #c8e3d4;
                     background: #F9FBFE;
                 }
 
@@ -1425,7 +1425,7 @@ export default function Edit({ document }) {
                     align-items: center;
                     justify-content: center;
                     border-radius: 8px;
-                    background: #EAF1FC;
+                    background: #eff7f3;
                     color: var(--primary);
                     font-size: 9px;
                     font-weight: 800;
@@ -1538,13 +1538,13 @@ export default function Edit({ document }) {
                 }
 
                 .preview-btn {
-                    border: 1px solid #DCE5F1;
+                    border: 1px solid #dfeee6;
                     background: #F7FAFE;
-                    color: #4C72A9;
+                    color: #174a2f;
                 }
 
                 .preview-btn:hover {
-                    background: #EAF1FC;
+                    background: #eff7f3;
                 }
 
                 .remove-btn {
@@ -1649,7 +1649,7 @@ export default function Edit({ document }) {
                     align-items: center;
                     justify-content: center;
                     border-radius: 8px;
-                    background: #EAF1FC;
+                    background: #eff7f3;
                     color: var(--primary);
                 }
 
@@ -1705,7 +1705,7 @@ export default function Edit({ document }) {
                     font-size: 11px;
                     font-weight: 700;
                     cursor: pointer;
-                    box-shadow: 0 4px 12px rgba(93, 137, 200, .18);
+                    box-shadow: 0 4px 12px rgba(32, 96, 61, .18);
                     transition: .2s ease;
                 }
 
@@ -1817,7 +1817,7 @@ export default function Edit({ document }) {
                     align-items: center;
                     justify-content: center;
                     border-radius: 8px;
-                    background: #EAF1FC;
+                    background: #eff7f3;
                     color: var(--primary);
                 }
 

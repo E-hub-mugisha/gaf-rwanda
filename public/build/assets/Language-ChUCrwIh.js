@@ -1,0 +1,1 @@
+const n="gaf-language-change";function t(){return typeof window>"u"?"rw":localStorage.getItem("gaf_language")||"rw"}function a(e){typeof window>"u"||(localStorage.setItem("gaf_language",e),document.documentElement.lang=e,window.dispatchEvent(new CustomEvent(n,{detail:e})))}export{n as L,t as g,a as s};

@@ -38,6 +38,18 @@ return [
             'report' => false,
         ],
 
+        // Website media (images, videos, banners, photos) saved directly in
+        // the public folder: public/uploads/... served at /uploads/...
+        'uploads' => [
+            'driver' => 'local',
+            'root' => public_path('uploads'),
+            // Relative URL so images work on any domain (no APP_URL dependency).
+            'url' => '/uploads',
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

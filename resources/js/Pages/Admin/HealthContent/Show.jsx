@@ -6,7 +6,7 @@ import {
     LANGUAGE_EVENT,
 } from "@/lib/language";
 
-const BRAND = "#5D89C8";
+const BRAND = "#20603d";
 
 const UI_TRANSLATIONS = {
     rw: {
@@ -718,8 +718,8 @@ export default function Show({ page }) {
                 }
 
                 .language-badge {
-                    color: #315f96;
-                    background: #edf4fc;
+                    color: #174a2f;
+                    background: #f1f8f4;
                 }
 
                 .status-badge.published {
@@ -936,7 +936,7 @@ export default function Show({ page }) {
                 }
 
                 .language-row.active {
-                    background: #edf4fc;
+                    background: #f1f8f4;
                 }
 
                 .language-row .flag {
@@ -985,7 +985,7 @@ export default function Show({ page }) {
                     align-items: center;
                     justify-content: center;
                     border-radius: 8px;
-                    background: #edf4fc;
+                    background: #f1f8f4;
                     color: ${BRAND};
                 }
 
@@ -1011,7 +1011,7 @@ export default function Show({ page }) {
                 }
 
                 .edit-link:hover {
-                    color: #315f96;
+                    color: #174a2f;
                 }
 
 
@@ -1033,7 +1033,7 @@ export default function Show({ page }) {
                     align-items: center;
                     justify-content: center;
                     border-radius: 12px;
-                    background: #edf4fc;
+                    background: #f1f8f4;
                     color: ${BRAND};
                     font-size: 1.3rem;
                     margin-bottom: 13px;

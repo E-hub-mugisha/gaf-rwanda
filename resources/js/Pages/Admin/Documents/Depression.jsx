@@ -1131,8 +1131,8 @@ export default function Depression() {
             <style>{`
 
                 .mental-health-page {
-                    --mh-primary: #5D89C8;
-                    --mh-primary-dark: #466FA9;
+                    --mh-primary: #20603d;
+                    --mh-primary-dark: #174a2f;
                     --mh-primary-soft: #EEF4FC;
 
                     --mh-teal: #5CA47C;
@@ -1179,7 +1179,7 @@ export default function Depression() {
                     gap: 8px;
                     padding: 7px 11px;
                     border-radius: 30px;
-                    background: rgba(93,137,200,.11);
+                    background: rgba(32, 96, 61,.11);
                     color: var(--mh-primary-dark);
                     font-size: 10px;
                     font-weight: 800;
@@ -1219,13 +1219,13 @@ export default function Depression() {
                     border-radius: 50%;
                     background: white;
                     color: var(--mh-primary);
-                    box-shadow: 0 20px 55px rgba(48,74,111,.15);
+                    box-shadow: 0 20px 55px rgba(23, 74, 47,.15);
                     z-index: 3;
                 }
 
                 .mh-orbit {
                     position: absolute;
-                    border: 1px solid rgba(93,137,200,.25);
+                    border: 1px solid rgba(32, 96, 61,.25);
                     border-radius: 50%;
                 }
 
@@ -1871,8 +1871,8 @@ export default function Depression() {
                     background:
                         linear-gradient(
                             135deg,
-                            #466FA9,
-                            #5D89C8
+                            #174a2f,
+                            #20603d
                         );
                     color: white;
                     display: flex;

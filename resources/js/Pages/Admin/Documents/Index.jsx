@@ -694,8 +694,8 @@ export default function Index({ documents }) {
             {/* ================= STYLES ================= */}
             <style>{`
                 .documents-page {
-                    --primary: #5D89C8;
-                    --primary-dark: #416FAE;
+                    --primary: #20603d;
+                    --primary-dark: #174a2f;
                     --text: #172033;
                     --muted: #718096;
                     --border: #E7EBF2;
@@ -730,7 +730,7 @@ export default function Index({ documents }) {
                     align-items: center;
                     justify-content: center;
                     border-radius: 13px;
-                    background: #EAF1FC;
+                    background: #eff7f3;
                     color: var(--primary);
                 }
 
@@ -760,7 +760,7 @@ export default function Index({ documents }) {
                     font-size: 14px;
                     font-weight: 650;
                     transition: .2s ease;
-                    box-shadow: 0 4px 12px rgba(93, 137, 200, .20);
+                    box-shadow: 0 4px 12px rgba(32, 96, 61, .20);
                 }
 
                 .upload-btn:hover {
@@ -834,8 +834,8 @@ export default function Index({ documents }) {
                 }
 
                 .stat-icon.blue {
-                    background: #EAF1FC;
-                    color: #5D89C8;
+                    background: #eff7f3;
+                    color: #20603d;
                 }
 
                 .stat-icon.purple {
@@ -909,7 +909,7 @@ export default function Index({ documents }) {
                 .search-box:focus-within {
                     border-color: var(--primary);
                     background: white;
-                    box-shadow: 0 0 0 3px rgba(93, 137, 200, .10);
+                    box-shadow: 0 0 0 3px rgba(32, 96, 61, .10);
                 }
 
                 .search-box input {
@@ -981,7 +981,7 @@ export default function Index({ documents }) {
                     align-items: center;
                     justify-content: center;
                     border-radius: 10px;
-                    background: #EDF3FC;
+                    background: #f1f8f4;
                     color: var(--primary);
                 }
 
@@ -1065,14 +1065,14 @@ export default function Index({ documents }) {
                 }
 
                 .action-btn.view {
-                    color: #416FAE;
-                    border-color: #D8E5F7;
+                    color: #174a2f;
+                    border-color: #e0efe7;
                     background: #F5F9FF;
                 }
 
                 .action-btn.view:hover {
-                    background: #EAF1FC;
-                    border-color: #BFD3EE;
+                    background: #eff7f3;
+                    border-color: #cae3d5;
                 }
 
                 .action-btn.activity {
@@ -1086,13 +1086,13 @@ export default function Index({ documents }) {
                 }
 
                 .action-btn.edit {
-                    color: #4C72A9;
-                    border-color: #DCE8F8;
+                    color: #174a2f;
+                    border-color: #e4f0e9;
                     background: #F7FAFE;
                 }
 
                 .action-btn.edit:hover {
-                    background: #EAF1FC;
+                    background: #eff7f3;
                 }
 
                 .action-btn.delete {
@@ -1121,7 +1121,7 @@ export default function Index({ documents }) {
                     align-items: center;
                     justify-content: center;
                     border-radius: 18px;
-                    background: #EDF3FC;
+                    background: #f1f8f4;
                     color: var(--primary);
                 }
 

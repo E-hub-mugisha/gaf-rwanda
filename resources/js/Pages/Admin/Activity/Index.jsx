@@ -577,8 +577,8 @@ export default function Index({ views }) {
 
             <style>{`
                 .activity-page {
-                    --blue: #5D89C8;
-                    --blue-dark: #466FA9;
+                    --blue: #20603d;
+                    --blue-dark: #174a2f;
                     --blue-light: #EEF4FC;
                     --ink: #172033;
                     --muted: #718096;
@@ -798,7 +798,7 @@ export default function Index({ views }) {
                 .search-wrapper input:focus {
                     border-color: var(--blue);
                     background: #fff;
-                    box-shadow: 0 0 0 3px rgba(93,137,200,.1);
+                    box-shadow: 0 0 0 3px rgba(32, 96, 61,.1);
                 }
 
                 .search-wrapper input::placeholder {

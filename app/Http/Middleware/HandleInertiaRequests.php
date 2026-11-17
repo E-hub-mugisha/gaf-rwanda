@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\ContactMessage;
+use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -28,7 +30,17 @@ class HandleInertiaRequests extends Middleware
             ],
             'flash' => [
                 'status' => fn () => $request->session()->get('status'),
+                'success' => fn () => $request->session()->get('success'),
+                'error' => fn () => $request->session()->get('error'),
             ],
+
+            // Contacts and social links edited in Admin > Site settings.
+            'site' => fn () => SiteSetting::forWebsite(),
+
+            // Badge in the admin sidebar.
+            'unreadMessages' => fn () => $request->user()?->role === 'admin'
+                ? ContactMessage::where('status', 'new')->count()
+                : 0,
         ];
     }
 }

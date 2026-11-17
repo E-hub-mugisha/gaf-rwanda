@@ -749,8 +749,8 @@ export default function Create() {
 
             <style>{`
                 .upload-page {
-                    --primary: #5D89C8;
-                    --primary-dark: #416FAE;
+                    --primary: #20603d;
+                    --primary-dark: #174a2f;
                     --text: #172033;
                     --muted: #718096;
                     --border: #E5E9F0;
@@ -789,7 +789,7 @@ export default function Create() {
                 }
 
                 .back-button:hover {
-                    border-color: #C7D5E8;
+                    border-color: #cbe4d6;
                     background: #F8FAFD;
                     color: var(--primary);
                 }
@@ -899,7 +899,7 @@ export default function Create() {
                 }
 
                 .heading-icon.blue {
-                    background: #EAF1FC;
+                    background: #eff7f3;
                     color: var(--primary);
                 }
 
@@ -985,7 +985,7 @@ export default function Create() {
                 .form-group textarea:focus {
                     border-color: var(--primary);
                     background: white;
-                    box-shadow: 0 0 0 3px rgba(93, 137, 200, .10);
+                    box-shadow: 0 0 0 3px rgba(32, 96, 61, .10);
                 }
 
                 .form-group input::placeholder,
@@ -1055,7 +1055,7 @@ export default function Create() {
                 }
 
                 .language-card:hover {
-                    border-color: #CBD7E8;
+                    border-color: #cee5d8;
                 }
 
                 .language-card.has-file {
@@ -1088,7 +1088,7 @@ export default function Create() {
                     align-items: center;
                     justify-content: center;
                     border-radius: 8px;
-                    background: #EAF1FC;
+                    background: #eff7f3;
                     color: var(--primary);
                     font-size: 10px;
                     font-weight: 800;
@@ -1145,7 +1145,7 @@ export default function Create() {
                     justify-content: center;
                     margin-bottom: 7px;
                     border-radius: 9px;
-                    background: #EAF1FC;
+                    background: #eff7f3;
                     color: var(--primary);
                 }
 
@@ -1289,7 +1289,7 @@ export default function Create() {
                     font-size: 12px;
                     font-weight: 700;
                     cursor: pointer;
-                    box-shadow: 0 4px 12px rgba(93, 137, 200, .18);
+                    box-shadow: 0 4px 12px rgba(32, 96, 61, .18);
                     transition: .2s ease;
                 }
 
@@ -1353,7 +1353,7 @@ export default function Create() {
                     align-items: center;
                     justify-content: center;
                     border-radius: 8px;
-                    background: #EAF1FC;
+                    background: #eff7f3;
                     color: var(--primary);
                 }
 

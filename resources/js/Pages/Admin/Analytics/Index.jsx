@@ -1856,7 +1856,7 @@ const styles = `
     background:
         radial-gradient(
             circle at 90% 0%,
-            rgba(93, 137, 200, .12),
+            rgba(32, 96, 61, .12),
             transparent 30%
         ),
         #f6f8fb;
@@ -1890,7 +1890,7 @@ const styles = `
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    color: #5D89C8;
+    color: #20603d;
     font-size: 11px;
     font-weight: 800;
     letter-spacing: .12em;
@@ -1920,7 +1920,7 @@ const styles = `
     justify-content: center;
     gap: 8px;
     flex-shrink: 0;
-    border: 1px solid #dce3ed;
+    border: 1px solid #ddece3;
     background: #fff;
     color: #263348;
     border-radius: 12px;
@@ -1933,8 +1933,8 @@ const styles = `
 }
 
 .refresh-button:hover {
-    border-color: #5D89C8;
-    color: #5D89C8;
+    border-color: #20603d;
+    color: #20603d;
     transform: translateY(-1px);
 }
 
@@ -1969,7 +1969,7 @@ const styles = `
 
 .stat-card:hover {
     transform: translateY(-2px);
-    border-color: #d7e1ee;
+    border-color: #daebe1;
     box-shadow:
         0 14px 38px rgba(23, 32, 51, .07);
 }
@@ -1982,7 +1982,7 @@ const styles = `
     right: -35px;
     top: -35px;
     border-radius: 50%;
-    background: rgba(93, 137, 200, .07);
+    background: rgba(32, 96, 61, .07);
 }
 
 .stat-top {
@@ -1999,8 +1999,8 @@ const styles = `
     border-radius: 12px;
     display: grid;
     place-items: center;
-    background: #edf4fc;
-    color: #5D89C8;
+    background: #f1f8f4;
+    color: #20603d;
 }
 
 .stat-card.purple .stat-icon {
@@ -2061,8 +2061,8 @@ const styles = `
     place-items: center;
     flex-shrink: 0;
     border-radius: 11px;
-    background: #edf4fc;
-    color: #5D89C8;
+    background: #f1f8f4;
+    color: #20603d;
 }
 
 .growth-content {
@@ -2152,7 +2152,7 @@ const styles = `
 
 .section-kicker {
     margin-bottom: 5px;
-    color: #5D89C8;
+    color: #20603d;
     font-size: 9px;
     font-weight: 850;
     letter-spacing: .13em;
@@ -2161,7 +2161,7 @@ const styles = `
 .clear-button {
     border: 0;
     background: transparent;
-    color: #5D89C8;
+    color: #20603d;
     font-size: 12px;
     font-weight: 750;
     cursor: pointer;
@@ -2210,9 +2210,9 @@ const styles = `
 }
 
 .input-wrap:focus-within {
-    border-color: #5D89C8;
+    border-color: #20603d;
     box-shadow:
-        0 0 0 3px rgba(93, 137, 200, .1);
+        0 0 0 3px rgba(32, 96, 61, .1);
 }
 
 .input-wrap select {
@@ -2232,21 +2232,21 @@ const styles = `
     padding: 0 19px;
     border: 0;
     border-radius: 11px;
-    background: #5D89C8;
+    background: #20603d;
     color: #fff;
     font-size: 12px;
     font-weight: 800;
     cursor: pointer;
     box-shadow:
-        0 7px 18px rgba(93, 137, 200, .22);
+        0 7px 18px rgba(32, 96, 61, .22);
     transition: .2s ease;
 }
 
 .apply-button:hover {
-    background: #4f7dbd;
+    background: #20603d;
     transform: translateY(-1px);
     box-shadow:
-        0 10px 22px rgba(93, 137, 200, .27);
+        0 10px 22px rgba(32, 96, 61, .27);
 }
 
 
@@ -2284,7 +2284,7 @@ const styles = `
     flex-shrink: 0;
     border-radius: 10px;
     background: #f0f5fb;
-    color: #5D89C8;
+    color: #20603d;
 }
 
 
@@ -2334,7 +2334,7 @@ const styles = `
     inset: 5px 0 10px;
     width: 100%;
     height: calc(100% - 15px);
-    color: #5D89C8;
+    color: #20603d;
     overflow: visible;
 }
 
@@ -2379,7 +2379,7 @@ const styles = `
     height: 8px;
     flex-shrink: 0;
     border-radius: 50%;
-    background: #5D89C8;
+    background: #20603d;
 }
 
 .language-row-top strong {
@@ -2396,7 +2396,7 @@ const styles = `
 .progress-bar {
     height: 100%;
     border-radius: inherit;
-    background: #5D89C8;
+    background: #20603d;
     transition: width .4s ease;
 }
 
@@ -2480,7 +2480,7 @@ const styles = `
     flex-shrink: 0;
     border-radius: 8px;
     background: #f0f5fb;
-    color: #5D89C8;
+    color: #20603d;
     font-size: 10px;
     font-weight: 850;
 }
@@ -2528,8 +2528,8 @@ const styles = `
     display: grid;
     place-items: center;
     border-radius: 11px;
-    background: #edf4fc;
-    color: #5D89C8;
+    background: #f1f8f4;
+    color: #20603d;
     font-size: 11px;
     font-weight: 850;
 }

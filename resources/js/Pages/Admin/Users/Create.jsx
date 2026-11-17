@@ -728,8 +728,8 @@ export default function Create() {
             <style>{`
 
                 .create-reader-page {
-                    --primary: #5D89C8;
-                    --primary-dark: #416FAE;
+                    --primary: #20603d;
+                    --primary-dark: #174a2f;
                     --text: #172033;
                     --muted: #718096;
                     --border: #E5EAF1;
@@ -790,7 +790,7 @@ export default function Create() {
 
                     border-radius: 13px;
 
-                    background: #EAF1FC;
+                    background: #eff7f3;
 
                     color: var(--primary);
                 }
@@ -945,7 +945,7 @@ export default function Create() {
 
                     background: #EEF4FC;
 
-                    color: #5275A6;
+                    color: #174a2f;
 
                     font-size: 10px;
                     font-weight: 700;
@@ -1006,7 +1006,7 @@ export default function Create() {
 
                     box-shadow:
                         0 0 0 3px
-                        rgba(93, 137, 200, .10);
+                        rgba(32, 96, 61, .10);
                 }
 
                 .input-wrapper.has-error {
@@ -1111,7 +1111,7 @@ export default function Create() {
                     margin-top: 2px;
                     margin-bottom: 24px;
 
-                    border: 1px solid #DDE8F6;
+                    border: 1px solid #e3f0e9;
 
                     border-radius: 10px;
 
@@ -1130,7 +1130,7 @@ export default function Create() {
 
                     border-radius: 8px;
 
-                    background: #E5EFFB;
+                    background: #ebf4ef;
 
                     color: var(--primary);
                 }
@@ -1138,7 +1138,7 @@ export default function Create() {
                 .password-notice strong {
                     display: block;
 
-                    color: #385C8C;
+                    color: #174a2f;
 
                     font-size: 11px;
                 }
@@ -1224,7 +1224,7 @@ export default function Create() {
 
                     box-shadow:
                         0 4px 10px
-                        rgba(93, 137, 200, .18);
+                        rgba(32, 96, 61, .18);
 
                     transition: .2s ease;
                 }
@@ -1309,7 +1309,7 @@ export default function Create() {
 
                     border-radius: 8px;
 
-                    background: #EDF3FC;
+                    background: #f1f8f4;
 
                     color: var(--primary);
                 }
@@ -1357,8 +1357,8 @@ export default function Create() {
                     background:
                         linear-gradient(
                             135deg,
-                            #EAF1FC,
-                            #DCE9F8
+                            #eff7f3,
+                            #e4f0e9
                         );
 
                     color: var(--primary-dark);
@@ -1467,7 +1467,7 @@ export default function Create() {
 
                     padding: 15px;
 
-                    border: 1px solid #DDE8F6;
+                    border: 1px solid #e3f0e9;
 
                     border-radius: 12px;
 
@@ -1486,7 +1486,7 @@ export default function Create() {
 
                     border-radius: 8px;
 
-                    background: #E5EFFB;
+                    background: #ebf4ef;
 
                     color: var(--primary);
                 }
@@ -1494,7 +1494,7 @@ export default function Create() {
                 .help-card strong {
                     display: block;
 
-                    color: #385C8C;
+                    color: #174a2f;
 
                     font-size: 10px;
                 }
