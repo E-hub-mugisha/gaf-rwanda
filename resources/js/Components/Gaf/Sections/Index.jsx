@@ -4,6 +4,7 @@ export { default as ResearchSection } from "./ResearchSection";
 export { default as ApproachSection } from "./ApproachSection";
 export { default as ParticipationSection } from "./ParticipationSection";
 export { default as NewsSection } from "./NewsSection";
+export { default as SocialSection } from "./SocialSection";
 export { default as FaqSection } from "./FaqSection";
 export { default as PrivacySection } from "./PrivacySection";
 export { default as PartnersSection } from "./PartnersSection";

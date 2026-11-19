@@ -12,9 +12,11 @@ export const defaultSite = {
 
     socials: [
         { label: "Facebook", url: "#" },
-        { label: "Instagram", url: "#" },
-        { label: "LinkedIn", url: "#" },
+        { label: "Instagram", url: "https://www.instagram.com/gafrwanda?exln=MXFmc2owcXV5a2NoMw==" },
+        { label: "LinkedIn", url: "https://www.linkedin.com/company/guided-act-feel-rwanda/" },
+        { label: "TikTok", url: "https://vm.tiktok.com/ZS9fRjheTpVGf-rmBbH/" },
         { label: "YouTube", url: "#" },
+        { label: "Thread", url: "https://thread.com/gafrwanda" },
     ],
 
     partners: [
@@ -34,7 +36,7 @@ export const content = {
         // Events / Gallery, Q&A, Privacy Policy, Footer.
         nav: {
             home: "Home",
-            participation: "Take part",
+            participation: "Recruitment Process",
             team: "Team",
             activities: "Events / Gallery",
             faq: "Q&A",
@@ -402,9 +404,9 @@ export const content = {
         nav: {
             home: "Ahabanza",
             participation: "Kwitabira",
-            team: "Itsinda",
+            team: "Itsinda ry'abashakashatsi",
             activities: "Ibyabaye n’amafoto",
-            faq: "Q&A",
+            faq: "Ibibazo bikunze kubazwa",
             contact: "Vugana natwe",
             research: "Ubushakashatsi",
             updates: "Amakuru mashya",
@@ -429,7 +431,7 @@ export const content = {
         research: {
             eyebrow: "INCAMAKE Y’UBUSHAKASHATSI",
             title: "GAF-Rwanda ni iki?",
-            intro: "Ni ubushakashatsi bugamije kugerageza uburyo bushya bwo gufasha abantu bafite ibimenyetso by’agahinda gakabije hifashishijwe ikoranabuhanga n’abajyanama b’ubuzima.",
+            intro: "Ni ubushakashatsi bugamije kugerageza uburyo bushya bwo gufasha abantu bafite ibimenyetso by’agahinda gakabije hifashishijwe interineti n’abajyanama b’ubuzima.",
             objectiveTitle: "Intego y’ubushakashatsi",
             objective: "Intego nyamukuru y’ubu bushakashatsi ni ukugerageza gahunda nshya yifashisha ikoranabuhanga (interineti) yitwa “Guided Act & Feel Rwanda”, kugira ngo turebe niba ifasha mu kugabanya ibimenyetso by’agahinda gakabije ku bayikoresha.",
             note: "Ubu bushakashatsi burimo gukorwa ku bufatanye n’inzego z’ubushakashatsi n’iz’ubuzima zo mu Rwanda no mu Buholandi.",
@@ -510,7 +512,7 @@ export const content = {
 
         updates: {
             eyebrow: "AMAKURU MASHYA",
-            title: "News & Updates",
+            title: "Amakuru mashya",
             intro: "Amakuru mashya yerekeye ubushakashatsi, ibyagezweho n’amatangazo yemejwe.",
             read: "Soma inkuru",
         },

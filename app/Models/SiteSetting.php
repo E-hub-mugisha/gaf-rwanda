@@ -23,17 +23,28 @@ class SiteSetting extends Model
         'phone' => '0781684259',
         'website' => 'https://gafrwanda.com',
         'survey_url' => 'https://data.castoredc.com/survey/5YQJTSM2',
+        // Social profiles (same as defaultSite.socials in gafContent.js).
         'facebook_url' => null,
-        'instagram_url' => null,
-        'linkedin_url' => null,
+        'instagram_url' => 'https://www.instagram.com/gafrwanda?exln=MXFmc2owcXV5a2NoMw==',
+        'linkedin_url' => 'https://www.linkedin.com/company/guided-act-feel-rwanda/',
+        'tiktok_url' => 'https://vm.tiktok.com/ZS9fRjheTpVGf-rmBbH/',
+        'threads_url' => 'https://thread.com/gafrwanda',
         'youtube_url' => null,
         'x_url' => null,
+
+        // Home page social media section: one post link (or embed code) per line.
+        'linkedin_posts' => null,
+        'instagram_posts' => null,
+        // Optional live-feed widget (SociableKIT, Juicer, Elfsight...): iframe URL.
+        'social_feed_widget_url' => null,
     ];
 
     public const SOCIALS = [
         'facebook_url' => 'Facebook',
         'instagram_url' => 'Instagram',
         'linkedin_url' => 'LinkedIn',
+        'tiktok_url' => 'TikTok',
+        'threads_url' => 'Threads',
         'youtube_url' => 'YouTube',
         'x_url' => 'X',
     ];
@@ -43,15 +54,16 @@ class SiteSetting extends Model
      */
     public static function allValues(): array
     {
-        return Cache::rememberForever(self::CACHE_KEY, function () {
+        $stored = Cache::rememberForever(self::CACHE_KEY, function () {
             if (! Schema::hasTable('site_settings')) {
-                return self::DEFAULTS;
+                return [];
             }
 
-            $stored = static::query()->pluck('value', 'key')->all();
-
-            return array_merge(self::DEFAULTS, array_intersect_key($stored, self::DEFAULTS));
+            return static::query()->pluck('value', 'key')->all();
         });
+
+        // Defaults merged outside the cache so newly added keys always exist.
+        return array_merge(self::DEFAULTS, array_intersect_key($stored, self::DEFAULTS));
     }
 
     public static function saveMany(array $values): void
@@ -75,7 +87,8 @@ class SiteSetting extends Model
 
         $socials = [];
         foreach (self::SOCIALS as $key => $label) {
-            if (! empty($values[$key])) {
+            // Skip empty and placeholder ("#") links.
+            if (! empty($values[$key]) && $values[$key] !== '#') {
                 $socials[] = ['label' => $label, 'url' => $values[$key]];
             }
         }
@@ -86,6 +99,13 @@ class SiteSetting extends Model
             'website' => $values['website'],
             'surveyUrl' => $values['survey_url'],
             'socials' => $socials,
+            'socialFeed' => [
+                'linkedinUrl' => $values['linkedin_url'],
+                'instagramUrl' => $values['instagram_url'],
+                'linkedin' => \App\Support\SocialEmbed::embeds($values['linkedin_posts'], [\App\Support\SocialEmbed::class, 'linkedin']),
+                'instagram' => \App\Support\SocialEmbed::embeds($values['instagram_posts'], [\App\Support\SocialEmbed::class, 'instagram']),
+                'widget' => $values['social_feed_widget_url'],
+            ],
         ];
     }
 }

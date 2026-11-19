@@ -1,11 +1,26 @@
 import React from "react";
 import { useGaf, imageFallback, navItems, navUrl } from "@/Context/GafContext";
 
+const SOCIAL_ICONS = {
+    facebook: "bi-facebook",
+    instagram: "bi-instagram",
+    linkedin: "bi-linkedin",
+    tiktok: "bi-tiktok",
+    youtube: "bi-youtube",
+    thread: "bi-threads",
+    threads: "bi-threads",
+    x: "bi-twitter-x",
+};
+
+const socialIcon = (label = "") => SOCIAL_ICONS[label.toLowerCase()] || "bi-link-45deg";
+
 // Footer columns follow the website structure document:
 // Iyobora · Kwitabira / Abo turibo · Vugana natwe · Contacts.
 export default function Footer() {
     const { t, site } = useGaf();
     const website = site.website.replace(/^https?:\/\//, "");
+    // Only real links (placeholders like "#" are skipped).
+    const socials = (site.socials || []).filter((social) => social.url && social.url !== "#");
 
     return (
         <footer className="gaf-footer">
@@ -38,9 +53,10 @@ export default function Footer() {
 
                 <div className="gaf-footer-links">
                     <h4>{t.footer.follow}</h4>
-                    {(site.socials || []).map((social) => (
-                        <a key={social.label} href={social.url} target="_blank" rel="noreferrer">
-                            {social.label} ↗
+                    {socials.map((social) => (
+                        <a key={social.label} href={social.url} target="_blank" rel="noreferrer" className="gaf-footer-social">
+                            <i className={`bi ${socialIcon(social.label)}`} aria-hidden="true" />
+                            {social.label}
                         </a>
                     ))}
                 </div>

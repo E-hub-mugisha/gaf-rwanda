@@ -17,14 +17,51 @@ use Throwable;
  */
 class Vimeo
 {
+    /**
+     * Take the src out of pasted Vimeo embed code
+     * (<iframe src="https://player.vimeo.com/video/..."></iframe>);
+     * plain links are returned trimmed.
+     */
+    public static function source(?string $value): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        $value = trim($value);
+
+        if (preg_match('/<iframe[^>]*\ssrc=["\']([^"\']+)["\']/i', $value, $match)) {
+            $value = $match[1];
+        }
+
+        return html_entity_decode($value, ENT_QUOTES | ENT_HTML5) ?: null;
+    }
+
+    /**
+     * Clean link to store: https://player.vimeo.com/video/{id}?h={hash}
+     * (keeps the privacy hash of unlisted videos). Null when not Vimeo.
+     */
+    public static function normalize(?string $value): ?string
+    {
+        $video = self::parse($value);
+
+        if (! $video) {
+            return null;
+        }
+
+        return 'https://player.vimeo.com/video/'.$video['id'].($video['hash'] ? '?h='.$video['hash'] : '');
+    }
+
     /** Returns ['id' => ..., 'hash' => ...] or null when the link is not a Vimeo video. */
     public static function parse(?string $url): ?array
     {
+        $url = self::source($url);
+
         if (! $url) {
             return null;
         }
 
-        $parts = parse_url(trim($url));
+        $parts = parse_url($url);
         $host = strtolower(preg_replace('/^www\./', '', $parts['host'] ?? ''));
 
         if (! in_array($host, ['vimeo.com', 'player.vimeo.com'], true)) {

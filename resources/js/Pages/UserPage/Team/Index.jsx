@@ -356,7 +356,6 @@ export default function Index({ members = [] }) {
                         </ul>
 
                         <div className="gaf-org-title">
-                            <span>{page.eyebrow}</span>
                             <h1>{page.title}</h1>
                             <p>{page.intro}</p>
                         </div>

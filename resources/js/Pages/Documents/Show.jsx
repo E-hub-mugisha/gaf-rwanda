@@ -174,11 +174,6 @@ export default function Show({
 
                         <div className="document-heading">
 
-                            <div className="eyebrow">
-                                <span className="published-dot"></span>
-                                {t.publishedDocument}
-                            </div>
-
                             <h1>
                                 {doc?.title}
                             </h1>

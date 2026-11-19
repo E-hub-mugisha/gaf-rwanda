@@ -13,7 +13,6 @@ export default function ResearchSection() {
                         <SectionHeading eyebrow={t.research.eyebrow} title={t.research.title} intro={t.research.intro} />
                     </div>
                     <div className="gaf-research-detail">
-                        <span className="gaf-small-number">01 — {t.ui.purpose}</span>
                         <h3>{t.research.objectiveTitle}</h3>
                         <p>{t.research.objective}</p>
                         <div className="gaf-research-note">

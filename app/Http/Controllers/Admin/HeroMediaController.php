@@ -111,6 +111,11 @@ class HeroMediaController extends Controller
     {
         $hasImage = (bool) $heroMedia?->banner_image;
 
+        // Accept a Vimeo link or the full <iframe> embed code; store a clean link.
+        if ($request->filled('vimeo_url') && ($clean = Vimeo::normalize($request->input('vimeo_url')))) {
+            $request->merge(['vimeo_url' => $clean]);
+        }
+
         return $request->validate([
             'title' => ['nullable', 'string', 'max:255'],
             'vimeo_url' => [

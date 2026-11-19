@@ -10,7 +10,6 @@ export default function ContactSection() {
         <section className="gaf-contact" id="contact">
             <div className="gaf-container gaf-contact-grid">
                 <div>
-                    <span className="gaf-eyebrow gaf-eyebrow-light">{t.contact.eyebrow}</span>
                     <h2>{t.contact.title}</h2>
                     <p>{t.contact.intro}</p>
                 </div>

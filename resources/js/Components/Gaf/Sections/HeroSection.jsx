@@ -7,13 +7,9 @@ import { vimeoEmbedUrl } from "@/lib/vimeo";
 export default function HeroSection() {
     const { t, site } = useGaf();
 
-    // Muted autoplay (browsers block sound on autoplay) with the Vimeo
-    // controls, so visitors can unmute and replay.
-    const embedUrl = vimeoEmbedUrl(site.heroVideo, {
-        autoplay: true,
-        muted: true,
-        loop: true,
-    });
+    // Embedded Vimeo video in background mode: plays muted on a loop with
+    // the player controls and action buttons (like, share...) hidden.
+    const embedUrl = vimeoEmbedUrl(site.heroVideo, { background: true });
 
     const imageUrl = site.heroImage || site.heroVideoThumbnail || null;
 
@@ -21,9 +17,6 @@ export default function HeroSection() {
         <section className="gaf-hero-split" id="home">
             <div className="gaf-container gaf-hero-split-grid">
                 <div className="gaf-hero-split-content">
-                    <p className="gaf-eyebrow gaf-eyebrow-light">
-                        {t.hero.eyebrow}
-                    </p>
 
                     <h1>{t.hero.title}</h1>
 
@@ -54,7 +47,7 @@ export default function HeroSection() {
                             <iframe
                                 src={embedUrl}
                                 title={t.ui.heroVideoTitle}
-                                allow="autoplay; fullscreen; picture-in-picture; clipboard-write"
+                                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
                                 allowFullScreen
                                 referrerPolicy="strict-origin-when-cross-origin"
                             />

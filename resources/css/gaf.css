@@ -1112,17 +1112,16 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    gap: 28px 58px;
+    gap: 32px 64px;
 }
 
+/* Partner logos in their real colours */
 .gaf-partner-logos img {
-    max-width: 150px;
-    max-height: 48px;
+    max-width: 200px;
+    max-height: 64px;
     width: auto;
     height: auto;
     object-fit: contain;
-    filter: grayscale(100%);
-    opacity: .68;
 }
 
 /* ---------- Contact ---------- */
@@ -1621,8 +1620,8 @@ body {
     }
 
     .gaf-partner-logos img {
-        max-width: 115px;
-        max-height: 38px;
+        max-width: 150px;
+        max-height: 50px;
     }
 
     .gaf-contact {

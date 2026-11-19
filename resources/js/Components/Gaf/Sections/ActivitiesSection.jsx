@@ -13,7 +13,6 @@ export default function ActivitiesSection({ events = [], gallery = [] }) {
 
                 <div className="gaf-subsection-heading">
                     <div>
-                        <span className="gaf-small-number">01 — {t.ui.events}</span>
                         <h3>{t.activities.eventsTitle}</h3>
                         <p>{t.activities.eventsIntro}</p>
                     </div>
@@ -30,7 +29,6 @@ export default function ActivitiesSection({ events = [], gallery = [] }) {
 
                 <div className="gaf-gallery-heading">
                     <div>
-                        <span className="gaf-small-number">02 — {t.ui.documenting}</span>
                         <h3>{t.activities.galleryTitle}</h3>
                         <p>{t.activities.galleryIntro}</p>
                     </div>

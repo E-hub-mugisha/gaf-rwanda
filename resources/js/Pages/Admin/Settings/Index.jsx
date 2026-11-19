@@ -7,6 +7,8 @@ const SOCIALS = [
     { key: "facebook_url", label: "Facebook", icon: "bi-facebook", placeholder: "https://facebook.com/…" },
     { key: "instagram_url", label: "Instagram", icon: "bi-instagram", placeholder: "https://instagram.com/…" },
     { key: "linkedin_url", label: "LinkedIn", icon: "bi-linkedin", placeholder: "https://linkedin.com/company/…" },
+    { key: "tiktok_url", label: "TikTok", icon: "bi-tiktok", placeholder: "https://tiktok.com/@…" },
+    { key: "threads_url", label: "Threads", icon: "bi-threads", placeholder: "https://threads.net/@…" },
     { key: "youtube_url", label: "YouTube", icon: "bi-youtube", placeholder: "https://youtube.com/@…" },
     { key: "x_url", label: "X (Twitter)", icon: "bi-twitter-x", placeholder: "https://x.com/…" },
 ];
@@ -21,7 +23,37 @@ export default function Index({ settings }) {
         website: settings.website || "",
         survey_url: settings.survey_url || "",
         ...Object.fromEntries(SOCIALS.map(({ key }) => [key, settings[key] || ""])),
+        linkedin_posts: settings.linkedin_posts || "",
+        instagram_posts: settings.instagram_posts || "",
+        social_feed_widget_url: settings.social_feed_widget_url || "",
     });
+
+    const lineCount = (text) => (text || "").split(/\r?\n/).filter((line) => line.trim()).length;
+
+    const postsField = ({ name, label, icon, placeholder, hint }) => (
+        <div className="col-md-6">
+            <label className="form-label fw-semibold d-flex justify-content-between" htmlFor={name}>
+                <span>
+                    <i className={`bi ${icon} me-2`} />
+                    {label}
+                </span>
+                <small className="text-muted fw-normal">
+                    {lineCount(data[name])} / 6
+                </small>
+            </label>
+            <textarea
+                id={name}
+                rows={6}
+                className={`form-control font-monospace small ${errors[name] ? "is-invalid" : ""}`}
+                value={data[name]}
+                onChange={(event) => setData(name, event.target.value)}
+                placeholder={placeholder}
+                spellCheck={false}
+            />
+            {errors[name] && <div className="invalid-feedback d-block">{errors[name]}</div>}
+            <div className="form-text">{hint}</div>
+        </div>
+    );
 
     const submit = (event) => {
         event.preventDefault();
@@ -134,6 +166,57 @@ export default function Index({ settings }) {
                         {SOCIALS.map(({ key, label, icon, placeholder }) =>
                             field({ name: key, label, icon, type: "url", placeholder })
                         )}
+                    </div>
+                </div>
+
+                <div className="adm-card adm-card-padded mt-4">
+                    <div className="adm-card-title">
+                        <span className="adm-icon is-yellow">
+                            <i className="bi bi-rss" />
+                        </span>
+                        <div>
+                            <h5>{t({ en: "Social media feeds (home page)", rw: "Ibyo dushyira ku mbuga nkoranyambaga (ahabanza)" })}</h5>
+                            <p>
+                                {t({
+                                    en: "Paste links to your latest posts, one per line, newest first (up to 6 each). They are shown on the home page with the official LinkedIn and Instagram embeds.",
+                                    rw: "Shyiramo amahuza y’ibyo mwashyize ku mbuga biheruka, rimwe ku murongo, ibishya mbere (ntarengwa 6 kuri buri rubuga). Bigaragara ahabanza.",
+                                })}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="row g-3">
+                        {postsField({
+                            name: "linkedin_posts",
+                            label: t({ en: "LinkedIn posts", rw: "Ibyashyizwe kuri LinkedIn" }),
+                            icon: "bi-linkedin",
+                            placeholder: "https://www.linkedin.com/posts/gaf-rwanda_…-activity-7212345678901234567-AbCd\nhttps://www.linkedin.com/feed/update/urn:li:activity:…",
+                            hint: t({
+                                en: "On LinkedIn: open the post › ••• › “Copy link to post” (or “Embed this post” and paste the code).",
+                                rw: "Kuri LinkedIn: fungura ibyo mwashyizeho › ••• › “Copy link to post” (cyangwa “Embed this post” ushyiremo kode).",
+                            }),
+                        })}
+                        {postsField({
+                            name: "instagram_posts",
+                            label: t({ en: "Instagram posts", rw: "Ibyashyizwe kuri Instagram" }),
+                            icon: "bi-instagram",
+                            placeholder: "https://www.instagram.com/p/C8abcDEF123/\nhttps://www.instagram.com/reel/…",
+                            hint: t({
+                                en: "On Instagram: open the post › ••• › “Copy link” (posts and reels; the account must be public).",
+                                rw: "Kuri Instagram: fungura ifoto › ••• › “Copy link” (konti igomba kuba ifunguye ku bantu bose).",
+                            }),
+                        })}
+                        {field({
+                            name: "social_feed_widget_url",
+                            label: t({ en: "Live feed widget link (optional)", rw: "Ihuza rya widget ihita yivugurura (si ngombwa)" }),
+                            icon: "bi-broadcast",
+                            type: "url",
+                            placeholder: "https://widgets.sociablekit.com/…/iframe/…",
+                            hint: t({
+                                en: "For a feed that updates by itself, create a free or paid widget (SociableKIT, Juicer, Elfsight…) and paste its iframe link here. When set, it replaces the posts above.",
+                                rw: "Niba ushaka ko bihita byivugurura, kora widget (SociableKIT, Juicer, Elfsight…) ushyire ihuza ryayo hano. Iyo rihari, risimbura amahuza ari hejuru.",
+                            }),
+                        })}
                     </div>
                 </div>
             </form>

@@ -146,6 +146,7 @@ const adminRw = {
     "Video preview": "Igaragaza rya video",
     "This is not a Vimeo video link.": "Iri si ihuza rya video ya Vimeo.",
     "Paste a Vimeo video link (vimeo.com or player.vimeo.com). Leave empty for an image-only hero.": "Shyiramo ihuza rya video ya Vimeo (vimeo.com cyangwa player.vimeo.com). Bireke ari ubusa niba ushaka ifoto gusa.",
+    "Paste a Vimeo video link or the Vimeo embed code (<iframe>). Leave empty for an image-only hero.": "Shyiramo ihuza rya video ya Vimeo cyangwa kode yo kuyishyira ku rubuga (<iframe>). Bireke ari ubusa niba ushaka ifoto gusa.",
     "JPG, PNG or WEBP. Maximum 5 MB. If no image is uploaded, the Vimeo thumbnail is used.": "JPG, PNG cyangwa WEBP. Ntarengwa 5 MB. Nta foto ishyizweho, hakoreshwa ifoto ntoya ya Vimeo.",
     "Add a Vimeo video or banner image to display on the homepage.": "Ongeraho video ya Vimeo cyangwa ifoto bigaragara ahabanza.",
     "When a valid video URL is provided, the homepage embeds the Vimeo video muted. Otherwise, it displays the banner image.": "Iyo ihuza rya video ari ryo, ahabanza herekana video ya Vimeo nta jwi. Bitabaye ibyo, herekana ifoto.",

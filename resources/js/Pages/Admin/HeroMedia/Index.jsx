@@ -514,7 +514,7 @@ export default function Index({ media = [] }) {
                                                     className={`form-control ${errors.vimeo_url || vimeoLinkInvalid ? "is-invalid" : ""}`}
                                                     value={data.vimeo_url}
                                                     onChange={e => setData("vimeo_url", e.target.value)}
-                                                    placeholder="https://vimeo.com/76979871"
+                                                    placeholder="https://vimeo.com/76979871 or <iframe src=…>"
                                                 />
 
                                                 {(errors.vimeo_url || vimeoLinkInvalid) && (
@@ -524,7 +524,7 @@ export default function Index({ media = [] }) {
                                                 )}
 
                                                 <div className="form-text">
-                                                    Paste a Vimeo video link (vimeo.com or player.vimeo.com).
+                                                    Paste a Vimeo video link or the Vimeo embed code (&lt;iframe&gt;).
                                                     Leave empty for an image-only hero.
                                                 </div>
                                             </div>

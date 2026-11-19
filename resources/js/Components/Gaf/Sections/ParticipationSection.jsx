@@ -20,7 +20,6 @@ export default function ParticipationSection() {
                 </div>
                 <div className="gaf-participation-grid">
                     <div className="gaf-eligibility">
-                        <span className="gaf-small-number">01 — {t.ui.eligibility}</span>
                         <h3>{t.participation.eligibleTitle}</h3>
                         <ul>
                             {t.participation.criteria.map((item) => (
@@ -29,7 +28,6 @@ export default function ParticipationSection() {
                         </ul>
                     </div>
                     <div className="gaf-process">
-                        <span className="gaf-small-number">02 — {t.ui.process}</span>
                         <h3>{t.participation.processTitle}</h3>
 
                         {/* The poster image shows the steps to join the study. */}

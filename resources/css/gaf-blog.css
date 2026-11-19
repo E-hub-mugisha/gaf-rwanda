@@ -1015,3 +1015,175 @@
         display: none;
     }
 }
+
+/* ==========================================================================
+   Home: social media feeds (LinkedIn + Instagram)
+   ========================================================================== */
+.gaf-site .sf-section {
+    border-top: 1px solid var(--rw-line, #e5e8e4);
+    background: var(--rw-subtle, #f6f7f5);
+}
+
+.gaf-site .sf-section .gaf-section-heading {
+    margin-bottom: 28px;
+}
+
+.gaf-site .sf-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.gaf-site .sf-column {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.gaf-site .sf-column-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 18px;
+    color: #fff;
+}
+
+.gaf-site .sf-column.is-linkedin .sf-column-head {
+    background: #0a66c2;
+}
+
+.gaf-site .sf-column.is-instagram .sf-column-head {
+    background: #c13584;
+}
+
+.gaf-site .sf-network {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.gaf-site .sf-network i {
+    font-size: 20px;
+}
+
+.gaf-site .sf-follow {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    background: #fff;
+    color: var(--rw-ink, #16201c) !important;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.gaf-site .sf-follow:hover {
+    background: var(--rw-yellow, #FAD201);
+}
+
+/* Scrolling feed of embedded posts */
+.gaf-site .sf-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-height: 640px;
+    padding: 14px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.gaf-site .sf-post {
+    flex: 0 0 auto;
+    overflow: hidden;
+    border-radius: 8px;
+    background: var(--rw-subtle, #f6f7f5);
+}
+
+.gaf-site .sf-post iframe {
+    display: block;
+    width: 100%;
+    border: 0;
+}
+
+.gaf-site .sf-column.is-linkedin .sf-post iframe {
+    height: 560px;
+}
+
+.gaf-site .sf-column.is-instagram .sf-post iframe {
+    height: 600px;
+}
+
+.gaf-site .sf-empty {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 240px;
+    padding: 32px 20px;
+    color: var(--rw-muted, #5f6964);
+    text-align: center;
+}
+
+.gaf-site .sf-empty i {
+    font-size: 34px;
+}
+
+.gaf-site .sf-column.is-linkedin .sf-empty i { color: #0a66c2; }
+.gaf-site .sf-column.is-instagram .sf-empty i { color: #c13584; }
+
+.gaf-site .sf-empty p {
+    max-width: 280px;
+    margin: 0;
+    font-size: 14px;
+}
+
+.gaf-site .sf-empty .sf-follow {
+    background: var(--rw-green, #20603D);
+    color: #fff !important;
+}
+
+/* Live-feed widget */
+.gaf-site .sf-widget {
+    overflow: hidden;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.gaf-site .sf-widget iframe {
+    display: block;
+    width: 100%;
+    height: 720px;
+    border: 0;
+}
+
+@media (max-width: 860px) {
+    .gaf-site .sf-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .gaf-site .sf-feed {
+        max-height: 560px;
+    }
+}
+
+/* Footer social links with icons */
+.gaf-site .gaf-footer-links a.gaf-footer-social {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.gaf-site .gaf-footer-social i {
+    width: 16px;
+    font-size: 15px;
+    text-align: center;
+}

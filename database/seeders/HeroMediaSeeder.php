@@ -19,8 +19,8 @@ class HeroMediaSeeder extends Seeder
 {
     public function run(): void
     {
-        // Public sample video from Vimeo's own player documentation.
-        $url = 'https://vimeo.com/76979871';
+        // GAF-Rwanda hero video (unlisted, so the privacy hash is kept).
+        $url = 'https://player.vimeo.com/video/1248379984?h=2866bddb83';
 
         DB::transaction(function () use ($url) {
             HeroMedia::query()->update(['is_active' => false]);
@@ -28,10 +28,10 @@ class HeroMediaSeeder extends Seeder
             HeroMedia::updateOrCreate(
                 ['vimeo_url' => $url],
                 [
-                    'title' => 'GAF-Rwanda hero video (test)',
+                    'title' => 'GAF-Rwanda hero video',
                     'video_thumbnail' => Vimeo::thumbnail($url),
                     'alt_text' => 'GAF-Rwanda study introduction video',
-                    'caption' => 'Sample Vimeo video for testing',
+                    'caption' => null,
                     'is_active' => true,
                     'sort_order' => 0,
                 ]

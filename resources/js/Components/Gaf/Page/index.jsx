@@ -35,12 +35,6 @@ export function PageHero({ crumbs, eyebrow, title, intro, topics = [], stats = [
             <div className="gaf-container gp-hero-inner">
                 <div className="gp-hero-copy">
                     {crumbs && <Breadcrumbs items={crumbs} light />}
-                    {eyebrow && (
-                        <span className="gp-eyebrow is-light">
-                            <i className={`bi ${icon}`} aria-hidden="true" />
-                            {eyebrow}
-                        </span>
-                    )}
                     <h1>{title}</h1>
                     {intro && <p className="gp-hero-intro">{intro}</p>}
                     {topics.length > 0 && (
@@ -75,7 +69,6 @@ export function SectionTitle({ eyebrow, title, aside }) {
     return (
         <div className="gp-section-title">
             <div>
-                {eyebrow && <span className="gp-eyebrow">{eyebrow}</span>}
                 <h2>{title}</h2>
             </div>
             {aside}

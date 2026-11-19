@@ -7,6 +7,7 @@ import {
     ApproachSection,
     ParticipationSection,
     NewsSection,
+    SocialSection,
     FaqSection,
     PrivacySection,
     PartnersSection,
@@ -28,6 +29,7 @@ export default function Index({ events = [], gallery = [], news = [], faqs }) {
             <ApproachSection />
             <ParticipationSection />
             <NewsSection news={news} />
+            <SocialSection />
             <FaqSection faqs={faqs} />
             <PrivacySection />
             <PartnersSection />
