@@ -54,7 +54,7 @@
 
 /* Shared "on green" text treatment */
 .gaf-site :is(.gaf-topline, .gaf-hero-split, .gp-hero, .gp-detail-hero) {
-    background: var(--rw-green);
+    background: var(--rw-green-deep);
     color: #fff;
 }
 
@@ -208,25 +208,25 @@
 /* ---------- Participation (blue, dark text) ---------- */
 .gaf-site .gaf-participation {
     border-top: 0;
-    background: var(--rw-blue);
-    color: var(--rw-ink);
+    background: var(--rw-green-deep);
+    color: #fff;
 }
 
 .gaf-site .gaf-participation :is(.gaf-section-heading h2, .gaf-eligibility h3, .gaf-process h3) {
-    color: var(--rw-ink);
+    color: #fff;
 }
 
 .gaf-site .gaf-participation :is(.gaf-section-heading > p, .gaf-participation-disclaimer) {
-    color: #0e2a36;
+    color: var(--rw-yellow);
 }
 
 .gaf-site .gaf-participation :is(.gaf-eyebrow, .gaf-small-number) {
-    color: var(--rw-ink);
+    color: #fff;
 }
 
 .gaf-site .gaf-participation .gaf-eligibility li {
     border-color: rgba(22, 32, 28, .2);
-    color: var(--rw-ink);
+    color: #fff;
 }
 
 .gaf-site .gaf-participation .gaf-eligibility li span {
@@ -259,20 +259,20 @@
 /* ---------- Privacy (yellow, dark text) ---------- */
 .gaf-site .gaf-privacy {
     border-top: 0;
-    background: var(--rw-yellow);
+    background: var(--rw-green-deep);
     color: var(--rw-ink);
 }
 
 .gaf-site .gaf-privacy :is(h2, .gaf-eyebrow) {
-    color: var(--rw-ink);
+    color: #fff;
 }
 
 .gaf-site .gaf-privacy p {
-    color: #2b2a1c;
+    color: #fff;
 }
 
 .gaf-site .gaf-privacy small {
-    color: #4a4620;
+    color: #fff;
 }
 
 .gaf-site .gaf-privacy-symbol {
