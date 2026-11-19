@@ -485,12 +485,7 @@ export default function Index({ documents }) {
                     overflow: hidden;
                     border-radius: 20px;
                     background:
-                        linear-gradient(
-                            120deg,
-                            #EEF4FC 0%,
-                            #F7FAFE 55%,
-                            #FFFFFF 100%
-                        );
+                        #EEF4FC;
                     border: 1px solid #DDE7F3;
                     padding: 30px 34px;
                     box-sizing: border-box;

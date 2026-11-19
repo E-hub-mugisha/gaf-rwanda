@@ -13,9 +13,8 @@ export default function ParticipationSection() {
                         eyebrow={t.participation.eyebrow}
                         title={t.participation.title}
                         intro={t.participation.intro}
-                        light
                     />
-                    <a className="gaf-button gaf-button-light" href={site.surveyUrl} target="_blank" rel="noreferrer">
+                    <a className="gaf-button gaf-button-primary" href={site.surveyUrl} target="_blank" rel="noreferrer">
                         {t.participation.cta} <span aria-hidden="true">↗</span>
                     </a>
                 </div>

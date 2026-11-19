@@ -69,7 +69,10 @@ class PublicEventController extends Controller
         $event->load([
             'category:id,name,name_rw,slug',
             'program:id,title',
-            'galleries',
+            'galleries' => fn ($query) => $query
+                ->public()
+                ->withCount('publicMedia as media_count')
+                ->orderBy('sort_order'),
         ]);
 
         $relatedEvents = Event::query()

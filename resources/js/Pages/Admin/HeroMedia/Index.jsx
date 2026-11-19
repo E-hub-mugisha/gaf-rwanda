@@ -2,45 +2,17 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Head, router, useForm, usePage } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
+import { parseVimeo, vimeoEmbedUrl } from "@/lib/vimeo";
 
 const initialValues = {
     title: "",
-    youtube_url: "",
+    vimeo_url: "",
     banner_image: null,
     alt_text: "",
     caption: "",
     is_active: false,
     sort_order: 0,
 };
-
-function getYouTubeId(url) {
-    if (!url) return null;
-
-    try {
-        const parsed = new URL(url);
-        const host = parsed.hostname.replace(/^www\./, "");
-
-        if (host === "youtu.be") {
-            return parsed.pathname.split("/").filter(Boolean)[0] || null;
-        }
-
-        if (
-            ["youtube.com", "m.youtube.com", "youtube-nocookie.com"].includes(host)
-        ) {
-            if (parsed.pathname === "/watch") {
-                return parsed.searchParams.get("v");
-            }
-
-            return parsed.pathname.match(
-                /^\/(?:embed|shorts|live)\/([^/?]+)/
-            )?.[1] || null;
-        }
-    } catch {
-        return null;
-    }
-
-    return null;
-}
 
 export default function Index({ media = [] }) {
     const { flash } = usePage().props;
@@ -60,16 +32,15 @@ export default function Index({ media = [] }) {
         transform,
     } = useForm(initialValues);
 
-    const youtubeId = useMemo(
-        () => getYouTubeId(data.youtube_url),
-        [data.youtube_url]
+    // Live player preview of the Vimeo link being typed.
+    const videoPreview = useMemo(
+        () => vimeoEmbedUrl(data.vimeo_url),
+        [data.vimeo_url]
     );
 
-    const youtubeThumbnail = youtubeId
-        ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
-        : null;
+    const vimeoLinkInvalid = Boolean(data.vimeo_url) && !parseVimeo(data.vimeo_url);
 
-    const previewImage = imagePreview || youtubeThumbnail;
+    const previewImage = imagePreview;
 
     useEffect(() => {
         return () => {
@@ -93,7 +64,7 @@ export default function Index({ media = [] }) {
 
         setData({
             title: item.title || "",
-            youtube_url: item.youtube_url || "",
+            vimeo_url: item.vimeo_url || "",
             banner_image: null,
             alt_text: item.alt_text || "",
             caption: item.caption || "",
@@ -283,10 +254,10 @@ export default function Index({ media = [] }) {
 
                                 <div>
                                     <div className="text-muted small">
-                                        YouTube videos
+                                        Vimeo videos
                                     </div>
                                     <h4 className="fw-bold mb-0">
-                                        {media.filter(item => item.youtube_url).length}
+                                        {media.filter(item => item.vimeo_url).length}
                                     </h4>
                                 </div>
                             </div>
@@ -315,7 +286,7 @@ export default function Index({ media = [] }) {
                                 </h6>
 
                                 <p className="text-muted mb-3">
-                                    Add a YouTube video or banner image to display on the homepage.
+                                    Add a Vimeo video or banner image to display on the homepage.
                                 </p>
 
                                 <button
@@ -342,13 +313,10 @@ export default function Index({ media = [] }) {
 
                                     <tbody>
                                         {media.map(item => {
-                                            const id = getYouTubeId(item.youtube_url);
-
                                             const thumbnail =
                                                 item.banner_image ||
-                                                (id
-                                                    ? `https://img.youtube.com/vi/${id}/hqdefault.jpg`
-                                                    : null);
+                                                item.video_thumbnail ||
+                                                null;
 
                                             return (
                                                 <tr key={item.id}>
@@ -393,7 +361,7 @@ export default function Index({ media = [] }) {
                                                                         whiteSpace: "nowrap",
                                                                     }}
                                                                 >
-                                                                    {item.caption || item.youtube_url || "No caption"}
+                                                                    {item.caption || item.vimeo_url || "No caption"}
                                                                 </div>
                                                             </div>
 
@@ -401,10 +369,10 @@ export default function Index({ media = [] }) {
                                                     </td>
 
                                                     <td>
-                                                        {item.youtube_url ? (
-                                                            <span className="badge text-bg-danger">
-                                                                <i className="bi bi-youtube me-1" />
-                                                                YouTube
+                                                        {item.vimeo_url ? (
+                                                            <span className="badge text-bg-info">
+                                                                <i className="bi bi-vimeo me-1" />
+                                                                Vimeo
                                                             </span>
                                                         ) : (
                                                             <span className="badge text-bg-secondary">
@@ -538,28 +506,45 @@ export default function Index({ media = [] }) {
 
                                             <div className="col-12">
                                                 <label className="form-label fw-semibold">
-                                                    YouTube video URL
+                                                    Vimeo video URL
                                                 </label>
 
                                                 <input
                                                     type="url"
-                                                    className={`form-control ${errors.youtube_url ? "is-invalid" : ""}`}
-                                                    value={data.youtube_url}
-                                                    onChange={e => setData("youtube_url", e.target.value)}
-                                                    placeholder="https://www.youtube.com/watch?v=..."
+                                                    className={`form-control ${errors.vimeo_url || vimeoLinkInvalid ? "is-invalid" : ""}`}
+                                                    value={data.vimeo_url}
+                                                    onChange={e => setData("vimeo_url", e.target.value)}
+                                                    placeholder="https://vimeo.com/76979871"
                                                 />
 
-                                                {errors.youtube_url && (
+                                                {(errors.vimeo_url || vimeoLinkInvalid) && (
                                                     <div className="invalid-feedback">
-                                                        {errors.youtube_url}
+                                                        {errors.vimeo_url || "This is not a Vimeo video link."}
                                                     </div>
                                                 )}
 
                                                 <div className="form-text">
-                                                    Paste a YouTube video, Shorts, or youtu.be link.
+                                                    Paste a Vimeo video link (vimeo.com or player.vimeo.com).
                                                     Leave empty for an image-only hero.
                                                 </div>
                                             </div>
+
+                                            {videoPreview && (
+                                                <div className="col-12">
+                                                    <label className="form-label fw-semibold">
+                                                        Video preview
+                                                    </label>
+
+                                                    <div className="ratio ratio-16x9 rounded-3 overflow-hidden bg-dark">
+                                                        <iframe
+                                                            src={videoPreview}
+                                                            title="Vimeo video preview"
+                                                            allow="autoplay; fullscreen; picture-in-picture"
+                                                            allowFullScreen
+                                                        />
+                                                    </div>
+                                                </div>
+                                            )}
 
                                             <div className="col-12">
                                                 <label className="form-label fw-semibold">
@@ -581,7 +566,7 @@ export default function Index({ media = [] }) {
 
                                                 <div className="form-text">
                                                     JPG, PNG or WEBP. Maximum 5 MB.
-                                                    If no image is uploaded, the YouTube thumbnail is used.
+                                                    If no image is uploaded, the Vimeo thumbnail is used.
                                                 </div>
                                             </div>
 
@@ -691,7 +676,7 @@ export default function Index({ media = [] }) {
                                                 <div className="alert alert-light border mb-0 small">
                                                     <i className="bi bi-info-circle me-2 text-primary" />
                                                     When a valid video URL is provided, the homepage
-                                                    embeds the YouTube video muted. Otherwise, it displays
+                                                    embeds the Vimeo video muted. Otherwise, it displays
                                                     the banner image.
                                                 </div>
                                             </div>

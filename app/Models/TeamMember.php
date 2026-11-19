@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Support\FileUpload;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 
 class TeamMember extends Model
 {
@@ -45,7 +45,7 @@ class TeamMember extends Model
     public function getPhotoUrlAttribute(): ?string
     {
         return $this->photo
-            ? Storage::disk('uploads')->url($this->photo)
+            ? FileUpload::url($this->photo)
             : null;
     }
 }

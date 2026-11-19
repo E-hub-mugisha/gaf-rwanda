@@ -12,8 +12,8 @@
     --gaf-paper: #fbfaf7;
     --gaf-white: #fff;
     --gaf-line: #dce2dc;
-    --gaf-serif: "Montserrat", Arial, sans-serif;
-    --gaf-sans: "Montserrat", Arial, sans-serif;
+    --gaf-serif: "Source Serif 4", Georgia, serif;
+    --gaf-sans: "Source Serif 4", Georgia, serif;
 }
 
 * {
@@ -368,7 +368,7 @@ body {
     content: "";
     position: absolute;
     inset: 45% 0 0;
-    background: linear-gradient(transparent, rgba(8, 25, 21, .62));
+    background: rgba(8, 25, 21, 0.53);
     pointer-events: none;
 }
 

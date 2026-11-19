@@ -16,7 +16,7 @@
 
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: "Source Serif 4", Georgia, serif;
     background: var(--color-bg);
     color: var(--color-text);
 }
@@ -29,7 +29,7 @@ a { color: inherit; }
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(160deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    background: var(--color-primary);
 }
 .auth-card {
     background: var(--color-surface);

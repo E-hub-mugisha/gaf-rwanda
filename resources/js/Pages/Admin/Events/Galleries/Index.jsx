@@ -1449,7 +1449,7 @@ export default function Index({ event, galleries = [] }) {
                     justify-content: center;
                     flex-direction: column;
                     gap: 9px;
-                    background: linear-gradient(135deg, #eef3f9, #e6f1eb);
+                    background: #eef3f9;
                     color: #97a5b7;
                     font-size: 11px;
                 }

@@ -22,13 +22,16 @@ export default function ResearchSection() {
                         </div>
                     </div>
                 </div>
-                <div className="gaf-research-image">
-                    <img src={site.heroImage} alt={t.ui.researchAlt} onError={imageFallback} />
-                    <div className="gaf-image-overlay-copy">
+                {/* Photo with its caption underneath (no text over the image) */}
+                <figure className="gaf-research-figure">
+                    <div className="gaf-research-image">
+                        <img src={site.heroImage} alt={t.ui.researchAlt} onError={imageFallback} />
+                    </div>
+                    <figcaption className="gaf-research-caption">
                         <span>GAF-RWANDA</span>
                         <p>{t.ui.tagline}</p>
-                    </div>
-                </div>
+                    </figcaption>
+                </figure>
             </div>
         </section>
     );

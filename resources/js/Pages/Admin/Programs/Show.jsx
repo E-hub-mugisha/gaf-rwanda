@@ -556,7 +556,7 @@ export default function Show({ program }) {
                         align-items: center;
                         justify-content: center;
                         gap: 10px;
-                        background: linear-gradient(135deg, #edf3fa, #e2f0e8);
+                        background: #edf3fa;
                         color: #829ab8;
                     }
 
@@ -572,12 +572,7 @@ export default function Show({ program }) {
                     .program-hero-overlay {
                         position: absolute;
                         inset: 0;
-                        background: linear-gradient(
-                            180deg,
-                            rgba(14,28,47,.16),
-                            transparent 35%,
-                            rgba(14,28,47,.76)
-                        );
+                        background: transparent;
                     }
 
                     .program-hero-badges {

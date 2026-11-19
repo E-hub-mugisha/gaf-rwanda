@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Admin\ActivityController;
 use App\Http\Controllers\Admin\AnalyticsController;
-use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DocumentController as AdminDocumentController;
 use App\Http\Controllers\Admin\EventCategoryController;
@@ -19,7 +18,6 @@ use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\TeamMemberController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DepressionController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\GalleryController;
@@ -59,11 +57,6 @@ Route::get('/gallery/{slug}', [GalleryController::class, 'show'])
 
 // Team
 Route::get('/team', [TeamController::class, 'index'])->name('team.index');
-
-// Contact form ("Vugana natwe"), limited to 5 messages per minute per visitor
-Route::post('/contact', [ContactController::class, 'store'])
-    ->middleware('throttle:5,1')
-    ->name('contact.store');
 
 // Mental health content (requires login)
 Route::get('/mental-health/depression', [DepressionController::class, 'show'])
@@ -114,6 +107,9 @@ Route::middleware(['auth', 'admin'])
     ->group(function () {
 
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        // Content search for the command palette (Ctrl+K)
+        Route::get('/search', \App\Http\Controllers\Admin\AdminSearchController::class)->name('search');
         Route::get('/activity', [ActivityController::class, 'index'])->name('activity.index');
 
         // Users
@@ -203,9 +199,6 @@ Route::middleware(['auth', 'admin'])
             ->name('faqs.toggle-status');
 
         // Contact messages
-        Route::get('/messages', [ContactMessageController::class, 'index'])->name('messages.index');
-        Route::patch('/messages/{message}', [ContactMessageController::class, 'update'])->name('messages.update');
-        Route::delete('/messages/{message}', [ContactMessageController::class, 'destroy'])->name('messages.destroy');
 
         // Site settings (contacts, participation link, social media)
         Route::get('/settings', [SiteSettingController::class, 'edit'])->name('settings.edit');

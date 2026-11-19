@@ -902,7 +902,7 @@ export default function Show({ event }) {
                     flex-direction: column;
                     gap: 10px;
                     color: #8996a8;
-                    background: linear-gradient(135deg, #eef3f9, #e5f1ea);
+                    background: #eef3f9;
                     font-size: 12px;
                 }
 
@@ -922,7 +922,7 @@ export default function Show({ event }) {
                     gap: 15px;
                     padding: 55px 23px 20px;
                     color: #fff;
-                    background: linear-gradient(transparent, rgba(15, 26, 44, .82));
+                    background: rgba(15, 26, 44, 0.7);
                 }
 
                 .gaf-event-cover-eyebrow {

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Support\FileUpload;
 use App\Http\Controllers\Controller;
 use App\Models\Program;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -86,10 +86,7 @@ class ProgramController extends Controller
             $validated['slug'] ?: $validated['title']
         );
 
-        if ($request->hasFile('cover_image')) {
-            $validated['cover_image'] = $request->file('cover_image')
-                ->store('programs', 'uploads');
-        }
+        $validated['cover_image'] = FileUpload::fromRequest($request, 'cover_image', 'programs');
 
         Program::create($validated);
 
@@ -164,12 +161,7 @@ class ProgramController extends Controller
         );
 
         if ($request->hasFile('cover_image')) {
-            if ($program->cover_image) {
-                Storage::disk('uploads')->delete($program->cover_image);
-            }
-
-            $validated['cover_image'] = $request->file('cover_image')
-                ->store('programs', 'uploads');
+            $validated['cover_image'] = FileUpload::replace($request, 'cover_image', 'programs', $program->cover_image);
         } else {
             unset($validated['cover_image']);
         }

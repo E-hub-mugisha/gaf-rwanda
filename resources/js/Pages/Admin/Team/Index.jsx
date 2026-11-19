@@ -203,7 +203,14 @@ export default function Index({
     const [deleting, setDeleting] = useState(null);
     const [deleteBusy, setDeleteBusy] = useState(false);
 
-    const [search, setSearch] = useState("");
+    // Opened from the admin search (?search=name): start filtered.
+    const [search, setSearch] = useState(() => {
+        try {
+            return new URLSearchParams(window.location.search).get("search") || "";
+        } catch {
+            return "";
+        }
+    });
     const [categoryFilter, setCategoryFilter] = useState("all");
     const [affiliationFilter, setAffiliationFilter] = useState("all");
 

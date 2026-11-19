@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Support\FileUpload;
 use App\Http\Controllers\Controller;
 use App\Models\TeamMember;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
@@ -56,10 +56,7 @@ class TeamMemberController extends Controller
     {
         $validated = $this->validateMember($request);
 
-        if ($request->hasFile('photo')) {
-            $validated['photo'] = $request->file('photo')
-                ->store('team-members', 'uploads');
-        }
+        $validated['photo'] = FileUpload::fromRequest($request, 'photo', 'team-members');
 
         TeamMember::create($validated);
 
@@ -71,12 +68,9 @@ class TeamMemberController extends Controller
         $validated = $this->validateMember($request, $teamMember);
 
         if ($request->hasFile('photo')) {
-            if ($teamMember->photo) {
-                Storage::disk('uploads')->delete($teamMember->photo);
-            }
-
-            $validated['photo'] = $request->file('photo')
-                ->store('team-members', 'uploads');
+            $validated['photo'] = FileUpload::replace($request, 'photo', 'team-members', $teamMember->photo);
+        } else {
+            unset($validated['photo']);
         }
 
         $teamMember->update($validated);
@@ -91,9 +85,7 @@ class TeamMemberController extends Controller
             TeamMember::where('reports_to_id', $teamMember->id)
                 ->update(['reports_to_id' => null]);
 
-            if ($teamMember->photo) {
-                Storage::disk('uploads')->delete($teamMember->photo);
-            }
+            FileUpload::delete($teamMember->photo);
 
             $teamMember->delete();
         });

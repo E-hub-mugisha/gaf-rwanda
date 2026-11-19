@@ -1355,11 +1355,7 @@ export default function Create() {
                     border-radius: 12px;
 
                     background:
-                        linear-gradient(
-                            135deg,
-                            #eff7f3,
-                            #e4f0e9
-                        );
+                        #eff7f3;
 
                     color: var(--primary-dark);
 

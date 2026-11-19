@@ -577,8 +577,7 @@ export default function Login({ status }) {
             </div>
 
             <style>{`
-                @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
-
+                
                 * {
                     box-sizing: border-box;
                 }
@@ -591,15 +590,7 @@ export default function Login({ status }) {
                 }
 
                 body {
-                    font-family:
-                        "Manrope",
-                        Inter,
-                        ui-sans-serif,
-                        system-ui,
-                        -apple-system,
-                        BlinkMacSystemFont,
-                        "Segoe UI",
-                        sans-serif;
+                    font-family: "Source Serif 4", Georgia, serif;
 
                     background: #f4f7fb;
                     color: #182333;
@@ -624,16 +615,6 @@ export default function Login({ status }) {
                     overflow: hidden;
 
                     background:
-                        radial-gradient(
-                            circle at 10% 10%,
-                            rgba(93, 137, 200, 0.08),
-                            transparent 28%
-                        ),
-                        radial-gradient(
-                            circle at 90% 90%,
-                            rgba(32, 96, 61, 0.06),
-                            transparent 30%
-                        ),
                         #f4f7fb;
                 }
 
@@ -1431,6 +1412,69 @@ export default function Login({ status }) {
                     .language-menu {
                         width: 165px;
                     }
+                }
+
+                /* Minimal theme: flat, borderless, no shadows or decoration */
+                .login-page,
+                .login-page * {
+                    box-shadow: none !important;
+                    text-shadow: none !important;
+                    backdrop-filter: none !important;
+                }
+
+                .login-page {
+                    background: #f7f7f5;
+                }
+
+                .background-shape {
+                    display: none;
+                }
+
+                .login-card {
+                    border: 0;
+                    border-radius: 8px;
+                    background: #fff;
+                }
+
+                .logo-container,
+                .language-button {
+                    border: 0;
+                    border-radius: 6px;
+                    background: #f7f7f5;
+                }
+
+                .language-menu {
+                    border: 0;
+                    border-radius: 8px;
+                    background: #f7f7f5;
+                }
+
+                .input-wrapper input {
+                    border: 0;
+                    border-radius: 6px;
+                    background: #f7f7f5;
+                }
+
+                .input-wrapper input:focus {
+                    outline: 2px solid #20603D;
+                    outline-offset: 0;
+                    background: #fff;
+                }
+
+                .login-button {
+                    border: 0;
+                    border-radius: 6px;
+                    background: #20603D;
+                }
+
+                .login-button:hover:not(:disabled) {
+                    background: #174a2f;
+                    transform: none;
+                }
+
+                .login-page :focus-visible {
+                    outline: 2px solid #20603D;
+                    outline-offset: 2px;
                 }
             `}</style>
         </>

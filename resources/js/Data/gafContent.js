@@ -173,18 +173,6 @@ export const content = {
             phone: "Telephone",
             website: "Website",
             socials: "Our social media",
-            form: {
-                title: "Send us a message",
-                name: "Full name",
-                email: "Email",
-                phone: "Phone (optional)",
-                subject: "Subject (optional)",
-                message: "Your message",
-                submit: "Send message",
-                sending: "Sending…",
-                success: "Thank you! Your message has been sent. The study team will get back to you.",
-                privacy: "Your details are only used to reply to your message.",
-            },
         },
 
         footer: {
@@ -568,18 +556,6 @@ export const content = {
             phone: "Telefoni",
             website: "Urubuga",
             socials: "Imbuga nkoranyambaga zacu",
-            form: {
-                title: "Twandikire ubutumwa",
-                name: "Amazina yawe",
-                email: "Imeyili",
-                phone: "Telefoni (si ngombwa)",
-                subject: "Impamvu (si ngombwa)",
-                message: "Ubutumwa bwawe",
-                submit: "Ohereza ubutumwa",
-                sending: "Biroherezwa…",
-                success: "Murakoze! Ubutumwa bwanyu bwoherejwe. Itsinda ry’ubushakashatsi rizabasubiza.",
-                privacy: "Amakuru yawe akoreshwa gusa mu kugusubiza.",
-            },
         },
 
         footer: {

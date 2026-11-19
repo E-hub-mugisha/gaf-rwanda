@@ -1136,11 +1136,7 @@ export default function Edit({ user }) {
                     width: 48px;
                     height: 48px;
                     border-radius: 13px;
-                    background: linear-gradient(
-                        135deg,
-                        var(--blue),
-                        #20603d
-                    );
+                    background: var(--blue);
                     color: #fff;
                     display: flex;
                     align-items: center;

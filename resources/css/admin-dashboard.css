@@ -13,8 +13,7 @@
     overflow: hidden;
     border-radius: 18px;
     background:
-        radial-gradient(circle at 92% 10%, rgba(250, 210, 1, .28), transparent 32%),
-        linear-gradient(120deg, #123c26 0%, #20603D 60%, #2c7a50 100%);
+        #123c26;
     color: #fff;
 }
 
@@ -362,7 +361,7 @@ a.adm-stat:hover {
     height: 54px;
     border: 0;
     border-radius: 50%;
-    background: linear-gradient(135deg, #20603D, #2c7a50);
+    background: #20603D;
     color: #FAD201;
     font-size: 22px;
     box-shadow: 0 12px 30px rgba(32, 96, 61, .35);

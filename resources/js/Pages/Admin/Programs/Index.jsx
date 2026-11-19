@@ -1024,7 +1024,7 @@ export default function Index({
                         align-items: center;
                         justify-content: center;
                         gap: 8px;
-                        background: linear-gradient(135deg, #edf3fa, #e4eaf2);
+                        background: #edf3fa;
                         color: #91a3ba;
                     }
 
@@ -1040,7 +1040,7 @@ export default function Index({
                     .program-cover-overlay {
                         position: absolute;
                         inset: 0;
-                        background: linear-gradient(180deg, rgba(16,28,45,.12), transparent 45%, rgba(16,28,45,.12));
+                        background: transparent;
                         pointer-events: none;
                     }
 

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Support\FileUpload;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 
 class HeroMedia extends Model
 {
@@ -11,7 +11,8 @@ class HeroMedia extends Model
 
     protected $fillable = [
         'title',
-        'youtube_url',
+        'vimeo_url',
+        'video_thumbnail',
         'banner_image',
         'alt_text',
         'caption',
@@ -27,7 +28,7 @@ class HeroMedia extends Model
     public function getBannerImageUrlAttribute(): ?string
     {
         return $this->banner_image
-            ? Storage::disk('uploads')->url($this->banner_image)
+            ? FileUpload::url($this->banner_image)
             : null;
     }
 

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Support\FileUpload;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\EventGallery;
 use App\Models\GalleryMedia;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
@@ -70,7 +70,6 @@ class GalleryMediaController extends Controller
 
         $gallery->media()->create([
             'type' => $validated['type'],
-            'disk' => $fileData['disk'],
             'file_path' => $fileData['file_path'],
             'original_name' => $fileData['original_name'],
             'mime_type' => $fileData['mime_type'],
@@ -124,8 +123,7 @@ class GalleryMediaController extends Controller
             );
 
             $attributes = array_merge($attributes, [
-                'disk' => $fileData['disk'],
-                'file_path' => $fileData['file_path'],
+                    'file_path' => $fileData['file_path'],
                 'original_name' => $fileData['original_name'],
                 'mime_type' => $fileData['mime_type'],
                 'file_size' => $fileData['file_size'],
@@ -252,7 +250,6 @@ class GalleryMediaController extends Controller
     ): array {
         if (!$request->hasFile('file')) {
             return [
-                'disk' => 'uploads',
                 'file_path' => null,
                 'original_name' => null,
                 'mime_type' => null,
@@ -262,18 +259,20 @@ class GalleryMediaController extends Controller
 
         $file = $request->file('file');
 
-        $path = $file->store(
-            "event-galleries/{$event->id}/{$gallery->id}",
-            'uploads'
-        );
-
-        return [
-            'disk' => 'uploads',
-            'file_path' => $path,
+        // Read the details before move(): the temporary file is gone afterwards.
+        $details = [
             'original_name' => $file->getClientOriginalName(),
             'mime_type' => $file->getMimeType(),
             'file_size' => $file->getSize(),
         ];
+
+        $path = FileUpload::save(
+            $file,
+            "event-galleries/{$event->id}/{$gallery->id}",
+            'file'
+        );
+
+        return ['file_path' => $path] + $details;
     }
 
     /**
@@ -281,9 +280,7 @@ class GalleryMediaController extends Controller
      */
     private function deleteStoredFile(GalleryMedia $media): void
     {
-        if ($media->file_path && Storage::disk($media->disk)->exists($media->file_path)) {
-            Storage::disk($media->disk)->delete($media->file_path);
-        }
+        FileUpload::delete($media->file_path);
     }
 
     /**

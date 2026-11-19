@@ -498,11 +498,7 @@ export default function Show({
                     color: #5D89C8;
 
                     background:
-                        linear-gradient(
-                            145deg,
-                            #edf4fc,
-                            #f7faff
-                        );
+                        #edf4fc;
 
                     border: 1px solid #dce8f6;
                 }

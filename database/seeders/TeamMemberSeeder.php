@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Support\FileUpload;
 use App\Models\TeamMember;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class TeamMemberSeeder extends Seeder
@@ -339,7 +339,7 @@ class TeamMemberSeeder extends Seeder
         foreach (['jpg', 'jpeg', 'png', 'webp'] as $extension) {
             $path = "team/{$slug}.{$extension}";
 
-            if (Storage::disk('uploads')->exists($path)) {
+            if (FileUpload::exists($path)) {
                 return $path;
             }
         }

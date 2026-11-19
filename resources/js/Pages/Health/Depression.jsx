@@ -803,14 +803,7 @@ export default function Depression() {
                 .depression-page {
                     overflow: hidden;
                     background: #fff;
-                    font-family:
-                        Inter,
-                        ui-sans-serif,
-                        system-ui,
-                        -apple-system,
-                        BlinkMacSystemFont,
-                        "Segoe UI",
-                        sans-serif;
+                    font-family: "Source Serif 4", Georgia, serif;
                 }
 
                 .depression-page button,
@@ -833,14 +826,7 @@ export default function Depression() {
                     isolation: isolate;
                     color: #fff;
                     background:
-                        linear-gradient(
-                            105deg,
-                            rgba(19, 42, 70, .92) 0%,
-                            rgba(34, 72, 113, .79) 52%,
-                            rgba(45, 77, 107, .60) 100%
-                        ),
-                        url("/images/medium-shot-smiley-friends-hugging.jpg")
-                        center / cover no-repeat;
+                        rgb(19, 42, 70);
                 }
 
                 .depression-hero::after {
@@ -850,11 +836,7 @@ export default function Depression() {
                     right: 0;
                     bottom: 0;
                     height: 110px;
-                    background: linear-gradient(
-                        to top,
-                        rgba(0, 0, 0, .13),
-                        transparent
-                    );
+                    background: transparent;
                     pointer-events: none;
                     z-index: -1;
                 }
@@ -1103,11 +1085,7 @@ export default function Depression() {
                     content: "";
                     position: absolute;
                     inset: 0;
-                    // background: linear-gradient(
-                    //     145deg,
-                    //     rgba(23,48,79,.08),
-                    //     rgba(93,137,200,.25)
-                    // );
+                    // background: transparent;
                 }
 
                 .intro-accent {
@@ -1243,11 +1221,6 @@ export default function Depression() {
                     color: var(--mental-blue);
                     border-radius: 20px;
                     background:
-                        radial-gradient(
-                            circle at 50% 40%,
-                            rgba(93,137,200,.15),
-                            transparent 52%
-                        ),
                         #F8FAFC;
                     overflow: hidden;
                 }
@@ -1546,11 +1519,7 @@ export default function Depression() {
                     overflow: hidden;
                     color: #fff;
                     background:
-                        linear-gradient(
-                            120deg,
-                            #294B78 0%,
-                            #5D89C8 100%
-                        );
+                        #294B78;
                 }
 
                 .advice-section::before {
@@ -1655,11 +1624,7 @@ export default function Depression() {
                     border-radius: 21px;
                     color: #fff;
                     background:
-                        linear-gradient(
-                            135deg,
-                            rgba(41,75,120,.98),
-                            rgba(93,137,200,.98)
-                        );
+                        rgb(41, 75, 120);
                     box-shadow: 0 25px 70px rgba(41,75,120,.18);
                 }
 

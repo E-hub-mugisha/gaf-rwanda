@@ -1,9 +1,18 @@
 import { Head, Link, usePage, router } from "@inertiajs/react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAdminLang, ADMIN_LANGUAGES } from "@/lib/adminI18n";
 import { useAdminAutoTranslate } from "@/lib/adminAutoTranslate";
 import "../../css/admin.css";
 import "../../css/admin-dashboard.css";
+import "../../css/admin-minimal.css";
+import "../../css/admin-theme.css";
+import {
+    CommandPalette,
+    ShortcutsHelp,
+    Toaster,
+    useShortcuts,
+    useUnsavedGuard,
+} from "@/Components/Admin/AdminTools";
 
 const COLLAPSE_KEY = "gaf_admin_sidebar_collapsed";
 
@@ -24,7 +33,6 @@ const safeRoute = (name) => {
 export default function AdminLayout({ title, children }) {
     const { url, props } = usePage();
     const user = props.auth?.user;
-    const unread = props.unreadMessages || 0;
     const flash = props.flash || {};
 
     const { lang, t, setLang } = useAdminLang();
@@ -45,6 +53,29 @@ export default function AdminLayout({ title, children }) {
     useEffect(() => {
         document.documentElement.lang = lang;
     }, [lang]);
+
+    // Command palette (Ctrl+K), shortcuts help (?) and unsaved-changes guard.
+    const [paletteOpen, setPaletteOpen] = useState(false);
+    const [helpOpen, setHelpOpen] = useState(false);
+    const openPalette = useCallback(() => {
+        setHelpOpen(false);
+        setPaletteOpen(true);
+    }, []);
+    const openHelp = useCallback(() => {
+        setPaletteOpen(false);
+        setHelpOpen(true);
+    }, []);
+    const closeAll = useCallback(() => {
+        setPaletteOpen(false);
+        setHelpOpen(false);
+    }, []);
+
+    useShortcuts({ openPalette, openHelp, closeAll });
+    useUnsavedGuard(t);
+
+    useEffect(() => {
+        closeAll();
+    }, [url, closeAll]);
 
     useEffect(() => {
         setMobileOpen(false);
@@ -80,7 +111,6 @@ export default function AdminLayout({ title, children }) {
             {
                 label: t({ en: "ENGAGEMENT", rw: "ITUMANAHO" }),
                 items: [
-                    { label: t("messages"), icon: "bi-envelope", route: "admin.messages.index", path: "/admin/messages", badge: unread },
                     { label: t({ en: "Documents", rw: "Inyandiko" }), icon: "bi-file-earmark-text", route: "admin.documents.index", path: "/admin/documents" },
                     { label: t({ en: "Mental health content", rw: "Ubuzima bwo mu mutwe" }), icon: "bi-heart-pulse", route: "admin.health-content.depression.show", path: "/admin/health-content" },
                 ],
@@ -95,7 +125,7 @@ export default function AdminLayout({ title, children }) {
                 ],
             },
         ],
-        [t, unread]
+        [t]
     );
 
     // Hide links whose route does not exist and apply the menu search.
@@ -122,7 +152,7 @@ export default function AdminLayout({ title, children }) {
         <>
             {title && <Head title={title} />}
 
-            <div className={`adm-shell${collapsed ? " is-collapsed" : ""}${mobileOpen ? " is-mobile-open" : ""}`}>
+            <div className={`adm-shell has-toasts${collapsed ? " is-collapsed" : ""}${mobileOpen ? " is-mobile-open" : ""}`}>
                 <button
                     type="button"
                     className="adm-overlay"
@@ -230,12 +260,21 @@ export default function AdminLayout({ title, children }) {
                         </div>
 
                         <div className="adm-topbar-actions">
-                            {unread > 0 && (
-                                <Link href={route("admin.messages.index", { status: "new" })} className="adm-icon-btn adm-has-badge" aria-label={t("messages")}>
-                                    <i className="bi bi-bell" />
-                                    <span>{unread}</span>
-                                </Link>
-                            )}
+                            <button type="button" className="adm-search-trigger" onClick={openPalette}>
+                                <i className="bi bi-search" aria-hidden="true" />
+                                <span>{t({ en: "Search or jump to…", rw: "Shakisha cyangwa ujye…" })}</span>
+                                <kbd>Ctrl K</kbd>
+                            </button>
+
+                            <button
+                                type="button"
+                                className="adm-icon-btn"
+                                onClick={openHelp}
+                                aria-label={t({ en: "Keyboard shortcuts", rw: "Inzira z’ubusamo" })}
+                                title={t({ en: "Keyboard shortcuts (?)", rw: "Inzira z’ubusamo (?)" })}
+                            >
+                                <i className="bi bi-keyboard" />
+                            </button>
 
                             <div className="adm-lang" role="group" aria-label={t("language")}>
                                 {Object.keys(ADMIN_LANGUAGES).map((code) => (
@@ -262,12 +301,6 @@ export default function AdminLayout({ title, children }) {
                         </div>
                     </header>
 
-                    {flash.error && (
-                        <div className="adm-flash is-error">
-                            <i className="bi bi-exclamation-triangle" /> {flash.error}
-                        </div>
-                    )}
-
                     <main className="adm-content">{children}</main>
 
                     <footer className="adm-footer">
@@ -278,6 +311,10 @@ export default function AdminLayout({ title, children }) {
                     </footer>
                 </div>
             </div>
+
+            <CommandPalette open={paletteOpen} onClose={closeAll} navigation={navigation} t={t} />
+            <ShortcutsHelp open={helpOpen} onClose={closeAll} t={t} />
+            <Toaster initialFlash={flash} t={t} />
         </>
     );
 }

@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Support\FileUpload;
 use App\Http\Controllers\Controller;
 use App\Models\HeroMedia;
+use App\Support\Vimeo;
+use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rule;
 
 class HeroMediaController extends Controller
 {
@@ -20,7 +21,8 @@ class HeroMediaController extends Controller
             ->map(fn($item) => [
                 'id' => $item->id,
                 'title' => $item->title,
-                'youtube_url' => $item->youtube_url,
+                'vimeo_url' => $item->vimeo_url,
+                'video_thumbnail' => $item->video_thumbnail,
                 'banner_image' => $item->banner_image_url,
                 'alt_text' => $item->alt_text,
                 'caption' => $item->caption,
@@ -38,12 +40,11 @@ class HeroMediaController extends Controller
     {
         $validated = $this->validateMedia($request);
 
-        if ($request->hasFile('banner_image')) {
-            $validated['banner_image'] = $request->file('banner_image')
-                ->store('hero-media', 'uploads');
-        }
+        $validated['banner_image'] = FileUpload::fromRequest($request, 'banner_image', 'hero-media');
 
-        DB::transaction(function () use (&$validated) {
+        $validated['video_thumbnail'] = Vimeo::thumbnail($validated['vimeo_url'] ?? null);
+
+        DB::transaction(function () use ($validated) {
             if (!empty($validated['is_active'])) {
                 HeroMedia::query()->update(['is_active' => false]);
             }
@@ -56,36 +57,23 @@ class HeroMediaController extends Controller
 
     public function update(Request $request, HeroMedia $heroMedia)
     {
-        $validated = $request->validate([
-            'title' => ['nullable', 'string', 'max:255'],
-            'youtube_url' => ['nullable', 'url', 'max:2048'],
-            'banner_image' => [
-                'nullable',
-                'image',
-                'mimes:jpg,jpeg,png,webp',
-                'max:5120',
-            ],
-            'alt_text' => ['nullable', 'string', 'max:255'],
-            'caption' => ['nullable', 'string', 'max:255'],
-            'is_active' => ['nullable', 'boolean'],
-            'sort_order' => ['nullable', 'integer', 'min:0'],
-        ]);
+        $validated = $this->validateMedia($request, $heroMedia);
 
         if ($request->hasFile('banner_image')) {
-            if ($heroMedia->banner_image) {
-                \Illuminate\Support\Facades\Storage::disk('uploads')
-                    ->delete($heroMedia->banner_image);
-            }
-
-            $validated['banner_image'] = $request->file('banner_image')
-                ->store('hero-media', 'uploads');
+            $validated['banner_image'] = FileUpload::replace($request, 'banner_image', 'hero-media', $heroMedia->banner_image);
         } else {
             unset($validated['banner_image']);
         }
 
-        \Illuminate\Support\Facades\DB::transaction(function () use ($heroMedia, $validated) {
+        // Only ask Vimeo for a new thumbnail when the link changed.
+        $url = $validated['vimeo_url'] ?? null;
+        if ($url !== $heroMedia->vimeo_url || ($url && !$heroMedia->video_thumbnail)) {
+            $validated['video_thumbnail'] = Vimeo::thumbnail($url);
+        }
+
+        DB::transaction(function () use ($heroMedia, $validated) {
             if (!empty($validated['is_active'])) {
-                \App\Models\HeroMedia::where('id', '!=', $heroMedia->id)
+                HeroMedia::where('id', '!=', $heroMedia->id)
                     ->update(['is_active' => false]);
             }
 
@@ -108,36 +96,48 @@ class HeroMediaController extends Controller
 
     public function destroy(HeroMedia $heroMedia)
     {
-        if ($heroMedia->banner_image) {
-            Storage::disk('uploads')->delete($heroMedia->banner_image);
-        }
+        FileUpload::delete($heroMedia->banner_image);
 
         $heroMedia->delete();
 
         return back()->with('success', 'Hero media deleted successfully.');
     }
 
-    private function validateMedia(Request $request): array
+    /**
+     * A hero needs a Vimeo video or a banner image. When editing, an image
+     * that is already saved counts.
+     */
+    private function validateMedia(Request $request, ?HeroMedia $heroMedia = null): array
     {
+        $hasImage = (bool) $heroMedia?->banner_image;
+
         return $request->validate([
             'title' => ['nullable', 'string', 'max:255'],
-            'youtube_url' => [
+            'vimeo_url' => [
                 'nullable',
                 'url',
                 'max:2048',
-                'required_without:banner_image',
+                $hasImage ? 'nullable' : 'required_without:banner_image',
+                function (string $attribute, mixed $value, Closure $fail) {
+                    if ($value && !Vimeo::isValid($value)) {
+                        $fail('Please enter a valid Vimeo video link, e.g. https://vimeo.com/76979871.');
+                    }
+                },
             ],
             'banner_image' => [
                 'nullable',
                 'image',
                 'mimes:jpg,jpeg,png,webp',
                 'max:5120',
-                'required_without:youtube_url',
+                $hasImage ? 'nullable' : 'required_without:vimeo_url',
             ],
             'alt_text' => ['nullable', 'string', 'max:255'],
             'caption' => ['nullable', 'string', 'max:255'],
             'is_active' => ['nullable', 'boolean'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
+        ], [
+            'vimeo_url.required_without' => 'Add a Vimeo video link or upload a banner image.',
+            'banner_image.required_without' => 'Add a Vimeo video link or upload a banner image.',
         ]);
     }
 }

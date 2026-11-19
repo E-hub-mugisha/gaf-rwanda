@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\Support\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 
 class EventGallery extends Model
 {
@@ -70,6 +70,6 @@ class EventGallery extends Model
             return $this->cover_image;
         }
 
-        return Storage::disk('uploads')->url($this->cover_image);
+        return FileUpload::url($this->cover_image);
     }
 }

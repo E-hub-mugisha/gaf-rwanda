@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\GalleryMedia;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 
@@ -70,10 +69,6 @@ class MoveMediaToPublic extends Command
         }
 
         if (! $dryRun) {
-            // Gallery items remember which disk their file is on.
-            $updated = GalleryMedia::where('disk', 'public')->update(['disk' => 'uploads']);
-            $this->info("Gallery media records updated: {$updated}");
-
             // Remove folders left empty.
             foreach (self::FOLDERS as $folder) {
                 $this->removeEmptyDirectories("{$from}/{$folder}");

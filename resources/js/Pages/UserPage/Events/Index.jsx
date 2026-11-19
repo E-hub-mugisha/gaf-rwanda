@@ -1,319 +1,222 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { Head, Link } from "@inertiajs/react";
 import GafLayout from "@/Layouts/GafLayout";
 import { useGaf } from "@/Context/GafContext";
+import { Cover, EmptyState, PageHero, SectionTitle, StatusPill } from "@/Components/Gaf/Page";
+import { dateParts, eventStatus, formatDate, formatTime, localized, pick } from "@/lib/gafLocale";
 
-const formatDate = (value, lang) => {
-    if (!value) return null;
+const eventUrl = (event) => route("events.show", { event: event.slug });
 
-    const date = new Date(value);
+const placeOf = (event, lang) =>
+    [localized(event, "venue", lang), localized(event, "city", lang)].filter(Boolean).join(", ");
 
-    if (Number.isNaN(date.getTime())) return null;
-
-    return new Intl.DateTimeFormat(
-        lang === "rw" ? "rw-RW" : "en-GB",
-        {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-        }
-    ).format(date);
-};
-
-const formatTime = (value, lang) => {
-    if (!value) return null;
-
-    const date = new Date(value);
-
-    if (Number.isNaN(date.getTime())) return null;
-
-    return new Intl.DateTimeFormat(
-        lang === "rw" ? "rw-RW" : "en-GB",
-        {
-            hour: "2-digit",
-            minute: "2-digit",
-        }
-    ).format(date);
-};
-
-const eventText = (event, field, lang) => {
-    if (lang === "rw") {
-        return event[`${field}_rw`] || event[field] || "";
-    }
-
-    return event[field] || "";
-};
-
-const getCategoryName = (event, lang) => {
-    if (!event.category) return "";
-
-    return lang === "rw"
-        ? event.category.name_rw || event.category.name
-        : event.category.name;
-};
-
-function EventCard({ event, lang, t }) {
-    const title = eventText(event, "title", lang);
-    const excerpt = eventText(event, "excerpt", lang);
-    const venue = eventText(event, "venue", lang);
-    const city = eventText(event, "city", lang);
-
-    const date = formatDate(event.starts_at, lang);
-    const image = event.cover_image_url || event.cover_image;
+function DateTile({ value, lang }) {
+    const parts = dateParts(value, lang);
+    if (!parts) return null;
 
     return (
-        <article className="gaf-event-card">
-            <Link
-                href={`/events/${event.slug}`}
-                className="gaf-event-card-image"
-                aria-label={`${t.viewEvent}: ${title}`}
-            >
-                {image ? (
-                    <img src={image} alt={title} loading="lazy" />
-                ) : (
-                    <div className="gaf-event-image-placeholder">
-                        <span>GAF Rwanda</span>
-                    </div>
-                )}
+        <span className="gp-date-tile">
+            <strong>{parts.day}</strong>
+            <span>{parts.month}</span>
+        </span>
+    );
+}
 
-                {event.category && (
-                    <span className="gaf-event-category">
-                        {getCategoryName(event, lang)}
-                    </span>
-                )}
+function EventCard({ event, lang, t, labels }) {
+    const title = localized(event, "title", lang);
+    const excerpt = localized(event, "excerpt", lang);
+    const category = localized(event.category, "name", lang);
+    const place = placeOf(event, lang);
+    const time = formatTime(event.starts_at, lang);
+
+    return (
+        <article className="gp-card gp-event-card">
+            <Link href={eventUrl(event)} className="gp-card-media" aria-label={title}>
+                <Cover src={event.cover_image_url} alt={title} icon="bi-calendar-event" />
+                <DateTile value={event.starts_at} lang={lang} />
+                <StatusPill status={eventStatus(event)} labels={labels} />
             </Link>
 
-            <div className="gaf-event-card-body">
-                <div className="gaf-event-card-date">
-                    <span aria-hidden="true">▦</span>
-                    {date || t.dateUnavailable}
-                </div>
+            <div className="gp-card-body">
+                {category && <span className="gp-tag">{category}</span>}
 
                 <h3>
-                    <Link href={`/events/${event.slug}`}>
-                        {title}
-                    </Link>
+                    <Link href={eventUrl(event)}>{title}</Link>
                 </h3>
 
-                {excerpt && <p>{excerpt}</p>}
+                {excerpt && <p className="gp-card-text">{excerpt}</p>}
 
-                {(venue || city) && (
-                    <div className="gaf-event-card-location">
-                        <span aria-hidden="true">⌖</span>
-                        {[venue, city, event.country]
-                            .filter(Boolean)
-                            .join(", ")}
-                    </div>
-                )}
+                <ul className="gp-meta">
+                    <li>
+                        <i className="bi bi-calendar3" aria-hidden="true" />
+                        {formatDate(event.starts_at, lang) || t.dateUnavailable}
+                        {time && ` · ${time}`}
+                    </li>
+                    {place && (
+                        <li>
+                            <i className="bi bi-geo-alt" aria-hidden="true" />
+                            {place}
+                        </li>
+                    )}
+                </ul>
 
-                <Link
-                    href={`/events/${event.slug}`}
-                    className="gaf-event-card-link"
-                >
+                <Link href={eventUrl(event)} className="gp-card-link">
                     {t.viewDetails}
-                    <span aria-hidden="true">→</span>
+                    <i className="bi bi-arrow-right" aria-hidden="true" />
                 </Link>
             </div>
         </article>
     );
 }
 
-function EventSection({
-    title,
-    events = [],
-    lang,
-    t,
-    emptyMessage,
-}) {
+function FeaturedEvent({ event, lang, t, labels }) {
+    const title = localized(event, "title", lang);
+    const excerpt = localized(event, "excerpt", lang);
+    const place = placeOf(event, lang);
+
     return (
-        <section className="gaf-events-section">
-            <div className="gaf-events-section-heading">
-                <div>
-                    <span className="gaf-events-section-eyebrow">
-                        GAF RWANDA
+        <article className="gp-feature">
+            <Link href={eventUrl(event)} className="gp-feature-media" aria-label={title}>
+                <Cover src={event.cover_image_url} alt={title} icon="bi-calendar-event" eager />
+            </Link>
+
+            <div className="gp-feature-body">
+                <div className="gp-feature-tags">
+                    <span className="gp-eyebrow">
+                        <i className="bi bi-star-fill" aria-hidden="true" />
+                        {t.featured}
                     </span>
-                    <h2>{title}</h2>
+                    <StatusPill status={eventStatus(event)} labels={labels} />
                 </div>
 
-                <span className="gaf-events-section-count">
-                    {events.length}
-                </span>
+                <h2>
+                    <Link href={eventUrl(event)}>{title}</Link>
+                </h2>
+
+                {excerpt && <p>{excerpt}</p>}
+
+                <ul className="gp-meta is-large">
+                    <li>
+                        <i className="bi bi-calendar3" aria-hidden="true" />
+                        {formatDate(event.starts_at, lang) || t.dateUnavailable}
+                    </li>
+                    {place && (
+                        <li>
+                            <i className="bi bi-geo-alt" aria-hidden="true" />
+                            {place}
+                        </li>
+                    )}
+                </ul>
+
+                <Link href={eventUrl(event)} className="gp-button">
+                    {t.viewEvent}
+                    <i className="bi bi-arrow-right" aria-hidden="true" />
+                </Link>
             </div>
-
-            {events.length > 0 ? (
-                <div className="gaf-events-grid">
-                    {events.map((event) => (
-                        <EventCard
-                            key={event.id}
-                            event={event}
-                            lang={lang}
-                            t={t}
-                        />
-                    ))}
-                </div>
-            ) : (
-                <div className="gaf-events-empty">
-                    <span className="gaf-events-empty-icon">◎</span>
-                    <p>{emptyMessage}</p>
-                </div>
-            )}
-        </section>
+        </article>
     );
 }
 
-export default function Index({
-    featuredEvent,
-    upcomingEvents = [],
-    ongoingEvents = [],
-    pastEvents = [],
-}) {
+export default function Index({ featuredEvent, upcomingEvents = [], ongoingEvents = [], pastEvents = [] }) {
     const { lang, t: content } = useGaf();
     const t = content.eventsPage;
+    const [filter, setFilter] = useState("all");
 
-    const featuredTitle = featuredEvent
-        ? eventText(featuredEvent, "title", lang)
-        : "";
+    const labels = {
+        upcoming: t.upcomingLabel,
+        ongoing: t.ongoingLabel,
+        past: t.pastLabel,
+        cancelled: t.cancelled,
+    };
 
-    const featuredExcerpt = featuredEvent
-        ? eventText(featuredEvent, "excerpt", lang)
-        : "";
+    const groups = [
+        { key: "ongoing", title: t.ongoing, items: ongoingEvents, empty: t.noOngoing },
+        { key: "upcoming", title: t.upcoming, items: upcomingEvents, empty: t.noUpcoming },
+        { key: "past", title: t.past, items: pastEvents, empty: t.noPast },
+    ];
 
-    const featuredImage = featuredEvent
-        ? featuredEvent.cover_image_url || featuredEvent.cover_image
-        : null;
+    const total = ongoingEvents.length + upcomingEvents.length + pastEvents.length;
+
+    const tabs = [
+        { key: "all", label: t.allEvents, count: total },
+        ...groups.map((group) => ({ key: group.key, label: labels[group.key], count: group.items.length })),
+    ];
+
+    // "All" hides empty groups so the page does not fill up with empty boxes.
+    const visibleGroups = useMemo(
+        () => (filter === "all" ? groups.filter((group) => group.items.length) : groups.filter((group) => group.key === filter)),
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [filter, upcomingEvents, ongoingEvents, pastEvents, lang]
+    );
 
     return (
         <>
             <Head title={t.pageTitle} />
 
-            <main className="gaf-events-page">
-                <section className="gaf-events-hero">
-                    <div className="gaf-container">
-                        <span className="gaf-events-hero-eyebrow">
-                            {t.eyebrow}
-                        </span>
+            <main className="gp-page">
+                <PageHero
+                    icon="bi-calendar-event"
+                    crumbs={[
+                        { label: pick(lang, { en: "Home", rw: "Ahabanza" }), href: "/" },
+                        { label: t.title },
+                    ]}
+                    eyebrow={t.eyebrow}
+                    title={t.title}
+                    intro={t.intro}
+                    topics={t.topics || []}
+                    stats={[
+                        { label: t.upcomingLabel, value: upcomingEvents.length },
+                        { label: t.ongoingLabel, value: ongoingEvents.length },
+                        { label: t.pastLabel, value: pastEvents.length },
+                    ]}
+                />
 
-                        <h1>{t.title}</h1>
+                <div className="gaf-container gp-content">
+                    {featuredEvent && <FeaturedEvent event={featuredEvent} lang={lang} t={t} labels={labels} />}
 
-                        <p>{t.intro}</p>
-                        {Array.isArray(t.topics) && t.topics.length > 0 && (
-                            <ul className="gaf-page-topics">
-                                {t.topics.map((topic) => (
-                                    <li key={topic}>{topic}</li>
-                                ))}
-                            </ul>
-                        )}
-                    </div>
-                </section>
-
-                <div className="gaf-container gaf-events-content">
-                    {featuredEvent && (
-                        <section className="gaf-featured-event">
-                            <div className="gaf-featured-event-image">
-                                {featuredImage ? (
-                                    <img
-                                        src={featuredImage}
-                                        alt={featuredTitle}
-                                    />
-                                ) : (
-                                    <div className="gaf-event-image-placeholder">
-                                        <span>GAF Rwanda</span>
-                                    </div>
-                                )}
-                            </div>
-
-                            <div className="gaf-featured-event-content">
-                                <span className="gaf-events-featured-label">
-                                    {t.featured}
-                                </span>
-
-                                <h2>{featuredTitle}</h2>
-
-                                {featuredExcerpt && (
-                                    <p>{featuredExcerpt}</p>
-                                )}
-
-                                <div className="gaf-featured-event-meta">
-                                    <span>
-                                        <strong>{t.date}:</strong>{" "}
-                                        {formatDate(
-                                            featuredEvent.starts_at,
-                                            lang
-                                        ) || t.dateUnavailable}
-                                    </span>
-
-                                    {(eventText(
-                                        featuredEvent,
-                                        "venue",
-                                        lang
-                                    ) || featuredEvent.city) && (
-                                        <span>
-                                            <strong>{t.location}:</strong>{" "}
-                                            {[
-                                                eventText(
-                                                    featuredEvent,
-                                                    "venue",
-                                                    lang
-                                                ),
-                                                eventText(
-                                                    featuredEvent,
-                                                    "city",
-                                                    lang
-                                                ),
-                                                featuredEvent.country,
-                                            ]
-                                                .filter(Boolean)
-                                                .join(", ")}
-                                        </span>
-                                    )}
+                    {total > 0 ? (
+                        <>
+                            <div className="gp-toolbar" role="tablist" aria-label={t.allEvents}>
+                                <div className="gp-tabs">
+                                    {tabs.map((tab) => (
+                                        <button
+                                            key={tab.key}
+                                            type="button"
+                                            role="tab"
+                                            aria-selected={filter === tab.key}
+                                            className={filter === tab.key ? "is-active" : ""}
+                                            onClick={() => setFilter(tab.key)}
+                                        >
+                                            {tab.label}
+                                            <span>{tab.count}</span>
+                                        </button>
+                                    ))}
                                 </div>
-
-                                <Link
-                                    href={`/events/${featuredEvent.slug}`}
-                                    className="gaf-events-button"
-                                >
-                                    {t.viewEvent}
-                                    <span aria-hidden="true">→</span>
-                                </Link>
                             </div>
-                        </section>
+
+                            {visibleGroups.map((group) => (
+                                <section key={group.key} className="gp-section">
+                                    <SectionTitle
+                                        eyebrow={labels[group.key]}
+                                        title={group.title}
+                                        aside={<span className="gp-count">{group.items.length}</span>}
+                                    />
+
+                                    {group.items.length ? (
+                                        <div className="gp-grid">
+                                            {group.items.map((event) => (
+                                                <EventCard key={event.id} event={event} lang={lang} t={t} labels={labels} />
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <EmptyState icon="bi-calendar-x" title={group.empty} />
+                                    )}
+                                </section>
+                            ))}
+                        </>
+                    ) : (
+                        !featuredEvent && <EmptyState icon="bi-calendar-x" title={t.noEvents} />
                     )}
-
-                    <EventSection
-                        title={t.ongoing}
-                        events={ongoingEvents}
-                        lang={lang}
-                        t={t}
-                        emptyMessage={t.noOngoing}
-                    />
-
-                    <EventSection
-                        title={t.upcoming}
-                        events={upcomingEvents}
-                        lang={lang}
-                        t={t}
-                        emptyMessage={t.noUpcoming}
-                    />
-
-                    <EventSection
-                        title={t.past}
-                        events={pastEvents}
-                        lang={lang}
-                        t={t}
-                        emptyMessage={t.noPast}
-                    />
-
-                    {!featuredEvent &&
-                        upcomingEvents.length === 0 &&
-                        ongoingEvents.length === 0 &&
-                        pastEvents.length === 0 && (
-                            <div className="gaf-events-empty gaf-events-empty-main">
-                                <span className="gaf-events-empty-icon">
-                                    ◎
-                                </span>
-                                <h2>{t.noEvents}</h2>
-                            </div>
-                        )}
                 </div>
             </main>
         </>

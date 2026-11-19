@@ -1,419 +1,225 @@
-
 import React, { useEffect, useState } from "react";
 import { Head, Link, router } from "@inertiajs/react";
 import GafLayout from "@/Layouts/GafLayout";
 import { useGaf } from "@/Context/GafContext";
+import { Cover, EmptyState, PageHero, Pagination, SectionTitle } from "@/Components/Gaf/Page";
+import { formatDate, localized, pick, readingMinutes } from "@/lib/gafLocale";
 
-const formatDate = (value, lang) => {
-    if (!value) return "";
+const articleUrl = (article) => route("news.show", { slug: article.slug });
 
-    const date = new Date(value);
-
-    if (Number.isNaN(date.getTime())) return "";
-
-    return new Intl.DateTimeFormat(
-        lang === "rw" ? "rw-RW" : "en-GB",
-        {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-        }
-    ).format(date);
-};
-
-const localized = (item, field, lang) => {
-    if (!item) return "";
-
-    return lang === "rw"
-        ? item[`${field}_rw`] || item[field] || ""
-        : item[field] || "";
-};
-
-const ArticleImage = ({ article, className = "" }) => {
-    const image = article?.featured_image_url;
-
-    if (!image) {
-        return (
-            <div className={`gaf-news-image-placeholder ${className}`}>
-                <i className="bi bi-newspaper"></i>
-            </div>
-        );
-    }
-
-    return (
-        <div className={`gaf-news-image ${className}`}>
-            <img
-                src={image}
-                alt={article.title || "GAF-RW news"}
-                onError={(e) => {
-                    e.currentTarget.style.display = "none";
-                }}
-            />
-        </div>
-    );
-};
-
-const ArticleCard = ({ article, lang, t }) => {
+function ArticleCard({ article, lang, t }) {
     const title = localized(article, "title", lang);
     const excerpt = localized(article, "excerpt", lang);
     const category = localized(article.category, "name", lang);
+    const minutes = readingMinutes(localized(article, "content", lang));
 
     return (
-        <article className="gaf-news-card">
-            <Link
-                href={route("news.show", { slug: article.slug })}
-                className="gaf-news-card-image-link"
-            >
-                <ArticleImage article={article} />
+        <article className="gp-card">
+            <Link href={articleUrl(article)} className="gp-card-media" aria-label={title}>
+                <Cover src={article.featured_image_url} alt={title} icon="bi-newspaper" />
+                {category && <span className="gp-tag is-floating">{category}</span>}
             </Link>
 
-            <div className="gaf-news-card-body">
-                <div className="gaf-news-card-meta">
-                    {category && (
-                        <span className="gaf-news-category">
-                            {category}
-                        </span>
-                    )}
-
-                    <span>
+            <div className="gp-card-body">
+                <ul className="gp-meta">
+                    <li>
+                        <i className="bi bi-calendar3" aria-hidden="true" />
                         {formatDate(article.published_at, lang)}
-                    </span>
-                </div>
+                    </li>
+                    <li>
+                        <i className="bi bi-clock" aria-hidden="true" />
+                        {minutes} {pick(lang, { en: "min read", rw: "iminota yo gusoma" })}
+                    </li>
+                </ul>
 
                 <h3>
-                    <Link href={route("news.show", { slug: article.slug })}>
-                        {title}
-                    </Link>
+                    <Link href={articleUrl(article)}>{title}</Link>
                 </h3>
 
-                {excerpt && <p>{excerpt}</p>}
+                {excerpt && <p className="gp-card-text">{excerpt}</p>}
 
-                <Link
-                    href={route("news.show", { slug: article.slug })}
-                    className="gaf-news-read-more"
-                >
-                    {t.readMore || "Read more"}
-                    <i className="bi bi-arrow-right ms-2"></i>
+                <Link href={articleUrl(article)} className="gp-card-link">
+                    {t.readMore}
+                    <i className="bi bi-arrow-right" aria-hidden="true" />
                 </Link>
             </div>
         </article>
     );
-};
+}
 
-const Index = ({
-    featuredArticle,
-    articles,
-    categories = [],
-    filters = {},
-}) => {
+export default function Index({ featuredArticle, articles, categories = [], filters = {} }) {
     const { lang, t: content } = useGaf();
-    const t = content?.newsPage || {};
-
+    const t = content.newsPage;
     const [search, setSearch] = useState(filters.search || "");
 
-    useEffect(() => {
-        setSearch(filters.search || "");
-    }, [filters.search]);
+    useEffect(() => setSearch(filters.search || ""), [filters.search]);
 
-    const submitSearch = (e) => {
-        e.preventDefault();
-
+    const visit = (params) =>
         router.get(
             route("news.index"),
             {
-                search: search || undefined,
-                category: filters.category || undefined,
+                search: (params.search ?? filters.search) || undefined,
+                category: (params.category ?? filters.category) || undefined,
             },
-            {
-                preserveState: true,
-                preserveScroll: true,
-                replace: true,
-            }
+            { preserveState: true, preserveScroll: true, replace: true }
         );
-    };
 
-    const filterCategory = (slug) => {
-        router.get(
-            route("news.index"),
-            {
-                search: filters.search || undefined,
-                category: slug || undefined,
-            },
-            {
-                preserveState: true,
-                preserveScroll: true,
-            }
-        );
-    };
+    const items = articles?.data || [];
+    const filtering = Boolean(filters.search || filters.category);
+    const showFeatured = featuredArticle && !filtering;
 
-    const articleItems = articles?.data || [];
+    const featuredTitle = showFeatured ? localized(featuredArticle, "title", lang) : "";
+    const featuredCategory = showFeatured ? localized(featuredArticle.category, "name", lang) : "";
 
     return (
         <>
-            <Head title={t.pageTitle || "News & Updates | GAF Rwanda"}>
-                <meta
-                    head-key="description"
-                    name="description"
-                    content={
-                        t.intro ||
-                        "Discover the latest news, activities and updates from GAF-RW."
-                    }
-                />
+            <Head title={t.pageTitle}>
+                <meta head-key="description" name="description" content={t.title} />
             </Head>
 
-            <main className="gaf-news-page">
-                {/* Header */}
-                <section className="gaf-news-header">
-                    <div className="container">
-                        <div className="gaf-news-header-content">
-                            <span className="gaf-news-eyebrow">
-                                {t.eyebrow || "NEWS & UPDATES"}
-                            </span>
+            <main className="gp-page">
+                <PageHero
+                    icon="bi-newspaper"
+                    crumbs={[
+                        { label: pick(lang, { en: "Home", rw: "Ahabanza" }), href: "/" },
+                        { label: t.title },
+                    ]}
+                    eyebrow={t.eyebrow}
+                    title={t.title}
+                    intro={t.intro}
+                    topics={t.topics || []}
+                    stats={[
+                        { label: pick(lang, { en: "Articles", rw: "Inkuru" }), value: (articles?.total || 0) + (featuredArticle ? 1 : 0) },
+                        { label: pick(lang, { en: "Topics", rw: "Ingingo" }), value: categories.length },
+                    ]}
+                />
 
-                            <h1>
-                                {t.title || "News & Updates"}
-                            </h1>
+                <div className="gaf-container gp-content">
+                    {showFeatured && (
+                        <article className="gp-feature">
+                            <Link href={articleUrl(featuredArticle)} className="gp-feature-media" aria-label={featuredTitle}>
+                                <Cover src={featuredArticle.featured_image_url} alt={featuredTitle} icon="bi-newspaper" eager />
+                            </Link>
 
-                            <p>
-                                {t.intro ||
-                                    "Explore the latest news, research activities and updates from GAF-RW."}
-                            </p>
-                            {Array.isArray(t.topics) && t.topics.length > 0 && (
-                                <ul className="gaf-page-topics">
-                                    {t.topics.map((topic) => (
-                                        <li key={topic}>{topic}</li>
-                                    ))}
-                                </ul>
-                            )}
-                        </div>
-                    </div>
-                </section>
-
-                <section className="gaf-news-content">
-                    <div className="container">
-                        {/* Featured article */}
-                        {featuredArticle && !filters.search && !filters.category && (
-                            <section className="gaf-news-featured-section">
-                                <div className="gaf-news-section-heading">
-                                    <div>
-                                        <span className="gaf-news-eyebrow">
-                                            {t.featured || "FEATURED STORY"}
-                                        </span>
-
-                                        <h2>
-                                            {t.featuredTitle ||
-                                                "Featured update"}
-                                        </h2>
-                                    </div>
-                                </div>
-
-                                <article className="gaf-news-featured">
-                                    <div className="gaf-news-featured-image">
-                                        <ArticleImage article={featuredArticle} />
-                                    </div>
-
-                                    <div className="gaf-news-featured-body">
-                                        <div className="gaf-news-card-meta">
-                                            {localized(
-                                                featuredArticle.category,
-                                                "name",
-                                                lang
-                                            ) && (
-                                                <span className="gaf-news-category">
-                                                    {localized(
-                                                        featuredArticle.category,
-                                                        "name",
-                                                        lang
-                                                    )}
-                                                </span>
-                                            )}
-
-                                            <span>
-                                                {formatDate(
-                                                    featuredArticle.published_at,
-                                                    lang
-                                                )}
-                                            </span>
-                                        </div>
-
-                                        <h2>
-                                            {localized(
-                                                featuredArticle,
-                                                "title",
-                                                lang
-                                            )}
-                                        </h2>
-
-                                        <p>
-                                            {localized(
-                                                featuredArticle,
-                                                "excerpt",
-                                                lang
-                                            )}
-                                        </p>
-
-                                        <Link
-                                            href={route("news.show", {
-                                                slug: featuredArticle.slug,
-                                            })}
-                                            className="gaf-news-featured-link"
-                                        >
-                                            {t.readStory || "Read full story"}
-                                            <i className="bi bi-arrow-right ms-2"></i>
-                                        </Link>
-                                    </div>
-                                </article>
-                            </section>
-                        )}
-
-                        {/* Filters */}
-                        <section className="gaf-news-filter-section">
-                            <div className="gaf-news-filter-heading">
-                                <div>
-                                    <span className="gaf-news-eyebrow">
-                                        {t.latest || "LATEST STORIES"}
+                            <div className="gp-feature-body">
+                                <div className="gp-feature-tags">
+                                    <span className="gp-eyebrow">
+                                        <i className="bi bi-star-fill" aria-hidden="true" />
+                                        {t.featured}
                                     </span>
-
-                                    <h2>
-                                        {t.allNews || "All news and updates"}
-                                    </h2>
+                                    {featuredCategory && <span className="gp-tag">{featuredCategory}</span>}
                                 </div>
 
-                                <form
-                                    onSubmit={submitSearch}
-                                    className="gaf-news-search"
-                                >
-                                    <i className="bi bi-search"></i>
+                                <h2>
+                                    <Link href={articleUrl(featuredArticle)}>{featuredTitle}</Link>
+                                </h2>
 
-                                    <input
-                                        type="search"
-                                        value={search}
-                                        onChange={(e) =>
-                                            setSearch(e.target.value)
-                                        }
-                                        placeholder={
-                                            t.searchPlaceholder ||
-                                            "Search news..."
-                                        }
-                                    />
+                                <p>{localized(featuredArticle, "excerpt", lang)}</p>
 
-                                    <button type="submit">
-                                        {t.search || "Search"}
-                                    </button>
-                                </form>
+                                <ul className="gp-meta is-large">
+                                    <li>
+                                        <i className="bi bi-calendar3" aria-hidden="true" />
+                                        {formatDate(featuredArticle.published_at, lang)}
+                                    </li>
+                                    {featuredArticle.author?.name && (
+                                        <li>
+                                            <i className="bi bi-person" aria-hidden="true" />
+                                            {featuredArticle.author.name}
+                                        </li>
+                                    )}
+                                </ul>
+
+                                <Link href={articleUrl(featuredArticle)} className="gp-button">
+                                    {t.readStory}
+                                    <i className="bi bi-arrow-right" aria-hidden="true" />
+                                </Link>
                             </div>
+                        </article>
+                    )}
 
-                            <div className="gaf-news-categories">
-                                <button
-                                    type="button"
-                                    onClick={() => filterCategory("")}
-                                    className={
-                                        !filters.category ? "active" : ""
-                                    }
-                                >
-                                    {t.allCategories || "All"}
+                    {/* Search and topics */}
+                    <div className="gp-toolbar">
+                        <form
+                            className="gp-search"
+                            role="search"
+                            onSubmit={(event) => {
+                                event.preventDefault();
+                                visit({ search });
+                            }}
+                        >
+                            <i className="bi bi-search" aria-hidden="true" />
+                            <input
+                                type="search"
+                                value={search}
+                                onChange={(event) => setSearch(event.target.value)}
+                                placeholder={t.searchPlaceholder}
+                                aria-label={t.search}
+                            />
+                            <button type="submit">{t.search}</button>
+                        </form>
+
+                        {categories.length > 0 && (
+                            <div className="gp-tabs is-scroll">
+                                <button type="button" className={!filters.category ? "is-active" : ""} onClick={() => visit({ category: "" })}>
+                                    {t.allCategories}
                                 </button>
-
                                 {categories.map((category) => (
                                     <button
-                                        type="button"
                                         key={category.id}
-                                        onClick={() =>
-                                            filterCategory(category.slug)
-                                        }
-                                        className={
-                                            filters.category === category.slug
-                                                ? "active"
-                                                : ""
-                                        }
+                                        type="button"
+                                        className={filters.category === category.slug ? "is-active" : ""}
+                                        onClick={() => visit({ category: category.slug })}
                                     >
                                         {localized(category, "name", lang)}
+                                        <span>{category.published_articles_count}</span>
                                     </button>
                                 ))}
                             </div>
-                        </section>
-
-                        {/* Articles */}
-                        {articleItems.length > 0 ? (
-                            <>
-                                <div className="row g-4">
-                                    {articleItems.map((article) => (
-                                        <div
-                                            className="col-md-6 col-lg-4"
-                                            key={article.id}
-                                        >
-                                            <ArticleCard
-                                                article={article}
-                                                lang={lang}
-                                                t={t}
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-
-                                {/* Pagination */}
-                                {articles.links?.length > 3 && (
-                                    <nav
-                                        className="gaf-news-pagination"
-                                        aria-label="News pagination"
-                                    >
-                                        {articles.links.map((link, index) => (
-                                            <button
-                                                key={index}
-                                                type="button"
-                                                disabled={!link.url}
-                                                className={[
-                                                    link.active ? "active" : "",
-                                                    !link.url ? "disabled" : "",
-                                                ].join(" ")}
-                                                onClick={() =>
-                                                    link.url &&
-                                                    router.visit(link.url, {
-                                                        preserveScroll: true,
-                                                        preserveState: true,
-                                                    })
-                                                }
-                                                dangerouslySetInnerHTML={{
-                                                    __html: link.label,
-                                                }}
-                                            />
-                                        ))}
-                                    </nav>
-                                )}
-                            </>
-                        ) : (
-                            <div className="gaf-news-empty">
-                                <i className="bi bi-newspaper"></i>
-
-                                <h3>
-                                    {t.noNews || "No news articles found"}
-                                </h3>
-
-                                <p>
-                                    {t.noNewsIntro ||
-                                        "There are currently no news articles matching your search."}
-                                </p>
-
-                                {(filters.search || filters.category) && (
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            router.get(route("news.index"))
-                                        }
-                                        className="gaf-news-clear-button"
-                                    >
-                                        {t.clearFilters || "Clear filters"}
-                                    </button>
-                                )}
-                            </div>
                         )}
                     </div>
-                </section>
+
+                    <section className="gp-section">
+                        <SectionTitle
+                            eyebrow={t.latest}
+                            title={t.allNews}
+                            aside={
+                                filtering && (
+                                    <button type="button" className="gp-clear" onClick={() => router.get(route("news.index"))}>
+                                        <i className="bi bi-x-lg" aria-hidden="true" />
+                                        {t.clearFilters}
+                                    </button>
+                                )
+                            }
+                        />
+
+                        {items.length ? (
+                            <>
+                                <div className="gp-grid">
+                                    {items.map((article) => (
+                                        <ArticleCard key={article.id} article={article} lang={lang} t={t} />
+                                    ))}
+                                </div>
+                                <Pagination links={articles.links} label={t.allNews} />
+                            </>
+                        ) : (
+                            <EmptyState
+                                icon="bi-newspaper"
+                                title={t.noNews}
+                                text={t.noNewsIntro}
+                                action={
+                                    filtering && (
+                                        <button type="button" className="gp-button is-outline" onClick={() => router.get(route("news.index"))}>
+                                            {t.clearFilters}
+                                        </button>
+                                    )
+                                }
+                            />
+                        )}
+                    </section>
+                </div>
             </main>
         </>
     );
-};
+}
 
 Index.layout = (page) => <GafLayout>{page}</GafLayout>;
-
-export default Index;

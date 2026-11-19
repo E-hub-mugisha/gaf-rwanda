@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\Support\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Storage;
 
 class NewsArticle extends Model
 {
@@ -88,6 +88,6 @@ class NewsArticle extends Model
             return $this->featured_image;
         }
 
-        return Storage::disk('uploads')->url($this->featured_image);
+        return FileUpload::url($this->featured_image);
     }
 }

@@ -169,7 +169,6 @@ class Event extends Model
             return $this->cover_image;
         }
 
-        return \Illuminate\Support\Facades\Storage::disk('uploads')
-            ->url($this->cover_image);
+        return \App\Support\FileUpload::url($this->cover_image);
     }
 }

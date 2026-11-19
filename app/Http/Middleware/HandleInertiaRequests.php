@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\ContactMessage;
 use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -36,11 +35,6 @@ class HandleInertiaRequests extends Middleware
 
             // Contacts and social links edited in Admin > Site settings.
             'site' => fn () => SiteSetting::forWebsite(),
-
-            // Badge in the admin sidebar.
-            'unreadMessages' => fn () => $request->user()?->role === 'admin'
-                ? ContactMessage::where('status', 'new')->count()
-                : 0,
         ];
     }
 }

@@ -2603,11 +2603,7 @@ export default function Edit({ page }) {
                 .editor-tip {
                     border-radius: 12px;
                     padding: 14px;
-                    background: linear-gradient(
-                        135deg,
-                        #f1f8f4,
-                        #f5f8fc
-                    );
+                    background: #f1f8f4;
                     border: 1px solid #e2f0e8;
                     display: flex;
                     align-items: flex-start;

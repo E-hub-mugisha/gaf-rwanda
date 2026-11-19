@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Support\FileUpload;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\EventGallery;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -35,10 +35,7 @@ class EventGalleryController extends Controller
             $validated['slug'] ?: $validated['title']
         );
 
-        if ($request->hasFile('cover_image')) {
-            $validated['cover_image'] = $request->file('cover_image')
-                ->store('event-galleries', 'uploads');
-        }
+        $validated['cover_image'] = FileUpload::fromRequest($request, 'cover_image', 'event-galleries');
 
         $event->galleries()->create($validated);
 
@@ -65,12 +62,7 @@ class EventGalleryController extends Controller
         );
 
         if ($request->hasFile('cover_image')) {
-            if ($gallery->cover_image) {
-                Storage::disk('uploads')->delete($gallery->cover_image);
-            }
-
-            $validated['cover_image'] = $request->file('cover_image')
-                ->store('event-galleries', 'uploads');
+            $validated['cover_image'] = FileUpload::replace($request, 'cover_image', 'event-galleries', $gallery->cover_image);
         } else {
             unset($validated['cover_image']);
         }
@@ -84,8 +76,11 @@ class EventGalleryController extends Controller
     {
         abort_unless($gallery->event_id === $event->id, 404);
 
-        if ($gallery->cover_image) {
-            Storage::disk('uploads')->delete($gallery->cover_image);
+        FileUpload::delete($gallery->cover_image);
+
+        // Remove the photos and videos uploaded to this gallery.
+        foreach ($gallery->media()->whereNotNull('file_path')->pluck('file_path') as $path) {
+            FileUpload::delete($path);
         }
 
         $gallery->delete();

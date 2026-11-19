@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\FileUpload;
 use App\Models\Event;
 use App\Models\EventGallery;
 use App\Models\Faq;
 use App\Models\HeroMedia;
 use App\Models\NewsArticle;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -18,19 +18,22 @@ class HomeController extends Controller
         // NEWS: latest published articles
         $news = NewsArticle::query()
             ->published()
-            ->with('category:id,name')
+            ->with('category:id,name,name_rw')
             ->orderByDesc('is_featured')
             ->orderByDesc('published_at')
-            ->limit(6)
+            ->limit(5)
             ->get()
             ->map(fn(NewsArticle $a) => [
                 'id'       => $a->id,
                 'slug'     => $a->slug,
                 'date'     => optional($a->published_at ?? $a->created_at)->toDateString(),
-                'category' => $a->category?->name,
+                'category' => $a->category ? $this->bilingual($a->category->name, $a->category->name_rw) : null,
                 'image'    => $this->imageUrl($a->featured_image),
-                'title'    => $a->title,
-                'text'     => $a->excerpt ?: str()->limit(strip_tags((string) $a->content), 180),
+                'title'    => $this->bilingual($a->title, $a->title_rw),
+                'text'     => $this->bilingual(
+                    $a->excerpt ?: str()->limit(strip_tags((string) $a->content), 180),
+                    $a->excerpt_rw ?: ($a->content_rw ? str()->limit(strip_tags((string) $a->content_rw), 180) : null)
+                ),
                 'url'      => route('news.show', $a->slug),
             ]);
 
@@ -111,13 +114,23 @@ class HomeController extends Controller
             'heroMedia' => $heroMedia ? [
                 'id' => $heroMedia->id,
                 'title' => $heroMedia->title,
-                'heroVideo' => $heroMedia->youtube_url,
+                'heroVideo' => $heroMedia->vimeo_url,
+                'heroVideoThumbnail' => $heroMedia->video_thumbnail,
                 'heroImage' => $heroMedia->banner_image_url,
                 'altText' => $heroMedia->alt_text,
                 'caption' => $heroMedia->caption,
             ] : null,
             'faqs' => $faqs,
         ]);
+    }
+
+    /** { en, rw } with each language falling back to the other. */
+    private function bilingual(?string $en, ?string $rw): array
+    {
+        return [
+            'en' => $en ?: (string) $rw,
+            'rw' => $rw ?: (string) $en,
+        ];
     }
 
     private function imageUrl(?string $path): ?string
@@ -130,6 +143,6 @@ class HomeController extends Controller
             return $path;
         }
 
-        return Storage::disk('uploads')->url($path);
+        return FileUpload::url($path);
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\ContactMessage;
 use App\Models\Document;
 use App\Models\Event;
 use App\Models\EventCategory;
@@ -48,12 +47,6 @@ class DashboardController extends Controller
 
             'total_galleries' => EventGallery::count(),
 
-            'unread_messages' => ContactMessage::where(
-                'status',
-                'new'
-            )->count(),
-
-            'total_messages' => ContactMessage::count(),
             'team_members' => TeamMember::where('is_active', true)->count(),
             'active_faqs' => Faq::where('is_active', true)->count(),
             'draft_news' => NewsArticle::where('status', 'draft')->count(),
@@ -81,18 +74,6 @@ class DashboardController extends Controller
                 'route' => $item['route'],
             ];
         })->values();
-
-        $recentMessages = ContactMessage::latest()
-            ->take(5)
-            ->get(['id', 'name', 'email', 'subject', 'status', 'created_at'])
-            ->map(fn ($message) => [
-                'id' => $message->id,
-                'name' => $message->name,
-                'email' => $message->email,
-                'subject' => $message->subject,
-                'status' => $message->status,
-                'created_at_human' => $message->created_at?->diffForHumans(),
-            ]);
 
         $recentEvents = Event::with('category')
             ->latest()
@@ -125,14 +106,17 @@ class DashboardController extends Controller
                     : null,
             ]);
 
+        // Content with missing information (translations, images, summaries...)
+        $contentHealth = \App\Support\ContentHealth::report();
+
         return Inertia::render('Admin/Dashboard', compact(
             'stats',
             'recentDocuments',
             'statistics',
             'recentEvents',
             'recentNews',
-            'recentMessages',
             'translations',
+            'contentHealth',
         ));
     }
 }

@@ -38,17 +38,8 @@ return [
             'report' => false,
         ],
 
-        // Website media (images, videos, banners, photos) saved directly in
-        // the public folder: public/uploads/... served at /uploads/...
-        'uploads' => [
-            'driver' => 'local',
-            'root' => public_path('uploads'),
-            // Relative URL so images work on any domain (no APP_URL dependency).
-            'url' => '/uploads',
-            'visibility' => 'public',
-            'throw' => false,
-            'report' => false,
-        ],
+        // Website media (images, videos, banners, photos) does not use a disk:
+        // App\Support\FileUpload moves uploads into public/uploads/ with move().
 
         'public' => [
             'driver' => 'local',
@@ -85,8 +76,7 @@ return [
     |
     */
 
-    'links' => [
-        public_path('storage') => storage_path('app/public'),
-    ],
+    // No symbolic links: uploads are saved directly in public/uploads.
+    'links' => [],
 
 ];

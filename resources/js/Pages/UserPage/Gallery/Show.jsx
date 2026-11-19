@@ -1,36 +1,17 @@
-
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Head, Link } from "@inertiajs/react";
 import GafLayout from "@/Layouts/GafLayout";
 import { useGaf } from "@/Context/GafContext";
+import { AlbumCard, Breadcrumbs, EmptyState, SectionTitle, ShareLinks } from "@/Components/Gaf/Page";
+import { formatDate, localized, pick } from "@/lib/gafLocale";
+import { vimeoEmbedUrl } from "@/lib/vimeo";
 
-const formatDate = (value, lang) => {
-    if (!value) return "";
-
-    const date = new Date(value);
-
-    if (Number.isNaN(date.getTime())) return "";
-
-    return new Intl.DateTimeFormat(
-        lang === "rw" ? "rw-RW" : "en-GB",
-        {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-        }
-    ).format(date);
-};
-
-const localized = (item, field, lang) => {
-    if (!item) return "";
-
-    return lang === "rw"
-        ? item[`${field}_rw`] || item[field] || ""
-        : item[field] || "";
-};
-
-const getVideoEmbedUrl = (url) => {
+// External gallery videos can be YouTube or Vimeo links.
+const embedUrl = (url) => {
     if (!url) return null;
+
+    const vimeo = vimeoEmbedUrl(url);
+    if (vimeo) return vimeo;
 
     try {
         const parsed = new URL(url);
@@ -41,26 +22,9 @@ const getVideoEmbedUrl = (url) => {
             return id ? `https://www.youtube-nocookie.com/embed/${id}` : null;
         }
 
-        if (
-            host === "youtube.com" ||
-            host === "m.youtube.com" ||
-            host === "youtube-nocookie.com"
-        ) {
-            const id =
-                parsed.searchParams.get("v") ||
-                parsed.pathname.match(/\/(?:embed|shorts)\/([^/?]+)/)?.[1];
-
-            return id
-                ? `https://www.youtube-nocookie.com/embed/${id}`
-                : null;
-        }
-
-        if (host === "vimeo.com") {
-            const id = parsed.pathname.split("/").filter(Boolean).pop();
-
-            return id && /^\d+$/.test(id)
-                ? `https://player.vimeo.com/video/${id}`
-                : null;
+        if (["youtube.com", "m.youtube.com", "youtube-nocookie.com"].includes(host)) {
+            const id = parsed.searchParams.get("v") || parsed.pathname.match(/\/(?:embed|shorts|live)\/([^/?]+)/)?.[1];
+            return id ? `https://www.youtube-nocookie.com/embed/${id}` : null;
         }
     } catch {
         return null;
@@ -69,370 +33,297 @@ const getVideoEmbedUrl = (url) => {
     return null;
 };
 
-const isDirectVideo = (media) => {
-    const mime = media.mime_type || "";
+const isFileVideo = (media) =>
+    (media.mime_type || "").startsWith("video/") || /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(media.media_url || "");
 
-    if (mime.startsWith("video/")) return true;
-
-    return /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(
-        media.media_url || ""
-    );
-};
-
-const GalleryMedia = ({ media, lang, onImageClick, t }) => {
+function VideoCard({ media, lang, t }) {
     const caption = localized(media, "caption", lang);
-    const altText = localized(media, "alt_text", lang);
-
-    const url = media.media_url;
-
-    if (!url) return null;
-
-    const isVideo = media.type === "video";
-    const embedUrl = isVideo ? getVideoEmbedUrl(url) : null;
-    const directVideo = isVideo && isDirectVideo(media);
+    const embed = embedUrl(media.media_url);
 
     return (
-        <article className="gaf-gallery-media-card">
-            <div className="gaf-gallery-media-frame">
-                {isVideo ? (
-                    embedUrl ? (
-                        <iframe
-                            src={embedUrl}
-                            title={caption || t.video || "Gallery video"}
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            allowFullScreen
-                            loading="lazy"
-                        />
-                    ) : directVideo ? (
-                        <video
-                            src={url}
-                            controls
-                            preload="metadata"
-                            playsInline
-                        >
-                            {t.videoUnsupported ||
-                                "Your browser does not support this video."}
-                        </video>
-                    ) : (
-                        <a
-                            href={url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="gaf-gallery-external-video"
-                        >
-                            <i className="bi bi-play-circle"></i>
-                            <span>
-                                {t.watchVideo || "Watch video"}
-                            </span>
-                        </a>
-                    )
+        <figure className="gp-video">
+            <div className="gp-video-frame">
+                {embed ? (
+                    <iframe src={embed} title={caption || t.video} allow="autoplay; fullscreen; picture-in-picture" allowFullScreen loading="lazy" />
+                ) : isFileVideo(media) ? (
+                    <video src={media.media_url} controls preload="metadata" playsInline>
+                        {t.videoUnsupported}
+                    </video>
                 ) : (
-                    <button
-                        type="button"
-                        className="gaf-gallery-image-button"
-                        onClick={() =>
-                            onImageClick({
-                                url,
-                                alt: altText || caption || "Gallery image",
-                                caption,
-                            })
-                        }
-                        aria-label={
-                            t.openImage || "Open image"
-                        }
-                    >
-                        <img
-                            src={url}
-                            alt={altText || caption || "Gallery image"}
-                            loading="lazy"
-                            onError={(e) => {
-                                e.currentTarget.style.display = "none";
-                            }}
-                        />
-
-                        <span className="gaf-gallery-image-zoom">
-                            <i className="bi bi-arrows-fullscreen"></i>
-                        </span>
-                    </button>
+                    <a href={media.media_url} target="_blank" rel="noopener noreferrer" className="gp-video-link">
+                        <i className="bi bi-play-circle" aria-hidden="true" />
+                        {t.watchVideo}
+                    </a>
                 )}
             </div>
-
-            {caption && (
-                <div className="gaf-gallery-media-caption">
-                    <p>{caption}</p>
-                </div>
-            )}
-        </article>
+            {caption && <figcaption>{caption}</figcaption>}
+        </figure>
     );
-};
+}
 
-const Show = ({ gallery, relatedGalleries = [] }) => {
+// Photo tile; a photo that fails to load becomes a placeholder tile.
+function MasonryImage({ item, lang, fallbackAlt, label, onOpen }) {
+    const [failed, setFailed] = useState(false);
+    const caption = localized(item, "caption", lang);
+
+    if (failed) {
+        return (
+            <div className="gp-masonry-item is-broken" aria-hidden="true">
+                <i className="bi bi-image" />
+                {caption && <span>{caption}</span>}
+            </div>
+        );
+    }
+
+    return (
+        <button type="button" className="gp-masonry-item" onClick={onOpen} aria-label={`${label}${caption ? `: ${caption}` : ""}`}>
+            <img src={item.media_url} alt={localized(item, "alt_text", lang) || caption || fallbackAlt} loading="lazy" onError={() => setFailed(true)} />
+            <span className="gp-masonry-hover">
+                <i className="bi bi-arrows-angle-expand" aria-hidden="true" />
+                {caption && <span>{caption}</span>}
+            </span>
+        </button>
+    );
+}
+
+const capitalize = (text = "") => text.charAt(0).toUpperCase() + text.slice(1);
+
+function Lightbox({ images, index, onClose, onMove, lang, t }) {
+    const image = images[index];
+
+    useEffect(() => {
+        const onKey = (event) => {
+            if (event.key === "Escape") onClose();
+            if (event.key === "ArrowRight") onMove(1);
+            if (event.key === "ArrowLeft") onMove(-1);
+        };
+
+        document.addEventListener("keydown", onKey);
+        document.body.style.overflow = "hidden";
+
+        return () => {
+            document.removeEventListener("keydown", onKey);
+            document.body.style.overflow = "";
+        };
+    }, [onClose, onMove]);
+
+    if (!image) return null;
+
+    const caption = localized(image, "caption", lang);
+    const alt = localized(image, "alt_text", lang) || caption || t.imagePreview;
+
+    return (
+        <div className="gp-lightbox" role="dialog" aria-modal="true" aria-label={t.imagePreview} onClick={onClose}>
+            <div className="gp-lightbox-top" onClick={(event) => event.stopPropagation()}>
+                <span>
+                    {index + 1} / {images.length}
+                </span>
+                <div>
+                    <a href={image.media_url} target="_blank" rel="noopener noreferrer" aria-label={pick(lang, { en: "Open original", rw: "Fungura ifoto y’umwimerere" })}>
+                        <i className="bi bi-box-arrow-up-right" aria-hidden="true" />
+                    </a>
+                    <button type="button" onClick={onClose} aria-label={t.close}>
+                        <i className="bi bi-x-lg" aria-hidden="true" />
+                    </button>
+                </div>
+            </div>
+
+            {images.length > 1 && (
+                <button
+                    type="button"
+                    className="gp-lightbox-nav is-prev"
+                    onClick={(event) => {
+                        event.stopPropagation();
+                        onMove(-1);
+                    }}
+                    aria-label={pick(lang, { en: "Previous photo", rw: "Ifoto ibanza" })}
+                >
+                    <i className="bi bi-chevron-left" aria-hidden="true" />
+                </button>
+            )}
+
+            <figure className="gp-lightbox-figure" onClick={(event) => event.stopPropagation()}>
+                <img src={image.media_url} alt={alt} />
+                {caption && <figcaption>{caption}</figcaption>}
+            </figure>
+
+            {images.length > 1 && (
+                <button
+                    type="button"
+                    className="gp-lightbox-nav is-next"
+                    onClick={(event) => {
+                        event.stopPropagation();
+                        onMove(1);
+                    }}
+                    aria-label={pick(lang, { en: "Next photo", rw: "Ifoto ikurikira" })}
+                >
+                    <i className="bi bi-chevron-right" aria-hidden="true" />
+                </button>
+            )}
+        </div>
+    );
+}
+
+export default function Show({ gallery, relatedGalleries = [] }) {
     const { lang, t: content } = useGaf();
-    const t = content?.galleryPage || {};
+    const t = content.galleryPage;
 
-    const [selectedImage, setSelectedImage] = useState(null);
+    const [tab, setTab] = useState("all");
+    const [open, setOpen] = useState(null);
 
     const title = localized(gallery, "title", lang);
     const description = localized(gallery, "description", lang);
     const eventTitle = localized(gallery.event, "title", lang);
 
-    const media = gallery.public_media || gallery.publicMedia || gallery.media || [];
-
+    const media = (gallery.public_media || gallery.publicMedia || []).filter((item) => item.media_url);
     const images = media.filter((item) => item.type === "image");
     const videos = media.filter((item) => item.type === "video");
+
+    const showImages = tab !== "videos" && images.length > 0;
+    const showVideos = tab !== "photos" && videos.length > 0;
+
+    const close = useCallback(() => setOpen(null), []);
+    const move = useCallback(
+        (step) => setOpen((current) => (current === null ? null : (current + step + images.length) % images.length)),
+        [images.length]
+    );
+
+    const tabs = [
+        { key: "all", label: pick(lang, { en: "All", rw: "Byose" }), count: media.length },
+        { key: "photos", label: capitalize(t.photos), count: images.length },
+        { key: "videos", label: capitalize(t.videos), count: videos.length },
+    ].filter((item) => item.key === "all" || item.count > 0);
 
     return (
         <>
             <Head title={`${title} | GAF Rwanda`}>
-                <meta
-                    head-key="description"
-                    name="description"
-                    content={description || title}
-                />
-
-                {gallery.cover_image_url && (
-                    <meta
-                        head-key="og:image"
-                        property="og:image"
-                        content={gallery.cover_image_url}
-                    />
-                )}
+                <meta head-key="description" name="description" content={description || title} />
+                {gallery.cover_image_url && <meta head-key="og:image" property="og:image" content={gallery.cover_image_url} />}
             </Head>
 
-            <main className="gaf-gallery-detail-page">
-                {/* Gallery heading */}
-                <section className="gaf-gallery-detail-header">
-                    <div className="container">
-                        <Link
-                            href={route("gallery.index")}
-                            className="gaf-gallery-back-link"
-                        >
-                            <i className="bi bi-arrow-left me-2"></i>
-                            {t.backToGallery || "Back to gallery"}
-                        </Link>
+            <main className="gp-page">
+                <section className="gp-detail-hero">
+                    <div className="gaf-container gp-detail-hero-inner">
+                        <Breadcrumbs
+                            items={[
+                                { label: pick(lang, { en: "Home", rw: "Ahabanza" }), href: "/" },
+                                { label: t.title, href: route("gallery.index") },
+                                { label: title },
+                            ]}
+                        />
 
-                        {eventTitle && (
-                            <span className="gaf-gallery-event-label">
-                                <i className="bi bi-calendar-event me-2"></i>
-                                {eventTitle}
-                            </span>
+                        {eventTitle && gallery.event?.slug && (
+                            <Link href={route("events.show", { event: gallery.event.slug })} className="gp-tag">
+                                <i className="bi bi-calendar-event" aria-hidden="true" /> {eventTitle}
+                            </Link>
                         )}
 
                         <h1>{title}</h1>
+                        {description && <p className="gp-detail-lead">{description}</p>}
 
-                        {description && (
-                            <p className="gaf-gallery-detail-description">
-                                {description}
-                            </p>
-                        )}
-
-                        <div className="gaf-gallery-detail-meta">
+                        <ul className="gp-meta is-large">
                             {gallery.event?.starts_at && (
-                                <span>
-                                    <i className="bi bi-calendar3 me-2"></i>
-                                    {formatDate(
-                                        gallery.event.starts_at,
-                                        lang
-                                    )}
-                                </span>
+                                <li>
+                                    <i className="bi bi-calendar3" aria-hidden="true" />
+                                    {formatDate(gallery.event.starts_at, lang)}
+                                </li>
+                            )}
+                            <li>
+                                <i className="bi bi-image" aria-hidden="true" />
+                                {images.length} {t.photos}
+                            </li>
+                            {videos.length > 0 && (
+                                <li>
+                                    <i className="bi bi-play-btn" aria-hidden="true" />
+                                    {videos.length} {t.videos}
+                                </li>
+                            )}
+                        </ul>
+                    </div>
+                </section>
+
+                <div className="gaf-container gp-content">
+                    {media.length ? (
+                        <>
+                            <div className="gp-toolbar is-split">
+                                <div className="gp-tabs">
+                                    {tabs.map((item) => (
+                                        <button
+                                            key={item.key}
+                                            type="button"
+                                            className={tab === item.key ? "is-active" : ""}
+                                            onClick={() => setTab(item.key)}
+                                        >
+                                            {item.label}
+                                            <span>{item.count}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                                <ShareLinks title={title} lang={lang} />
+                            </div>
+
+                            {showImages && (
+                                <section className="gp-section">
+                                    {tab === "all" && <SectionTitle eyebrow={t.photoCollection} title={capitalize(t.photos)} aside={<span className="gp-count">{images.length}</span>} />}
+                                    <div className="gp-masonry">
+                                        {images.map((item, index) => (
+                                            <MasonryImage
+                                                key={item.id}
+                                                item={item}
+                                                lang={lang}
+                                                fallbackAlt={title}
+                                                label={t.openImage}
+                                                onOpen={() => setOpen(index)}
+                                            />
+                                        ))}
+                                    </div>
+                                </section>
                             )}
 
-                            <span>
-                                <i className="bi bi-image me-2"></i>
-                                {images.length} {t.photos || "photos"}
-                            </span>
-
-                            <span>
-                                <i className="bi bi-play-btn me-2"></i>
-                                {videos.length} {t.videos || "videos"}
-                            </span>
-                        </div>
-                    </div>
-                </section>
-
-                {/* Cover image */}
-                {gallery.cover_image_url && (
-                    <section className="gaf-gallery-detail-cover">
-                        <div className="container">
-                            <img
-                                src={gallery.cover_image_url}
-                                alt={title}
-                                onError={(e) => {
-                                    e.currentTarget.style.display = "none";
-                                }}
-                            />
-                        </div>
-                    </section>
-                )}
-
-                {/* Gallery media */}
-                <section className="gaf-gallery-detail-content">
-                    <div className="container">
-                        {media.length > 0 ? (
-                            <>
-                                {images.length > 0 && (
-                                    <div className="gaf-gallery-media-section">
-                                        <div className="gaf-gallery-section-heading">
-                                            <div>
-                                                <span className="gaf-gallery-eyebrow">
-                                                    {t.photoCollection ||
-                                                        "PHOTO COLLECTION"}
-                                                </span>
-
-                                                <h2>
-                                                    {t.photos || "Photos"}
-                                                </h2>
-                                            </div>
-
-                                            <span>
-                                                {images.length}
-                                            </span>
-                                        </div>
-
-                                        <div className="row g-4">
-                                            {images.map((item) => (
-                                                <div
-                                                    className="col-6 col-md-4 col-lg-3"
-                                                    key={item.id}
-                                                >
-                                                    <GalleryMedia
-                                                        media={item}
-                                                        lang={lang}
-                                                        t={t}
-                                                        onImageClick={
-                                                            setSelectedImage
-                                                        }
-                                                    />
-                                                </div>
-                                            ))}
-                                        </div>
+                            {showVideos && (
+                                <section className="gp-section">
+                                    {tab === "all" && <SectionTitle eyebrow={t.videoCollection} title={capitalize(t.videos)} aside={<span className="gp-count">{videos.length}</span>} />}
+                                    <div className="gp-video-grid">
+                                        {videos.map((item) => (
+                                            <VideoCard key={item.id} media={item} lang={lang} t={t} />
+                                        ))}
                                     </div>
-                                )}
+                                </section>
+                            )}
+                        </>
+                    ) : (
+                        <EmptyState icon="bi-images" title={t.noMedia} text={t.noMediaIntro} />
+                    )}
 
-                                {videos.length > 0 && (
-                                    <div className="gaf-gallery-media-section">
-                                        <div className="gaf-gallery-section-heading">
-                                            <div>
-                                                <span className="gaf-gallery-eyebrow">
-                                                    {t.videoCollection ||
-                                                        "VIDEO COLLECTION"}
-                                                </span>
+                    <Link href={route("gallery.index")} className="gp-back">
+                        <i className="bi bi-arrow-left" aria-hidden="true" />
+                        {t.backToGallery}
+                    </Link>
+                </div>
 
-                                                <h2>
-                                                    {t.videos || "Videos"}
-                                                </h2>
-                                            </div>
-
-                                            <span>
-                                                {videos.length}
-                                            </span>
-                                        </div>
-
-                                        <div className="row g-4">
-                                            {videos.map((item) => (
-                                                <div
-                                                    className="col-md-6 col-lg-4"
-                                                    key={item.id}
-                                                >
-                                                    <GalleryMedia
-                                                        media={item}
-                                                        lang={lang}
-                                                        t={t}
-                                                        onImageClick={
-                                                            setSelectedImage
-                                                        }
-                                                    />
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-                            </>
-                        ) : (
-                            <div className="gaf-gallery-empty">
-                                <i className="bi bi-images"></i>
-
-                                <h3>
-                                    {t.noMedia || "No media available"}
-                                </h3>
-
-                                <p>
-                                    {t.noMediaIntro ||
-                                        "Media from this event will be added soon."}
-                                </p>
-                            </div>
-                        )}
-                    </div>
-                </section>
-
-                {/* Related galleries */}
                 {relatedGalleries.length > 0 && (
-                    <section className="gaf-gallery-related-section">
-                        <div className="container">
-                            <div className="gaf-gallery-section-heading">
-                                <div>
-                                    <span className="gaf-gallery-eyebrow">
-                                        {t.moreCollections ||
-                                            "MORE COLLECTIONS"}
-                                    </span>
-
-                                    <h2>
-                                        {t.related || "Related galleries"}
-                                    </h2>
-                                </div>
-
-                                <Link
-                                    href={route("gallery.index")}
-                                    className="gaf-gallery-view-link"
-                                >
-                                    {t.viewAll || "View all"}
-                                    <i className="bi bi-arrow-right ms-2"></i>
-                                </Link>
-                            </div>
-
-                            <div className="row g-4">
+                    <section className="gp-related">
+                        <div className="gaf-container">
+                            <SectionTitle
+                                eyebrow={t.moreCollections}
+                                title={t.related}
+                                aside={
+                                    <Link href={route("gallery.index")} className="gp-card-link">
+                                        {t.viewAll}
+                                        <i className="bi bi-arrow-right" aria-hidden="true" />
+                                    </Link>
+                                }
+                            />
+                            <div className="gp-album-grid">
                                 {relatedGalleries.map((item) => (
-                                    <div
-                                        className="col-md-6 col-lg-4"
+                                    <AlbumCard
                                         key={item.id}
-                                    >
-                                        <Link
-                                            href={route("gallery.show", {
-                                                slug: item.slug,
-                                            })}
-                                            className="gaf-gallery-related-card"
-                                        >
-                                            {item.cover_image_url ? (
-                                                <img
-                                                    src={item.cover_image_url}
-                                                    alt={localized(
-                                                        item,
-                                                        "title",
-                                                        lang
-                                                    )}
-                                                />
-                                            ) : (
-                                                <div className="gaf-gallery-placeholder">
-                                                    <i className="bi bi-images"></i>
-                                                </div>
-                                            )}
-
-                                            <div>
-                                                <h3>
-                                                    {localized(
-                                                        item,
-                                                        "title",
-                                                        lang
-                                                    )}
-                                                </h3>
-
-                                                <span>
-                                                    {item.media_count || 0}{" "}
-                                                    {t.media || "media"}
-                                                </span>
-                                            </div>
-                                        </Link>
-                                    </div>
+                                        href={route("gallery.show", { slug: item.slug })}
+                                        image={item.cover_image_url}
+                                        title={localized(item, "title", lang)}
+                                        count={item.media_count || 0}
+                                        cta={t.viewGallery}
+                                    />
                                 ))}
                             </div>
                         </div>
@@ -440,44 +331,9 @@ const Show = ({ gallery, relatedGalleries = [] }) => {
                 )}
             </main>
 
-            {/* Image lightbox */}
-            {selectedImage && (
-                <div
-                    className="gaf-gallery-lightbox"
-                    role="dialog"
-                    aria-modal="true"
-                    aria-label={t.imagePreview || "Image preview"}
-                    onClick={() => setSelectedImage(null)}
-                >
-                    <button
-                        type="button"
-                        className="gaf-gallery-lightbox-close"
-                        onClick={() => setSelectedImage(null)}
-                        aria-label={t.close || "Close"}
-                    >
-                        <i className="bi bi-x-lg"></i>
-                    </button>
-
-                    <button
-                        type="button"
-                        className="gaf-gallery-lightbox-content"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <img
-                            src={selectedImage.url}
-                            alt={selectedImage.alt}
-                        />
-
-                        {selectedImage.caption && (
-                            <span>{selectedImage.caption}</span>
-                        )}
-                    </button>
-                </div>
-            )}
+            {open !== null && <Lightbox images={images} index={open} onClose={close} onMove={move} lang={lang} t={t} />}
         </>
     );
-};
+}
 
 Show.layout = (page) => <GafLayout>{page}</GafLayout>;
-
-export default Show;

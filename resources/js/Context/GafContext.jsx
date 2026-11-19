@@ -103,6 +103,11 @@ export function GafProvider({ site, children }) {
                 site?.heroVideo ??
                 defaultSite.heroVideo,
 
+            heroVideoThumbnail:
+                databaseHero?.heroVideoThumbnail ??
+                site?.heroVideoThumbnail ??
+                null,
+
             heroImage:
                 databaseHero?.heroImage ??
                 site?.heroImage ??

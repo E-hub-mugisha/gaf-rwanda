@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Support\FileUpload;
 use App\Http\Controllers\Controller;
 use App\Models\NewsArticle;
 use App\Models\NewsCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -83,11 +83,7 @@ class NewsArticleController extends Controller
         $validated['author_id'] = Auth::id();
         $validated['views_count'] = 0;
 
-        if ($request->hasFile('featured_image')) {
-            $validated['featured_image'] = $request
-                ->file('featured_image')
-                ->store('news-articles', 'uploads');
-        }
+        $validated['featured_image'] = FileUpload::fromRequest($request, 'featured_image', 'news-articles');
 
         $validated['published_at'] = $validated['status'] === 'published'
             ? ($request->filled('published_at')
@@ -112,15 +108,7 @@ class NewsArticleController extends Controller
         );
 
         if ($request->hasFile('featured_image')) {
-            $newImage = $request
-                ->file('featured_image')
-                ->store('news-articles', 'uploads');
-
-            if ($newsArticle->featured_image) {
-                Storage::disk('uploads')->delete($newsArticle->featured_image);
-            }
-
-            $validated['featured_image'] = $newImage;
+            $validated['featured_image'] = FileUpload::replace($request, 'featured_image', 'news-articles', $newsArticle->featured_image);
         } else {
             unset($validated['featured_image']);
         }

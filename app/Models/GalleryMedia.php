@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Support\FileUpload;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 
 class GalleryMedia extends Model
 {
@@ -12,7 +12,6 @@ class GalleryMedia extends Model
     protected $fillable = [
         'event_gallery_id',
         'type',
-        'disk',
         'file_path',
         'original_name',
         'mime_type',
@@ -54,8 +53,7 @@ class GalleryMedia extends Model
             return null;
         }
 
-        return Storage::disk($this->disk ?: 'uploads')
-            ->url($this->file_path);
+        return FileUpload::url($this->file_path);
     }
 
     public function getIsVideoAttribute(): bool

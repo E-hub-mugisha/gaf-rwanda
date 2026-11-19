@@ -58,6 +58,82 @@ function StatCard({ icon, tone, label, value, hint, href }) {
     );
 }
 
+/**
+ * "Missing information": content with gaps (translation, image, summary,
+ * location, draft). Each row expands to show the items with a fix link.
+ */
+function ContentHealthPanel({ report, t }) {
+    const [open, setOpen] = useState(report.issues[0]?.key ?? null);
+    const healthy = report.issues.length === 0;
+    const passed = report.checks - report.issues.length;
+
+    return (
+        <section className="adm-card adm-panel adm-health">
+            <div className="adm-panel-head">
+                <h3>
+                    <i className="bi bi-clipboard2-check" /> {t({ en: "Missing information", rw: "Amakuru abura" })}
+                </h3>
+                <span className={`adm-health-score${healthy ? " is-ok" : ""}`}>
+                    {passed}/{report.checks} {t({ en: "checks passed", rw: "byujujwe" })}
+                </span>
+            </div>
+
+            {healthy ? (
+                <p className="adm-panel-empty">
+                    <i className="bi bi-check-circle me-2" />
+                    {t({ en: "Everything is complete. No missing information found.", rw: "Byose byuzuye. Nta makuru abura." })}
+                </p>
+            ) : (
+                <ul className="adm-health-list">
+                    {report.issues.map((issue) => {
+                        const expanded = open === issue.key;
+                        return (
+                            <li key={issue.key} className={`is-${issue.tone}${expanded ? " is-open" : ""}`}>
+                                <button
+                                    type="button"
+                                    className="adm-health-row"
+                                    aria-expanded={expanded}
+                                    onClick={() => setOpen(expanded ? null : issue.key)}
+                                >
+                                    <span className="adm-health-icon">
+                                        <i className={`bi ${issue.icon}`} />
+                                    </span>
+                                    <span className="adm-health-label">{t(issue.label)}</span>
+                                    <span className="adm-health-count">{number(issue.count)}</span>
+                                    <i className={`bi bi-chevron-${expanded ? "up" : "down"} adm-health-chevron`} />
+                                </button>
+
+                                {expanded && (
+                                    <ul className="adm-health-items">
+                                        {issue.items.map((item, index) => (
+                                            <li key={index}>
+                                                <Link href={item.url}>
+                                                    <span>{item.title || t({ en: "Open settings", rw: "Fungura igenamiterere" })}</span>
+                                                    <em>
+                                                        {t({ en: "Fix", rw: "Kosora" })} <i className="bi bi-arrow-right" />
+                                                    </em>
+                                                </Link>
+                                            </li>
+                                        ))}
+                                        {issue.count > issue.items.length && (
+                                            <li className="adm-health-more">
+                                                {t({
+                                                    en: `+ ${number(issue.count - issue.items.length)} more`,
+                                                    rw: `+ ${number(issue.count - issue.items.length)} bindi`,
+                                                })}
+                                            </li>
+                                        )}
+                                    </ul>
+                                )}
+                            </li>
+                        );
+                    })}
+                </ul>
+            )}
+        </section>
+    );
+}
+
 function Panel({ title, icon, href, linkLabel, children }) {
     return (
         <section className="adm-card adm-panel">
@@ -81,9 +157,9 @@ export default function Dashboard({
     statistics = {},
     recentEvents = [],
     recentNews = [],
-    recentMessages = [],
     recentDocuments = [],
     translations = [],
+    contentHealth = { total: 0, checks: 0, issues: [] },
 }) {
     const { t } = useAdminLang();
     const { auth } = usePage().props;
@@ -160,14 +236,6 @@ export default function Dashboard({
                         href={safeRoute("admin.news-articles.index")}
                     />
                     <StatCard
-                        icon="bi-envelope"
-                        tone={statistics.unread_messages ? "red" : "yellow"}
-                        label={t({ en: "Unread messages", rw: "Ubutumwa butarasomwa" })}
-                        value={statistics.unread_messages}
-                        hint={t({ en: `${number(statistics.total_messages)} in total`, rw: `${number(statistics.total_messages)} bwose` })}
-                        href={safeRoute("admin.messages.index", { status: "new" })}
-                    />
-                    <StatCard
                         icon="bi-diagram-3"
                         tone="yellow"
                         label={t({ en: "Team members", rw: "Abagize itsinda" })}
@@ -207,6 +275,8 @@ export default function Dashboard({
                 <div className="adm-grid">
                     {/* Left column */}
                     <div className="adm-grid-main">
+                        <ContentHealthPanel report={contentHealth} t={t} />
+
                         <Panel
                             title={t({ en: "Recent events", rw: "Ibikorwa biheruka" })}
                             icon="bi-calendar-event"
@@ -361,33 +431,6 @@ export default function Dashboard({
                             </ul>
                         </Panel>
 
-                        <Panel
-                            title={t({ en: "Latest messages", rw: "Ubutumwa buheruka" })}
-                            icon="bi-envelope"
-                            href={safeRoute("admin.messages.index")}
-                            linkLabel={t({ en: "Inbox", rw: "Ubutumwa" })}
-                        >
-                            {recentMessages.length ? (
-                                <ul className="adm-list is-compact">
-                                    {recentMessages.map((message) => (
-                                        <li key={message.id}>
-                                            <Link href={safeRoute("admin.messages.index") || "#"}>
-                                                <span className="adm-avatar">{message.name.charAt(0).toUpperCase()}</span>
-                                                <span className="adm-list-text">
-                                                    <strong className={message.status === "new" ? "fw-bold" : ""}>{message.name}</strong>
-                                                    <small>{message.subject || message.email}</small>
-                                                </span>
-                                                <small className="text-muted text-nowrap">{message.created_at_human}</small>
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </ul>
-                            ) : (
-                                <p className="adm-panel-empty">
-                                    {t({ en: "No messages yet.", rw: "Nta butumwa buraboneka." })}
-                                </p>
-                            )}
-                        </Panel>
                     </aside>
                 </div>
             </div>

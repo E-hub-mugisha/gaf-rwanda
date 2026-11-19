@@ -1,0 +1,464 @@
+/* ==========================================================================
+   GAF-Rwanda public site: flag-colour section backgrounds
+
+   The Rwandan flag colours are used as solid section backgrounds
+   (no stripes, no gradients):
+     green  #20603D  top bar, home hero, page headers, footer  (white text)
+     blue   #00A1DE  participation call to action, 2nd programme card
+                     (dark text: white on this blue is too faint to read)
+     yellow #FAD201  privacy section, highlights, primary buttons on green
+                     (dark text)
+   Loaded last, after gaf-pages.css and gaf-home.css.
+   ========================================================================== */
+
+:root {
+    --rw-blue: #00A1DE;
+    --rw-blue-ink: #005f86;
+    --rw-blue-soft: #e6f6fc;
+    --rw-yellow: #FAD201;
+    --rw-yellow-dark: #e6c100;
+    --rw-green: #20603D;
+    --rw-green-dark: #174a2f;
+    --rw-green-deep: #133a25;
+    --rw-green-soft: #eaf2ed;
+    --rw-ink: #16201c;
+    --rw-muted: #5f6964;
+    --rw-line: #e5e8e4;
+    --rw-subtle: #f6f7f5;
+
+    --gp-green: var(--rw-green);
+    --gp-green-dark: var(--rw-green-dark);
+    --gp-green-soft: var(--rw-green-soft);
+    --gp-ink: var(--rw-ink);
+    --gp-muted: var(--rw-muted);
+    --gp-line: var(--rw-line);
+    --gp-subtle: var(--rw-subtle);
+}
+
+.gaf-site :focus-visible {
+    outline-color: var(--rw-blue);
+}
+
+/* Links on light backgrounds */
+.gaf-site :is(.gp-card-link, .gaf-text-link, .gp-prose a, .gaf-faq-answer a) {
+    color: var(--rw-blue-ink);
+}
+
+.gaf-site :is(.gp-card-link, .gaf-text-link):hover {
+    color: var(--rw-green);
+}
+
+.gaf-site :is(.gp-eyebrow, .gaf-eyebrow, .gaf-small-number) {
+    color: var(--rw-green);
+}
+
+/* Shared "on green" text treatment */
+.gaf-site :is(.gaf-topline, .gaf-hero-split, .gp-hero, .gp-detail-hero) {
+    background: var(--rw-green);
+    color: #fff;
+}
+
+/* ---------- Top bar (green) and header (white) ---------- */
+.gaf-site .gaf-topline {
+    border-bottom: 0;
+    color: rgba(255, 255, 255, .85);
+}
+
+.gaf-site .gaf-top-contact a {
+    color: #fff;
+}
+
+.gaf-site .gaf-top-contact a:hover {
+    color: var(--rw-yellow);
+}
+
+.gaf-site .gaf-header {
+    border-bottom: 1px solid var(--rw-line);
+    background: #fff;
+}
+
+.gaf-site .gaf-nav a,
+.gaf-site .gaf-nav-dropdown-toggle {
+    color: #2d3732;
+}
+
+.gaf-site .gaf-nav a:hover,
+.gaf-site .gaf-nav-dropdown-toggle:hover {
+    color: var(--rw-green);
+}
+
+.gaf-site .gaf-language button {
+    color: var(--rw-muted);
+}
+
+.gaf-site .gaf-language button.active {
+    color: var(--rw-green);
+}
+
+.gaf-site .gaf-header-cta {
+    border: 0;
+    border-radius: 6px;
+    background: var(--rw-yellow);
+    color: var(--rw-ink) !important;
+}
+
+.gaf-site .gaf-header-cta:hover {
+    background: var(--rw-yellow-dark);
+    color: var(--rw-ink) !important;
+}
+
+.gaf-site .gaf-nav-dropdown-menu {
+    border: 0;
+    border-radius: 0 0 8px 8px;
+    background: #fff;
+}
+
+/* ---------- Home hero (green) ---------- */
+.gaf-site .gaf-hero-split {
+    border-bottom: 0;
+}
+
+.gaf-site .gaf-hero-split h1 {
+    color: #fff;
+}
+
+.gaf-site .gaf-hero-split .gaf-eyebrow {
+    color: var(--rw-yellow);
+}
+
+.gaf-site .gaf-hero-rule {
+    display: block;
+    width: 64px;
+    height: 4px;
+    margin: 6px 0 22px;
+    border-radius: 2px;
+    background: var(--rw-yellow);
+}
+
+.gaf-site .gaf-hero-split-intro {
+    color: rgba(255, 255, 255, .88);
+}
+
+.gaf-site .gaf-hero-split-frame {
+    background: var(--rw-green-deep);
+}
+
+.gaf-site .gaf-hero-split-caption {
+    color: rgba(255, 255, 255, .82);
+}
+
+.gaf-site .gaf-hero-split-caption span {
+    background: var(--rw-yellow);
+    color: var(--rw-ink);
+}
+
+.gaf-site .gaf-hero-btn-primary {
+    background: var(--rw-yellow);
+    color: var(--rw-ink) !important;
+}
+
+.gaf-site .gaf-hero-btn-primary:hover {
+    background: var(--rw-yellow-dark);
+    color: var(--rw-ink) !important;
+}
+
+.gaf-site .gaf-hero-btn-outline {
+    background: rgba(255, 255, 255, .14);
+    color: #fff !important;
+}
+
+.gaf-site .gaf-hero-btn-outline:hover {
+    background: #fff;
+    color: var(--rw-green) !important;
+}
+
+/* ---------- Research (white) ---------- */
+.gaf-site .gaf-note-rule {
+    background: var(--rw-yellow);
+}
+
+/* ---------- Approach: one white card, one blue card ---------- */
+.gaf-site .gaf-programme {
+    background: #fff;
+}
+
+.gaf-site .gaf-programme-top {
+    color: var(--rw-green);
+}
+
+.gaf-site .gaf-programme-dark {
+    background: var(--rw-blue);
+    color: var(--rw-ink);
+}
+
+.gaf-site .gaf-programme-dark .gaf-programme-top,
+.gaf-site .gaf-programme-dark h3 {
+    color: var(--rw-ink);
+}
+
+.gaf-site .gaf-programme-dark p {
+    color: #0e2a36;
+}
+
+.gaf-site .gaf-programme-dark .gaf-programme-bottom {
+    border-top-color: rgba(22, 32, 28, .2);
+    color: #0e2a36;
+}
+
+/* ---------- Participation (blue, dark text) ---------- */
+.gaf-site .gaf-participation {
+    border-top: 0;
+    background: var(--rw-blue);
+    color: var(--rw-ink);
+}
+
+.gaf-site .gaf-participation :is(.gaf-section-heading h2, .gaf-eligibility h3, .gaf-process h3) {
+    color: var(--rw-ink);
+}
+
+.gaf-site .gaf-participation :is(.gaf-section-heading > p, .gaf-participation-disclaimer) {
+    color: #0e2a36;
+}
+
+.gaf-site .gaf-participation :is(.gaf-eyebrow, .gaf-small-number) {
+    color: var(--rw-ink);
+}
+
+.gaf-site .gaf-participation .gaf-eligibility li {
+    border-color: rgba(22, 32, 28, .2);
+    color: var(--rw-ink);
+}
+
+.gaf-site .gaf-participation .gaf-eligibility li span {
+    color: var(--rw-green);
+}
+
+.gaf-site .gaf-participation .gaf-button-primary {
+    background: var(--rw-green);
+    color: #fff !important;
+}
+
+.gaf-site .gaf-participation .gaf-button-primary:hover {
+    background: var(--rw-green-deep);
+}
+
+.gaf-site .gaf-participation-poster {
+    background: #fff;
+}
+
+/* ---------- FAQ (light) ---------- */
+.gaf-site .gaf-faq-list summary span,
+.gaf-site .gaf-faq-list summary b {
+    color: var(--rw-green);
+}
+
+.gaf-site .gaf-faq-list details[open] summary {
+    color: var(--rw-green);
+}
+
+/* ---------- Privacy (yellow, dark text) ---------- */
+.gaf-site .gaf-privacy {
+    border-top: 0;
+    background: var(--rw-yellow);
+    color: var(--rw-ink);
+}
+
+.gaf-site .gaf-privacy :is(h2, .gaf-eyebrow) {
+    color: var(--rw-ink);
+}
+
+.gaf-site .gaf-privacy p {
+    color: #2b2a1c;
+}
+
+.gaf-site .gaf-privacy small {
+    color: #4a4620;
+}
+
+.gaf-site .gaf-privacy-symbol {
+    background: #fff;
+    color: var(--rw-green);
+}
+
+/* ---------- Contact (light) ---------- */
+.gaf-site .gaf-contact-details b,
+.gaf-site .gaf-contact-socials a {
+    color: var(--rw-green);
+}
+
+.gaf-site .gaf-contact-socials a:hover {
+    background: var(--rw-green);
+    color: #fff;
+}
+
+/* ---------- Footer (green) ---------- */
+.gaf-site .gaf-footer {
+    background: var(--rw-green);
+    color: rgba(255, 255, 255, .8);
+}
+
+.gaf-site .gaf-footer-brand > p,
+.gaf-site .gaf-footer-links a {
+    color: rgba(255, 255, 255, .78);
+}
+
+.gaf-site .gaf-footer-links h4 {
+    color: var(--rw-yellow);
+}
+
+.gaf-site .gaf-footer-links a:hover {
+    color: #fff;
+}
+
+.gaf-site .gaf-footer-bottom {
+    background: var(--rw-green-deep);
+    color: rgba(255, 255, 255, .7);
+}
+
+/* ---------- Events / News / Gallery page headers (green) ---------- */
+.gaf-site :is(.gp-hero, .gp-detail-hero) {
+    border-bottom: 0;
+}
+
+.gaf-site :is(.gp-hero h1, .gp-detail-hero h1) {
+    color: #fff;
+}
+
+.gaf-site :is(.gp-hero, .gp-detail-hero) .gp-eyebrow {
+    color: var(--rw-yellow);
+}
+
+.gaf-site .gp-hero-intro,
+.gaf-site .gp-detail-lead {
+    color: rgba(255, 255, 255, .86);
+}
+
+.gaf-site .gp-hero-topics li {
+    color: #fff;
+}
+
+.gaf-site .gp-hero-topics li::before {
+    background: var(--rw-yellow);
+}
+
+.gaf-site .gp-hero-stats > div {
+    border-left-color: rgba(255, 255, 255, .22);
+}
+
+.gaf-site .gp-hero-stats dt {
+    color: rgba(255, 255, 255, .75);
+}
+
+.gaf-site .gp-hero-stats dd {
+    color: var(--rw-yellow);
+}
+
+.gaf-site :is(.gp-hero, .gp-detail-hero) .gp-crumbs li {
+    color: rgba(255, 255, 255, .7);
+}
+
+.gaf-site :is(.gp-hero, .gp-detail-hero) .gp-crumbs a {
+    color: #fff;
+}
+
+.gaf-site :is(.gp-hero, .gp-detail-hero) .gp-crumbs a:hover {
+    color: var(--rw-yellow);
+}
+
+.gaf-site .gp-detail-hero .gp-meta,
+.gaf-site .gp-detail-hero .gp-meta i {
+    color: rgba(255, 255, 255, .86);
+}
+
+.gaf-site .gp-detail-hero .gp-tag {
+    background: var(--rw-yellow);
+    color: var(--rw-ink);
+}
+
+.gaf-site .gp-detail-hero .gp-status {
+    background: #fff;
+}
+
+/* ---------- Page body accents ---------- */
+.gaf-site .gp-tabs button.is-active {
+    border-bottom-color: var(--rw-green);
+}
+
+.gaf-site .gp-tabs button.is-active span {
+    background: var(--rw-yellow);
+    color: var(--rw-ink);
+}
+
+.gaf-site .gp-tag {
+    background: var(--rw-green-soft);
+    color: var(--rw-green);
+}
+
+.gaf-site .gp-status.is-upcoming {
+    color: var(--rw-blue-ink);
+}
+
+.gaf-site .gp-status.is-ongoing {
+    color: #7a6400;
+}
+
+.gaf-site .gp-button.is-outline {
+    background: var(--rw-blue-soft);
+    color: var(--rw-blue-ink);
+}
+
+.gaf-site .gp-button.is-outline:hover {
+    background: var(--rw-blue);
+    color: var(--rw-ink);
+}
+
+.gaf-site .gp-search button {
+    background: var(--rw-green);
+}
+
+.gaf-site .gp-pagination button.is-active {
+    background: var(--rw-green);
+}
+
+.gaf-site .gp-date-tile strong {
+    color: var(--rw-green);
+}
+
+/* Event detail side panel: yellow date header */
+.gaf-site .gp-panel-date {
+    margin: -22px -22px 0;
+    padding: 18px 22px;
+    border-bottom: 0;
+    border-radius: 8px 8px 0 0;
+    background: var(--rw-yellow);
+}
+
+.gaf-site .gp-panel-date small {
+    color: #4a4620;
+}
+
+.gaf-site .gp-date-tile.is-large {
+    background: #fff;
+}
+
+/* News article header gets a light blue band */
+.gaf-site .gp-article-head {
+    background: var(--rw-blue-soft);
+}
+
+/* Related sections on a light green band */
+.gaf-site .gp-related {
+    padding-bottom: 56px;
+    border-top: 0;
+    background: var(--rw-green-soft);
+}
+
+/* Home updates header button */
+.gaf-site .gp-updates .gp-button.is-outline {
+    background: var(--rw-green);
+    color: #fff;
+}
+
+.gaf-site .gp-updates .gp-button.is-outline:hover {
+    background: var(--rw-green-dark);
+}

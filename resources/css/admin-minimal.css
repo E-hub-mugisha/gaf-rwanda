@@ -1,0 +1,436 @@
+/* =========================================================================
+   GAF-Rwanda admin: minimal theme layer
+   Loaded after admin.css and admin-dashboard.css. Flat surfaces, hairline
+   borders, a light sidebar, no gradients, no shadows and no blur. Applies
+   to every admin page, including pages with their own inline styles.
+   ========================================================================= */
+
+.adm-shell {
+    --adm-green: #20603D;
+    --adm-green-dark: #174a2f;
+    --adm-green-soft: #eef3ef;
+    --adm-ink: #1b2420;
+    --adm-muted: #6a736e;
+    --adm-line: #e6e8e4;
+    --adm-bg: #f7f7f5;
+    --adm-card: #ffffff;
+    --adm-radius: 8px;
+    --adm-shadow: none;
+
+    --bs-body-color: #1b2420;
+    --bs-border-color: #e6e8e4;
+    --bs-border-radius: 6px;
+    --bs-border-radius-sm: 4px;
+    --bs-border-radius-lg: 8px;
+    --bs-box-shadow: none;
+    --bs-box-shadow-sm: none;
+    --bs-box-shadow-lg: none;
+    --bs-focus-ring-width: 0;
+}
+
+/* No decorative depth anywhere in the admin */
+.adm-shell *,
+.adm-shell *::before,
+.adm-shell *::after,
+body > .modal,
+body > .modal *,
+.modal-backdrop {
+    box-shadow: none !important;
+    text-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* Clear keyboard focus instead of glowing rings */
+.adm-shell :focus-visible {
+    outline: 2px solid var(--adm-green);
+    outline-offset: 2px;
+}
+
+.adm-shell :is(.form-control, .form-select, .form-check-input):focus {
+    border-color: var(--adm-green) !important;
+    outline: 0;
+}
+
+.adm-shell .form-check-input:checked {
+    border-color: var(--adm-green);
+    background-color: var(--adm-green);
+}
+
+/* No lift-on-hover effects */
+.adm-shell :is(.card, .adm-card, .adm-stat, a.adm-stat, .btn):hover {
+    transform: none !important;
+}
+
+/* ---------- Sidebar: light, hairline border ---------- */
+.adm-shell .adm-sidebar {
+    border-right: 1px solid var(--adm-line);
+    background: #fff;
+    color: var(--adm-ink);
+}
+
+.adm-shell .adm-brand {
+    border-bottom: 1px solid var(--adm-line);
+}
+
+.adm-shell .adm-brand-logo {
+    border: 1px solid var(--adm-line);
+    border-radius: 8px;
+}
+
+.adm-shell .adm-brand-text strong {
+    color: var(--adm-ink);
+}
+
+.adm-shell .adm-brand-text small {
+    color: var(--adm-muted);
+}
+
+.adm-shell .adm-sidebar-close {
+    color: var(--adm-muted);
+}
+
+.adm-shell .adm-menu-search i {
+    color: var(--adm-muted);
+}
+
+.adm-shell .adm-menu-search input {
+    border: 1px solid var(--adm-line);
+    border-radius: 6px;
+    background: var(--adm-bg);
+    color: var(--adm-ink);
+}
+
+.adm-shell .adm-menu-search input::placeholder {
+    color: #9aa39e;
+}
+
+.adm-shell .adm-menu-search input:focus {
+    border-color: var(--adm-green);
+    background: #fff;
+}
+
+.adm-shell .adm-nav {
+    scrollbar-color: var(--adm-line) transparent;
+}
+
+.adm-shell .adm-nav-label {
+    color: #9aa39e;
+}
+
+.adm-shell .adm-nav-item {
+    border-radius: 6px;
+    color: #4a534e;
+}
+
+.adm-shell .adm-nav-item:hover {
+    background: var(--adm-bg);
+    color: var(--adm-ink);
+}
+
+.adm-shell .adm-nav-item.is-active {
+    background: var(--adm-green-soft);
+    color: var(--adm-green);
+}
+
+.adm-shell .adm-nav-item.is-active::before {
+    top: 10px;
+    bottom: 10px;
+    width: 3px;
+    border-radius: 0 2px 2px 0;
+    background: var(--adm-green);
+}
+
+.adm-shell .adm-nav-item.is-active > i {
+    color: var(--adm-green);
+}
+
+.adm-shell .adm-nav-badge {
+    background: var(--adm-green);
+    color: #fff;
+}
+
+.adm-shell .adm-sidebar-footer {
+    border-top: 1px solid var(--adm-line);
+}
+
+.adm-shell .adm-logout:hover {
+    background: #fdf0f0;
+    color: #b91c1c;
+}
+
+/* ---------- Top bar ---------- */
+.adm-shell .adm-topbar {
+    background: #fff;
+}
+
+.adm-shell .adm-icon-btn {
+    border-radius: 6px;
+}
+
+.adm-shell .adm-lang {
+    border: 1px solid var(--adm-line);
+    border-radius: 6px;
+    background: #fff;
+}
+
+.adm-shell .adm-lang button {
+    border-radius: 4px;
+}
+
+.adm-shell .adm-lang button.is-active {
+    background: var(--adm-green-soft);
+}
+
+.adm-shell .adm-user-avatar {
+    background: var(--adm-green-soft);
+    color: var(--adm-green);
+}
+
+/* ---------- Cards and panels ---------- */
+.adm-shell .card {
+    border: 1px solid var(--adm-line) !important;
+    border-radius: var(--adm-radius);
+}
+
+.adm-shell .card-header,
+.adm-shell .card-footer {
+    border-color: var(--adm-line) !important;
+    background: #fff !important;
+}
+
+.adm-shell :is(.adm-card, .adm-stat, .adm-panel) {
+    border-radius: var(--adm-radius);
+}
+
+a.adm-stat:hover {
+    border-color: var(--adm-green) !important;
+}
+
+.adm-shell .adm-icon {
+    border-radius: 6px;
+}
+
+/* Dashboard header: flat white panel instead of a dark banner */
+.adm-shell .adm-hero {
+    border: 1px solid var(--adm-line);
+    border-radius: var(--adm-radius);
+    background: #fff;
+    color: var(--adm-ink);
+}
+
+.adm-shell .adm-hero-eyebrow {
+    color: var(--adm-green);
+}
+
+.adm-shell .adm-hero h2 {
+    color: var(--adm-ink);
+}
+
+.adm-shell .adm-hero p {
+    color: var(--adm-muted);
+}
+
+.adm-shell .adm-hero .btn-light {
+    border: 1px solid var(--adm-line);
+    background: #fff;
+}
+
+.adm-shell .adm-hero .btn-warning {
+    --bs-btn-bg: var(--adm-green);
+    --bs-btn-border-color: var(--adm-green);
+    --bs-btn-hover-bg: var(--adm-green-dark);
+    --bs-btn-hover-border-color: var(--adm-green-dark);
+    --bs-btn-color: #fff;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-active-bg: var(--adm-green-dark);
+    --bs-btn-active-color: #fff;
+}
+
+/* Floating assistant: flat with a border */
+.adm-assistant-fab {
+    border: 1px solid var(--adm-green-dark) !important;
+    border-radius: 8px !important;
+    color: #fff !important;
+}
+
+.adm-assistant-fab:hover {
+    transform: none !important;
+    background: var(--adm-green-dark) !important;
+}
+
+.adm-assistant {
+    border-radius: var(--adm-radius) !important;
+}
+
+/* ---------- Bootstrap components ---------- */
+.adm-shell .btn {
+    border-radius: 6px;
+}
+
+.adm-shell :is(.form-control, .form-select) {
+    border-color: var(--adm-line);
+    border-radius: 6px;
+}
+
+.adm-shell .badge {
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.adm-shell .table > :not(caption) > * > * {
+    border-bottom-color: var(--adm-line);
+}
+
+.adm-shell .table-light,
+.adm-shell .table thead th {
+    --bs-table-bg: #fafaf8;
+    color: var(--adm-muted);
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.adm-shell :is(.dropdown-menu, .popover, .toast) {
+    border: 1px solid var(--adm-line);
+    border-radius: var(--adm-radius);
+}
+
+.modal-content {
+    border: 1px solid #e6e8e4 !important;
+    border-radius: 8px !important;
+}
+
+.modal-backdrop.show {
+    opacity: .4;
+}
+
+.adm-shell .nav-tabs .nav-link.active,
+.adm-shell .nav-pills .nav-link.active {
+    background: transparent;
+    color: var(--adm-green);
+}
+
+.adm-shell .nav-pills .nav-link.active {
+    background: var(--adm-green-soft);
+}
+
+.adm-shell .alert {
+    border-radius: 6px;
+}
+
+.adm-shell .progress {
+    border-radius: 2px;
+}
+
+/* ---------- Borderless buttons, cards and highlighted labels ----------
+   Cards are white on the light page background; buttons and labels use
+   soft flat fills instead of outlines. */
+.adm-shell .card,
+.adm-shell :is(.adm-card, .adm-stat, .adm-panel, .adm-hero),
+.modal-content {
+    border: 0 !important;
+}
+
+a.adm-stat:hover {
+    background: var(--adm-green-soft) !important;
+}
+
+.adm-shell .btn {
+    border: 0 !important;
+}
+
+/* Outline buttons become soft tinted buttons */
+.adm-shell .btn-outline-primary,
+.adm-shell .btn-outline-success {
+    background: var(--adm-green-soft);
+    color: var(--adm-green);
+}
+
+.adm-shell .btn-outline-secondary,
+.adm-shell .btn-outline-dark,
+.adm-shell .btn-light,
+.adm-shell .adm-hero .btn-light {
+    background: #f0f1ee;
+    color: var(--adm-ink);
+}
+
+.adm-shell .btn-outline-danger {
+    background: #fdf0f0;
+    color: #b91c1c;
+}
+
+.adm-shell .btn-outline-warning {
+    background: #fdf6e3;
+    color: #8a6100;
+}
+
+.adm-shell .btn-outline-info {
+    background: #eaf5fb;
+    color: #0b6b91;
+}
+
+.adm-shell :is(.btn-outline-primary, .btn-outline-success):hover {
+    background: var(--adm-green);
+    color: #fff;
+}
+
+.adm-shell :is(.btn-outline-secondary, .btn-outline-dark, .btn-light):hover {
+    background: #e4e6e2;
+    color: var(--adm-ink);
+}
+
+.adm-shell .btn-outline-danger:hover {
+    background: #b91c1c;
+    color: #fff;
+}
+
+.adm-shell .btn-outline-warning:hover {
+    background: #f0c74a;
+    color: #1b2420;
+}
+
+.adm-shell .btn-outline-info:hover {
+    background: #0b6b91;
+    color: #fff;
+}
+
+.adm-shell .adm-icon-btn,
+.adm-shell .adm-lang {
+    border: 0;
+    background: #f0f1ee;
+}
+
+.adm-shell .adm-icon-btn:hover {
+    background: #e4e6e2;
+}
+
+.adm-shell .adm-lang button.is-active {
+    background: #fff;
+}
+
+/* Highlighted labels: badges, counts, chips */
+.adm-shell .badge,
+.adm-shell .badge.border,
+.adm-shell .adm-count,
+.adm-shell .adm-nav-badge {
+    border: 0 !important;
+}
+
+.adm-shell .badge.bg-light {
+    background: #f0f1ee !important;
+}
+
+.adm-shell .adm-brand-logo {
+    border: 0;
+    background: var(--adm-bg);
+}
+
+.adm-shell .adm-menu-search input {
+    border: 0;
+}
+
+.adm-shell .adm-menu-search input:focus {
+    background: var(--adm-green-soft);
+}

@@ -1126,11 +1126,7 @@ export default function Index({ users }) {
                     border-radius: 11px;
 
                     background:
-                        linear-gradient(
-                            135deg,
-                            #eff7f3,
-                            #e4f0e9
-                        );
+                        #eff7f3;
 
                     color: var(--primary-dark);
 

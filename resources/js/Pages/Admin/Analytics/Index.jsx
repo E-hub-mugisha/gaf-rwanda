@@ -1854,11 +1854,6 @@ const styles = `
 .analytics-page {
     min-height: 100%;
     background:
-        radial-gradient(
-            circle at 90% 0%,
-            rgba(32, 96, 61, .12),
-            transparent 30%
-        ),
         #f6f8fb;
     color: #172033;
     padding: 32px 24px 70px;

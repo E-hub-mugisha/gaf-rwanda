@@ -1145,7 +1145,7 @@ export default function Depression() {
                     --mh-white: #FFFFFF;
 
                     width: 100%;
-                    font-family: Inter, system-ui, sans-serif;
+                    font-family: "Source Serif 4", Georgia, serif;
                 }
 
                 .mh-hero {
@@ -1155,12 +1155,7 @@ export default function Depression() {
                     overflow: hidden;
                     border-radius: 22px;
                     background:
-                        linear-gradient(
-                            135deg,
-                            #EEF4FC 0%,
-                            #F8FBFF 55%,
-                            #EEF7F3 100%
-                        );
+                        #EEF4FC;
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
@@ -1427,7 +1422,7 @@ export default function Depression() {
 
                 .mh-info-card {
                     padding: 27px;
-                    background: linear-gradient(145deg, #EEF4FC, #F7FBFF);
+                    background: #EEF4FC;
                 }
 
                 .mh-info-icon {
@@ -1713,7 +1708,7 @@ export default function Depression() {
                 .mh-physical-card {
                     padding: 27px;
                     border-radius: 15px;
-                    background: linear-gradient(145deg, #F0F7F3, #FAFCFB);
+                    background: #F0F7F3;
                     color: var(--mh-teal);
                 }
 
@@ -1869,11 +1864,7 @@ export default function Depression() {
                     padding: 30px;
                     border-radius: 18px;
                     background:
-                        linear-gradient(
-                            135deg,
-                            #174a2f,
-                            #20603d
-                        );
+                        #174a2f;
                     color: white;
                     display: flex;
                     align-items: center;

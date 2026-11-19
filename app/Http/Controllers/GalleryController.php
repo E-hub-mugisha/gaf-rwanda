@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\EventGallery;
+use App\Models\GalleryMedia;
 use Inertia\Inertia;
 
 class GalleryController extends Controller
@@ -35,8 +36,15 @@ class GalleryController extends Controller
             ->paginate(12)
             ->withQueryString();
 
+        $mediaTotal = GalleryMedia::query()
+            ->whereHas('gallery', fn ($query) => $query
+                ->public()
+                ->whereHas('event', fn ($event) => $event->published()))
+            ->count();
+
         return Inertia::render('UserPage/Gallery/Index', [
             'galleries' => $galleries,
+            'mediaTotal' => $mediaTotal,
         ]);
     }
 

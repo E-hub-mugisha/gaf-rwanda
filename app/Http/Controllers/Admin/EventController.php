@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Support\FileUpload;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\EventCategory;
@@ -9,7 +10,6 @@ use App\Models\NewsArticle;
 use App\Models\Program;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -110,10 +110,7 @@ class EventController extends Controller
             $validated['slug'] ?: $validated['title']
         );
 
-        if ($request->hasFile('cover_image')) {
-            $validated['cover_image'] = $request->file('cover_image')
-                ->store('events', 'uploads');
-        }
+        $validated['cover_image'] = FileUpload::fromRequest($request, 'cover_image', 'events');
 
         $validated['created_by'] = $request->user()->id;
 
@@ -201,10 +198,10 @@ class EventController extends Controller
         );
 
         $newCoverImage = null;
+        $oldCoverImage = $event->cover_image;
 
         if ($request->hasFile('cover_image')) {
-            $newCoverImage = $request->file('cover_image')
-                ->store('events', 'uploads');
+            $newCoverImage = FileUpload::save($request->file('cover_image'), 'events', 'cover_image');
 
             $validated['cover_image'] = $newCoverImage;
         } else {
@@ -234,17 +231,15 @@ class EventController extends Controller
         } catch (\Throwable $exception) {
             // Remove the newly uploaded image if the update fails.
             if ($newCoverImage) {
-                Storage::disk('uploads')->delete($newCoverImage);
+                FileUpload::delete($newCoverImage);
             }
 
             throw $exception;
         }
 
         // Delete the old image only after the update succeeds.
-        if ($newCoverImage && $event->getOriginal('cover_image')) {
-            Storage::disk('uploads')->delete(
-                $event->getOriginal('cover_image')
-            );
+        if ($newCoverImage && $oldCoverImage) {
+            FileUpload::delete($oldCoverImage);
         }
 
         return redirect()
@@ -257,9 +252,7 @@ class EventController extends Controller
      */
     public function destroy(Event $event)
     {
-        if ($event->cover_image) {
-            Storage::disk('uploads')->delete($event->cover_image);
-        }
+        FileUpload::delete($event->cover_image);
 
         $event->delete();
 

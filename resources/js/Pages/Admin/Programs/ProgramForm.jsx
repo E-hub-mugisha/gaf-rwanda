@@ -754,7 +754,7 @@ export default function ProgramForm({ program, mode }) {
                     position: absolute;
                     inset: auto 0 0;
                     padding: 24px 13px 12px;
-                    background: linear-gradient(transparent, rgba(15,25,40,.6));
+                    background: rgba(15, 25, 40, 0.51);
                     color: #fff;
                     font-size: 10px;
                     font-weight: 700;

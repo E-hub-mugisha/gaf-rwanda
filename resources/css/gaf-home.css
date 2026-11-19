@@ -1,0 +1,323 @@
+/* ==========================================================================
+   GAF-Rwanda: home page sections, minimal style
+   Same rules as gaf-pages.css: flat light sections, no gradients, shadows
+   or text on photos; borderless cards, buttons and labels; green is an
+   accent only. Loaded after gaf.css / gaf-structure.css / gaf-pages.css.
+   ========================================================================== */
+
+/* ---------- Shared ---------- */
+.gaf-site .gaf-section-heading h2,
+.gaf-site .gaf-section-heading.is-light h2 {
+    color: var(--gp-ink);
+}
+
+.gaf-site .gaf-section-heading > p,
+.gaf-site .gaf-section-heading.is-light > p {
+    color: var(--gp-muted);
+}
+
+.gaf-site .gaf-eyebrow,
+.gaf-site .gaf-eyebrow-light {
+    color: var(--gp-green);
+}
+
+.gaf-site .gaf-small-number {
+    color: var(--gp-green);
+}
+
+.gaf-site .gaf-text-link {
+    border-bottom: 0;
+    color: var(--gp-green);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+/* Buttons: flat, borderless */
+.gaf-site :is(.gaf-button, .gaf-hero-btn) {
+    border: 0 !important;
+    border-radius: 6px;
+}
+
+.gaf-site :is(.gaf-button-primary, .gaf-hero-btn-primary) {
+    background: var(--gp-green);
+    color: #fff !important;
+}
+
+.gaf-site :is(.gaf-button-primary, .gaf-hero-btn-primary):hover {
+    background: var(--gp-green-dark);
+    color: #fff !important;
+}
+
+.gaf-site .gaf-hero-btn-outline,
+.gaf-site .gaf-button-light {
+    background: var(--gp-green-soft);
+    color: var(--gp-green) !important;
+}
+
+.gaf-site .gaf-hero-btn-outline:hover,
+.gaf-site .gaf-button-light:hover {
+    background: var(--gp-green);
+    color: #fff !important;
+}
+
+/* ---------- Hero: light background, video on the right ---------- */
+.gaf-site .gaf-hero-split {
+    border-bottom: 1px solid var(--gp-line);
+    background: var(--gp-subtle);
+    color: var(--gp-ink);
+}
+
+.gaf-site .gaf-hero-split::before,
+.gaf-site .gaf-hero-split::after {
+    display: none;
+}
+
+.gaf-site .gaf-hero-split h1 {
+    color: var(--gp-ink);
+}
+
+.gaf-site .gaf-hero-split-divider {
+    background: var(--gp-line);
+}
+
+.gaf-site .gaf-hero-split-divider i {
+    background: var(--gp-green);
+}
+
+.gaf-site .gaf-hero-split-intro {
+    color: var(--gp-muted);
+}
+
+.gaf-site .gaf-hero-split-frame {
+    border: 0;
+    border-radius: 8px;
+    background: #e9ece8;
+}
+
+.gaf-site .gaf-hero-split-caption {
+    color: var(--gp-muted);
+}
+
+.gaf-site .gaf-hero-split-caption span {
+    background: var(--gp-green);
+    color: #fff;
+}
+
+/* ---------- Research: caption under the photo ---------- */
+.gaf-site .gaf-research {
+    background: var(--gp-paper);
+}
+
+.gaf-site .gaf-research-note {
+    border: 0;
+}
+
+.gaf-site .gaf-note-rule {
+    background: var(--gp-green);
+}
+
+.gaf-site .gaf-research-figure {
+    margin: 56px 0 0;
+}
+
+.gaf-site .gaf-research-image {
+    overflow: hidden;
+    border-radius: 8px;
+    background: var(--gp-subtle);
+}
+
+.gaf-site .gaf-research-caption {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 16px;
+    margin-top: 14px;
+}
+
+.gaf-site .gaf-research-caption span {
+    color: var(--gp-green);
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: .12em;
+}
+
+.gaf-site .gaf-research-caption p {
+    margin: 0;
+    color: var(--gp-muted);
+    font-size: 14px;
+}
+
+/* ---------- Approach: two borderless cards ---------- */
+.gaf-site .gaf-approach {
+    border-top: 1px solid var(--gp-line);
+    background: var(--gp-subtle);
+}
+
+.gaf-site .gaf-programme,
+.gaf-site .gaf-programme-dark {
+    border: 0;
+    border-radius: 8px;
+    background: #fff;
+    color: var(--gp-ink);
+}
+
+.gaf-site .gaf-programme-top,
+.gaf-site .gaf-programme-dark .gaf-programme-top {
+    color: var(--gp-green);
+}
+
+.gaf-site .gaf-programme h3,
+.gaf-site .gaf-programme-dark h3 {
+    color: var(--gp-ink);
+}
+
+.gaf-site .gaf-programme p,
+.gaf-site .gaf-programme-dark p {
+    color: var(--gp-muted);
+}
+
+.gaf-site .gaf-programme-bottom,
+.gaf-site .gaf-programme-dark .gaf-programme-bottom {
+    border-top: 1px solid var(--gp-line);
+    color: #8a938e;
+}
+
+.gaf-site .gaf-section-footnote {
+    color: var(--gp-muted);
+}
+
+/* ---------- Participation: light section ---------- */
+.gaf-site .gaf-participation {
+    border-top: 1px solid var(--gp-line);
+    background: var(--gp-paper);
+    color: var(--gp-ink);
+}
+
+.gaf-site .gaf-eligibility h3,
+.gaf-site .gaf-process h3 {
+    color: var(--gp-ink);
+}
+
+.gaf-site .gaf-eligibility li,
+.gaf-site .gaf-eligibility li:last-child {
+    border-color: var(--gp-line);
+    color: var(--gp-ink);
+}
+
+.gaf-site .gaf-eligibility li span {
+    color: var(--gp-green);
+}
+
+.gaf-site .gaf-participation-poster {
+    overflow: hidden;
+    border: 0;
+    border-radius: 8px;
+    background: var(--gp-subtle);
+}
+
+.gaf-site .gaf-participation-disclaimer {
+    color: var(--gp-muted);
+}
+
+/* ---------- FAQ ---------- */
+.gaf-site .gaf-faq {
+    border-top: 1px solid var(--gp-line);
+    background: var(--gp-subtle);
+}
+
+.gaf-site .gaf-faq-list,
+.gaf-site .gaf-faq-list details {
+    border-color: var(--gp-line);
+}
+
+.gaf-site .gaf-faq-list summary {
+    color: var(--gp-ink);
+}
+
+.gaf-site .gaf-faq-list summary span,
+.gaf-site .gaf-faq-list summary b {
+    color: var(--gp-green);
+}
+
+.gaf-site .gaf-faq-answer a {
+    color: var(--gp-green);
+}
+
+/* ---------- Privacy: light panel ---------- */
+.gaf-site .gaf-privacy {
+    border-top: 1px solid var(--gp-line);
+    background: var(--gp-paper);
+    color: var(--gp-ink);
+}
+
+.gaf-site .gaf-privacy-symbol {
+    border: 0;
+    background: var(--gp-green-soft);
+    color: var(--gp-green);
+}
+
+.gaf-site .gaf-privacy h2 {
+    color: var(--gp-ink);
+}
+
+.gaf-site .gaf-privacy p {
+    color: var(--gp-muted);
+}
+
+.gaf-site .gaf-privacy small {
+    color: #8a938e;
+}
+
+/* ---------- Partners ---------- */
+.gaf-site .gaf-partners {
+    border-top: 1px solid var(--gp-line);
+    border-bottom: 0;
+    background: var(--gp-subtle);
+}
+
+/* ---------- Contact ---------- */
+.gaf-site .gaf-contact {
+    border-top: 1px solid var(--gp-line);
+    background: var(--gp-paper);
+}
+
+.gaf-site .gaf-contact h2 {
+    color: var(--gp-ink);
+}
+
+.gaf-site .gaf-contact-details,
+.gaf-site .gaf-contact-details a {
+    border-color: var(--gp-line);
+}
+
+.gaf-site .gaf-contact-details a > span {
+    color: var(--gp-muted);
+}
+
+.gaf-site .gaf-contact-details strong {
+    color: var(--gp-ink);
+}
+
+.gaf-site .gaf-contact-details a:hover strong {
+    color: var(--gp-green);
+}
+
+.gaf-site .gaf-contact-details b {
+    color: var(--gp-green);
+}
+
+.gaf-site .gaf-contact-socials > span {
+    color: var(--gp-muted);
+}
+
+.gaf-site .gaf-contact-socials a {
+    border: 0;
+    border-radius: 6px;
+    background: var(--gp-subtle);
+    color: var(--gp-green);
+}
+
+.gaf-site .gaf-contact-socials a:hover {
+    background: var(--gp-green);
+    color: #fff;
+}
