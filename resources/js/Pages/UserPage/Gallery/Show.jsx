@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Head, Link } from "@inertiajs/react";
 import GafLayout from "@/Layouts/GafLayout";
 import { useGaf } from "@/Context/GafContext";
-import { AlbumCard, Breadcrumbs, EmptyState, SectionTitle, ShareLinks } from "@/Components/Gaf/Page";
+import { AlbumCard, Breadcrumbs, EmptyState, Lightbox, SectionTitle, ShareLinks } from "@/Components/Gaf/Page";
 import { formatDate, localized, pick } from "@/lib/gafLocale";
 import { vimeoEmbedUrl } from "@/lib/vimeo";
 
@@ -87,82 +87,6 @@ function MasonryImage({ item, lang, fallbackAlt, label, onOpen }) {
 }
 
 const capitalize = (text = "") => text.charAt(0).toUpperCase() + text.slice(1);
-
-function Lightbox({ images, index, onClose, onMove, lang, t }) {
-    const image = images[index];
-
-    useEffect(() => {
-        const onKey = (event) => {
-            if (event.key === "Escape") onClose();
-            if (event.key === "ArrowRight") onMove(1);
-            if (event.key === "ArrowLeft") onMove(-1);
-        };
-
-        document.addEventListener("keydown", onKey);
-        document.body.style.overflow = "hidden";
-
-        return () => {
-            document.removeEventListener("keydown", onKey);
-            document.body.style.overflow = "";
-        };
-    }, [onClose, onMove]);
-
-    if (!image) return null;
-
-    const caption = localized(image, "caption", lang);
-    const alt = localized(image, "alt_text", lang) || caption || t.imagePreview;
-
-    return (
-        <div className="gp-lightbox" role="dialog" aria-modal="true" aria-label={t.imagePreview} onClick={onClose}>
-            <div className="gp-lightbox-top" onClick={(event) => event.stopPropagation()}>
-                <span>
-                    {index + 1} / {images.length}
-                </span>
-                <div>
-                    <a href={image.media_url} target="_blank" rel="noopener noreferrer" aria-label={pick(lang, { en: "Open original", rw: "Fungura ifoto y’umwimerere" })}>
-                        <i className="bi bi-box-arrow-up-right" aria-hidden="true" />
-                    </a>
-                    <button type="button" onClick={onClose} aria-label={t.close}>
-                        <i className="bi bi-x-lg" aria-hidden="true" />
-                    </button>
-                </div>
-            </div>
-
-            {images.length > 1 && (
-                <button
-                    type="button"
-                    className="gp-lightbox-nav is-prev"
-                    onClick={(event) => {
-                        event.stopPropagation();
-                        onMove(-1);
-                    }}
-                    aria-label={pick(lang, { en: "Previous photo", rw: "Ifoto ibanza" })}
-                >
-                    <i className="bi bi-chevron-left" aria-hidden="true" />
-                </button>
-            )}
-
-            <figure className="gp-lightbox-figure" onClick={(event) => event.stopPropagation()}>
-                <img src={image.media_url} alt={alt} />
-                {caption && <figcaption>{caption}</figcaption>}
-            </figure>
-
-            {images.length > 1 && (
-                <button
-                    type="button"
-                    className="gp-lightbox-nav is-next"
-                    onClick={(event) => {
-                        event.stopPropagation();
-                        onMove(1);
-                    }}
-                    aria-label={pick(lang, { en: "Next photo", rw: "Ifoto ikurikira" })}
-                >
-                    <i className="bi bi-chevron-right" aria-hidden="true" />
-                </button>
-            )}
-        </div>
-    );
-}
 
 export default function Show({ gallery, relatedGalleries = [] }) {
     const { lang, t: content } = useGaf();

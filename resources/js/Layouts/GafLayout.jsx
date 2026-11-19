@@ -8,6 +8,7 @@ import "../../css/gaf-structure.css";
 import "../../css/gaf-pages.css";
 import "../../css/gaf-home.css";
 import "../../css/gaf-theme.css";
+import "../../css/gaf-blog.css";
 
 function Shell({ children }) {
     const { busy } = useGaf();

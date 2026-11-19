@@ -21,7 +21,7 @@ class HomeController extends Controller
             ->with('category:id,name,name_rw')
             ->orderByDesc('is_featured')
             ->orderByDesc('published_at')
-            ->limit(5)
+            ->limit(6)
             ->get()
             ->map(fn(NewsArticle $a) => [
                 'id'       => $a->id,
