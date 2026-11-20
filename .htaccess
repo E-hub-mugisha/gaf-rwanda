@@ -1,0 +1,13 @@
+# Only used when the domain's document root is this folder (for example
+# the app was uploaded straight into public_html). Sends every request to
+# the public/ folder so .env, vendor/, storage/ etc. are never served.
+# Not needed when the document root already points to public/.
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>

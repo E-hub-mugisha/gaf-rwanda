@@ -209,3 +209,10 @@ Route::middleware(['auth', 'admin'])
 Route::get('/admin/create-admin-user', [UserController::class, 'createAdminUser'])
     ->name('admin.create-admin-user')
     ->middleware('admin.create-admin-user');
+
+// Post-deploy hook for the FTP deployment (migrations + cache clear).
+// Protected by the X-Deploy-Token header; 404 when DEPLOY_TOKEN is not set.
+Route::post('/deploy/run', \App\Http\Controllers\DeployController::class)
+    ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class])
+    ->middleware('throttle:5,1')
+    ->name('deploy.run');

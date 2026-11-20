@@ -55,6 +55,12 @@ return [
     'url' => env('APP_URL', 'http://localhost'),
 
     /*
+    | Secret for the post-deploy hook (POST /deploy/run) used by the
+    | GitHub Actions FTP deployment. Leave empty to disable the hook.
+    */
+    'deploy_token' => env('DEPLOY_TOKEN'),
+
+    /*
     |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------

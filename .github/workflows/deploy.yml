@@ -1,0 +1,126 @@
+# Build and deploy to cPanel over FTP (no SSH needed).
+#
+# On every push to main (or manually from the Actions tab):
+#   1. install PHP dependencies (no dev) and build the front-end assets
+#   2. upload changed files by FTP (only what changed since the last deploy)
+#   3. call the post-deploy hook: migrations + cache clear
+#
+# Repository secrets (Settings > Secrets and variables > Actions > Secrets):
+#   FTP_SERVER      ftp.example.com
+#   FTP_USERNAME    cPanel FTP account
+#   FTP_PASSWORD    its password
+#   FTP_SERVER_DIR  folder of the Laravel app on the server, ending with /
+#                   relative to the FTP account root, e.g. gaf-rwanda/
+#   DEPLOY_TOKEN    long random string, same value as DEPLOY_TOKEN in the server .env
+#
+# Repository variables (same page > Variables):
+#   APP_URL         https://gafrwanda.com   (no trailing slash)
+#   FTP_PROTOCOL    optional: ftps (default, explicit FTPS on port 21), ftp or ftps-legacy
+#
+# Never uploaded / never touched on the server: .env, public/uploads,
+# storage logs, sessions and caches. See docs/DEPLOYMENT.md.
+
+name: Deploy to cPanel
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          extensions: mbstring, intl, pdo_mysql, gd, zip, bcmath, fileinfo
+          coverage: none
+          tools: composer:v2
+
+      - name: Install PHP dependencies (production)
+        run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --no-progress
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Build front-end assets
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+
+      - name: Check the app boots
+        run: |
+          cp .env.example .env
+          php artisan key:generate --force
+          php artisan route:list > /dev/null
+          rm .env
+
+      - name: Upload by FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          protocol: ${{ vars.FTP_PROTOCOL || 'ftps' }}
+          timeout: 600000
+          exclude: |
+            **/.git/**
+            .github/**
+            .gitattributes
+            .editorconfig
+            node_modules/**
+            tests/**
+            .env
+            .env.*
+            public/hot
+            public/uploads/**
+            public/storage
+            storage/logs/*.log
+            storage/framework/sessions/*
+            storage/framework/cache/data/**
+            storage/framework/views/*.php
+            resources/js/**
+            resources/css/**
+            phpunit.xml
+            package.json.additions
+            README.md
+            docs/**
+
+      - name: Run migrations and clear caches
+        if: ${{ vars.APP_URL != '' }}
+        env:
+          APP_URL: ${{ vars.APP_URL }}
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        run: |
+          status=$(curl -sS -o response.json -w "%{http_code}" -X POST \
+            -H "X-Deploy-Token: ${DEPLOY_TOKEN}" \
+            -H "Accept: application/json" \
+            --max-time 300 \
+            "${APP_URL}/deploy/run")
+          cat response.json; echo
+          if [ "$status" != "200" ]; then
+            echo "::error::Post-deploy hook returned HTTP $status"
+            exit 1
+          fi
+
+      - name: Check the site responds
+        if: ${{ vars.APP_URL != '' }}
+        run: |
+          curl -fsS -o /dev/null -w "Home page: HTTP %{http_code}\n" "${{ vars.APP_URL }}/"
