@@ -5,7 +5,7 @@ export const defaultSite = {
     heroImage: "/images/medium-shot-smiley-friends-hugging.jpg",
     heroVideo: null,
     poster: "/images/Flayer_ACTand Feel.png",
-    surveyUrl: "https://data.castoredc.com/survey/5YQJTSM2",
+    surveyUrl: "https://redcap.rbc.gov.rw/surveys/?s=YFPCATP3JAWD3PNP",
     email: "info@gafrwanda.com",
     phone: "0781684259",
     website: "https://gafrwanda.com",
@@ -30,7 +30,7 @@ export const defaultSite = {
 
 export const content = {
     en: {
-        topLine: "A collaborative research study in Rwanda",
+        topLine: "Technology and community health workers a solution for mental health in Rwanda",
 
         // Website structure: Home, Recruitment Process, Team,
         // Events / Gallery, Q&A, Privacy Policy, Footer.
@@ -48,10 +48,10 @@ export const content = {
         hero: {
             eyebrow: "GAF-RWANDA",
             title: "GUIDED ACT & FEEL – RWANDA",
-            intro: "Supporting mental health in Rwanda",
+            intro: "Technology and community health workers a solution for mental health in Rwanda",
             primary: "Take part – click here",
             secondary: "Read more",
-            imageCaption: "Supporting mental health in Rwanda",
+            imageCaption: "Technology and community health workers a solution for mental health in Rwanda",
         },
 
         facts: [
@@ -397,7 +397,7 @@ export const content = {
     },
 
     rw: {
-        topLine: "GAF-Rwanda · Gushyigikira ubuzima bwo mu mutwe mu Rwanda",
+        topLine: "GAF-Rwanda · Ikoranabuhanga n’abajyanama b’ubuzima igisubizo ku buzima bwo mu mutwe mu Rwanda",
 
         // Imiterere n’ibikubiye ku rubuga: Ahabanza, Kwitabira, Itsinda,
         // Ibyabaye n’amafoto, Q&A, Uko amakuru azabikwa, Footer.
@@ -415,10 +415,10 @@ export const content = {
         hero: {
             eyebrow: "GAF-RWANDA",
             title: "GUIDED ACT & FEEL – RWANDA",
-            intro: "Gushyigikira ubuzima bwo mu mutwe mu Rwanda",
+            intro: "Ikoranabuhanga n’abajyanama b’ubuzima igisubizo ku buzima bwo mu mutwe mu Rwanda",
             primary: "Itabire ukanze hano",
             secondary: "Soma byinshi",
-            imageCaption: "Gushyigikira ubuzima bwo mu mutwe mu Rwanda",
+            imageCaption: "Ikoranabuhanga n’abajyanama b’ubuzima igisubizo ku buzima bwo mu mutwe mu Rwanda",
         },
 
         facts: [
@@ -581,7 +581,7 @@ export const content = {
             events: "AMAHUGURWA",
             documenting: "AMAFOTO",
             gallery: "AMAFOTO",
-            tagline: "Gushyigikira ubuzima bwo mu mutwe mu Rwanda",
+            tagline: "Ikoranabuhanga n’abajyanama b’ubuzima igisubizo ku buzima bwo mu mutwe mu Rwanda",
             guidedLabel: "Abifashijwemo n’umujyanama w’ubuzima",
             infoLabel: "Amakuru n’inama",
             newsCategory: "GAF-RWANDA / AMAKURU MASHYA",

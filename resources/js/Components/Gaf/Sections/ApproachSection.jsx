@@ -12,7 +12,7 @@ export default function ApproachSection() {
                 <div className="gaf-programmes">
                     <article className="gaf-programme">
                         <div className="gaf-programme-top">
-                            <span>{t.approach.firstLabel}</span>
+                            <img className="gaf-programme-icon" src="/images/programme-guided.jpg" alt="" aria-hidden="true" width="56" height="56" />
                             <span className="gaf-programme-symbol">↗</span>
                         </div>
                         <div>
@@ -20,13 +20,12 @@ export default function ApproachSection() {
                             <p>{t.approach.firstText}</p>
                         </div>
                         <div className="gaf-programme-bottom">
-                            <span>01</span>
                             <span>{t.ui.guidedLabel}</span>
                         </div>
                     </article>
                     <article className="gaf-programme gaf-programme-dark">
                         <div className="gaf-programme-top">
-                            <span>{t.approach.secondLabel}</span>
+                            <img className="gaf-programme-icon" src="/images/programme-info.jpg" alt="" aria-hidden="true" width="56" height="56" />
                             <span className="gaf-programme-symbol">↗</span>
                         </div>
                         <div>
@@ -34,7 +33,6 @@ export default function ApproachSection() {
                             <p>{t.approach.secondText}</p>
                         </div>
                         <div className="gaf-programme-bottom">
-                            <span>02</span>
                             <span>{t.ui.infoLabel}</span>
                         </div>
                     </article>

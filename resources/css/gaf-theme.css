@@ -462,3 +462,67 @@
 .gaf-site .gp-updates .gp-button.is-outline:hover {
     background: var(--rw-green-dark);
 }
+
+/* Programme icons (replace the 01 / 02 numbers).
+   multiply drops the icons' light background on the blue card. */
+.gaf-site .gaf-programme-icon {
+    display: block;
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+}
+
+/* Participation QR code: small white tile, crisp pixels */
+.gaf-site .gaf-participation-poster.is-qr {
+    width: 200px;
+    max-width: 200px;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: none;
+    background: #fff;
+}
+
+.gaf-site .gaf-participation-poster.is-qr img {
+    width: 100%;
+    height: auto;
+    image-rendering: pixelated;
+}
+
+/* Hero video sound button (the video autoplays muted) */
+.gaf-site .gaf-hero-sound {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 14px;
+    border: 0;
+    border-radius: 6px;
+    background: var(--rw-yellow);
+    color: var(--rw-ink);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.gaf-site .gaf-hero-sound:hover {
+    background: var(--rw-yellow-dark);
+}
+
+.gaf-site .gaf-hero-sound.is-on {
+    background: rgba(255, 255, 255, .9);
+}
+
+.gaf-site .gaf-hero-sound i {
+    font-size: 16px;
+    line-height: 1;
+}
+
+@media (max-width: 575px) {
+    .gaf-site .gaf-hero-sound span {
+        display: none;
+    }
+}

@@ -22,7 +22,7 @@ class SiteSetting extends Model
         'email' => 'info@gafrwanda.com',
         'phone' => '0781684259',
         'website' => 'https://gafrwanda.com',
-        'survey_url' => 'https://data.castoredc.com/survey/5YQJTSM2',
+        'survey_url' => 'https://redcap.rbc.gov.rw/surveys/?s=YFPCATP3JAWD3PNP',
         // Social profiles (same as defaultSite.socials in gafContent.js).
         'facebook_url' => null,
         'instagram_url' => 'https://www.instagram.com/gafrwanda?exln=MXFmc2owcXV5a2NoMw==',

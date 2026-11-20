@@ -1,9 +1,9 @@
 import React from "react";
-import { useGaf, imageFallback } from "@/Context/GafContext";
+import { useGaf } from "@/Context/GafContext";
 import SectionHeading from "../SectionHeading";
 
 export default function ParticipationSection() {
-    const { t, site } = useGaf();
+    const { t, tr, site } = useGaf();
 
     return (
         <section className="gaf-section gaf-participation" id="participation">
@@ -30,22 +30,21 @@ export default function ParticipationSection() {
                     <div className="gaf-process">
                         <h3>{t.participation.processTitle}</h3>
 
-                        {/* The poster image shows the steps to join the study. */}
-                        {site.poster && (
-                            <a
-                                className="gaf-participation-poster"
-                                href={site.surveyUrl}
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                <img
-                                    src={site.poster}
-                                    alt={t.participation.posterAlt}
-                                    loading="lazy"
-                                    onError={imageFallback}
-                                />
-                            </a>
-                        )}
+                        {/* QR code that opens the participation survey. */}
+                        <a
+                            className="gaf-participation-poster is-qr"
+                            href={site.surveyUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            <img
+                                src="/images/participation-qr.jpg"
+                                alt={tr({ en: "QR code to take part in the study", rw: "QR code yo kwitabira ubushakashatsi" })}
+                                width="150"
+                                height="150"
+                                loading="lazy"
+                            />
+                        </a>
                     </div>
                 </div>
                 <p className="gaf-participation-disclaimer">{t.participation.disclaimer}</p>

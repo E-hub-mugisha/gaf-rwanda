@@ -451,7 +451,7 @@ body {
 
 /* ---------- Sections (shared) ---------- */
 .gaf-section {
-    padding: 112px 0;
+    padding: 72px 0;
 }
 
 .gaf-section-heading {
@@ -1126,7 +1126,7 @@ body {
 
 /* ---------- Contact ---------- */
 .gaf-contact {
-    padding: 86px 0;
+    padding: 64px 0;
     background: #e9eee8;
 }
 
@@ -1512,7 +1512,7 @@ body {
     }
 
     .gaf-section {
-        padding: 72px 0;
+        padding: 48px 0;
     }
 
     .gaf-section-heading h2 {
