@@ -473,56 +473,115 @@
     mix-blend-mode: multiply;
 }
 
-/* Participation QR code: small white tile, crisp pixels */
-.gaf-site .gaf-participation-poster.is-qr {
-    width: 200px;
-    max-width: 200px;
-    padding: 12px;
-    border-radius: 8px;
+/* Participation: animated steps poster (GIF) */
+.gaf-site .gaf-participation-poster.is-steps {
+    max-width: 480px;
+    border-radius: 10px;
     box-shadow: none;
-    background: #fff;
 }
 
-.gaf-site .gaf-participation-poster.is-qr img {
-    width: 100%;
-    height: auto;
-    image-rendering: pixelated;
-}
-
-/* Hero video sound button (the video autoplays muted) */
-.gaf-site .gaf-hero-sound {
+/* Hero video: cover with play button, then our own pause / sound buttons */
+.gaf-site .gaf-hero-cover {
     position: absolute;
-    right: 14px;
-    bottom: 14px;
-    z-index: 2;
-    display: inline-flex;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 8px;
-    padding: 9px 14px;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 0;
     border: 0;
-    border-radius: 6px;
-    background: var(--rw-yellow);
-    color: var(--rw-ink);
-    font-size: 13px;
-    font-weight: 600;
+    background: var(--rw-green-deep);
+    color: #fff;
     cursor: pointer;
 }
 
-.gaf-site .gaf-hero-sound:hover {
-    background: var(--rw-yellow-dark);
+.gaf-site .gaf-hero-cover img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-.gaf-site .gaf-hero-sound.is-on {
-    background: rgba(255, 255, 255, .9);
+.gaf-site .gaf-hero-cover::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 30, 20, .35);
+    transition: background .2s ease;
 }
 
-.gaf-site .gaf-hero-sound i {
-    font-size: 16px;
+.gaf-site .gaf-hero-cover:hover::after {
+    background: rgba(10, 30, 20, .2);
+}
+
+.gaf-site .gaf-hero-play {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: var(--rw-yellow);
+    color: var(--rw-ink);
+    font-size: 38px;
+    transition: transform .2s ease;
+}
+
+.gaf-site .gaf-hero-play i {
+    margin-left: 4px;
     line-height: 1;
 }
 
+.gaf-site .gaf-hero-cover:hover .gaf-hero-play {
+    transform: scale(1.06);
+}
+
+.gaf-site .gaf-hero-play-label {
+    position: relative;
+    z-index: 1;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.gaf-site .gaf-hero-cover:focus-visible {
+    outline: 3px solid var(--rw-yellow);
+    outline-offset: -3px;
+}
+
+.gaf-site .gaf-hero-video-controls {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    z-index: 2;
+    display: flex;
+    gap: 8px;
+}
+
+.gaf-site .gaf-hero-control {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .92);
+    color: var(--rw-ink);
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.gaf-site .gaf-hero-control:hover {
+    background: var(--rw-yellow);
+}
+
 @media (max-width: 575px) {
-    .gaf-site .gaf-hero-sound span {
-        display: none;
+    .gaf-site .gaf-hero-play {
+        width: 60px;
+        height: 60px;
+        font-size: 30px;
     }
 }

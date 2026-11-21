@@ -4,23 +4,22 @@ import { vimeoEmbedUrl } from "@/lib/vimeo";
 
 // Home hero: text and buttons on the left, the study lead's video on the
 // right. Without a video, the hero image is shown in the same frame.
+//
+// The video does not autoplay: a cover image with a play button is shown,
+// and the Vimeo player is only loaded when the visitor presses play (so it
+// can start with sound). The Vimeo controls and action buttons (like,
+// share...) are hidden; our own pause and sound buttons drive the player
+// through Vimeo's player API (postMessage).
 export default function HeroSection() {
     const { t, tr, site } = useGaf();
     const frameRef = useRef(null);
-    const soundButtonRef = useRef(null);
-    const userMutedRef = useRef(false);
-    const [soundOn, setSoundOn] = useState(false);
+    const [started, setStarted] = useState(false);
+    const [playing, setPlaying] = useState(false);
+    const [soundOn, setSoundOn] = useState(true);
 
-    // Embedded Vimeo video in background mode: no player controls or action
-    // buttons (like, share...). It plays with sound by default and the
-    // visitor can mute it with the sound button.
-    //
-    // Browsers block sound on autoplay until the visitor has interacted
-    // with the site, so the video starts muted and sound is switched on
-    // (through Vimeo's player API) as soon as it is allowed: right away
-    // when the visitor came from another page of the site, otherwise on
-    // their first click, tap or key press anywhere on the page.
-    const embedUrl = vimeoEmbedUrl(site.heroVideo, { background: true });
+    const embedUrl = vimeoEmbedUrl(site.heroVideo, { autoplay: true, controls: false });
+    const coverUrl = site.heroVideoThumbnail || site.heroImage || null;
+    const imageUrl = site.heroImage || site.heroVideoThumbnail || null;
 
     const vimeo = useCallback((method, value) => {
         const player = frameRef.current?.contentWindow;
@@ -28,30 +27,10 @@ export default function HeroSection() {
         player.postMessage(JSON.stringify(value === undefined ? { method } : { method, value }), "https://player.vimeo.com");
     }, []);
 
-    const unmute = useCallback(() => {
-        vimeo("setMuted", false);
-        vimeo("setVolume", 1);
-        vimeo("play");
-        setSoundOn(true);
-    }, [vimeo]);
-
-    const mute = useCallback(() => {
-        vimeo("setVolume", 0);
-        vimeo("setMuted", true);
-        setSoundOn(false);
-    }, [vimeo]);
-
+    // Follow the player's play / pause / end events.
     useEffect(() => {
-        if (!embedUrl) return undefined;
+        if (!started) return undefined;
 
-        let ready = false;
-        let activated = typeof navigator !== "undefined" && navigator.userActivation?.hasBeenActive;
-
-        const tryUnmute = () => {
-            if (ready && activated && !userMutedRef.current) unmute();
-        };
-
-        // The player says "ready" once it has loaded.
         const onMessage = (event) => {
             if (event.origin !== "https://player.vimeo.com" || event.source !== frameRef.current?.contentWindow) return;
             let data = event.data;
@@ -60,61 +39,40 @@ export default function HeroSection() {
             } catch {
                 return;
             }
-            if (data?.event === "ready" && !ready) {
-                ready = true;
-                tryUnmute();
+
+            if (data?.event === "ready") {
+                ["play", "pause", "ended"].forEach((name) => vimeo("addEventListener", name));
+            } else if (data?.event === "play") {
+                setPlaying(true);
+            } else if (data?.event === "pause" || data?.event === "ended") {
+                setPlaying(false);
             }
         };
 
-        // First interaction anywhere (except the sound button, which
-        // handles itself) allows sound.
-        const onInteract = (event) => {
-            if (soundButtonRef.current?.contains(event.target)) return;
-            activated = true;
-            tryUnmute();
-            removeInteract();
-        };
-
-        const events = ["pointerdown", "keydown", "touchstart"];
-        const removeInteract = () => events.forEach((name) => window.removeEventListener(name, onInteract, true));
-
-        // Fallback in case the "ready" message is missed.
-        const frame = frameRef.current;
-        let loadTimer;
-        const onLoad = () => {
-            loadTimer = setTimeout(() => {
-                ready = true;
-                tryUnmute();
-            }, 1500);
-        };
-        frame?.addEventListener("load", onLoad);
-
         window.addEventListener("message", onMessage);
-        events.forEach((name) => window.addEventListener(name, onInteract, true));
+        return () => window.removeEventListener("message", onMessage);
+    }, [started, vimeo]);
 
-        return () => {
-            window.removeEventListener("message", onMessage);
-            frame?.removeEventListener("load", onLoad);
-            clearTimeout(loadTimer);
-            removeInteract();
-        };
-    }, [embedUrl, unmute]);
-
-    const toggleSound = () => {
-        if (soundOn) {
-            userMutedRef.current = true;
-            mute();
-        } else {
-            userMutedRef.current = false;
-            unmute();
-        }
+    const start = () => {
+        setStarted(true);
+        setPlaying(true);
+        setSoundOn(true);
     };
 
-    const soundLabel = soundOn
-        ? tr({ en: "Mute", rw: "Funga amajwi" })
-        : tr({ en: "Turn sound on", rw: "Fungura amajwi" });
+    const togglePlay = () => {
+        vimeo(playing ? "pause" : "play");
+        setPlaying(!playing);
+    };
 
-    const imageUrl = site.heroImage || site.heroVideoThumbnail || null;
+    const toggleSound = () => {
+        vimeo("setMuted", soundOn);
+        vimeo("setVolume", soundOn ? 0 : 1);
+        setSoundOn(!soundOn);
+    };
+
+    const playLabel = tr({ en: "Play the video", rw: "Reba videwo" });
+    const pauseLabel = playing ? tr({ en: "Pause", rw: "Hagarika" }) : tr({ en: "Play", rw: "Komeza" });
+    const soundLabel = soundOn ? tr({ en: "Mute", rw: "Funga amajwi" }) : tr({ en: "Turn sound on", rw: "Fungura amajwi" });
 
     return (
         <section className="gaf-hero-split" id="home">
@@ -146,36 +104,42 @@ export default function HeroSection() {
 
                 <div className="gaf-hero-split-visual">
                     <div className="gaf-hero-split-frame">
-                        {embedUrl ? (
-                            <iframe
-                                ref={frameRef}
-                                src={embedUrl}
-                                title={t.ui.heroVideoTitle}
-                                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-                                allowFullScreen
-                                referrerPolicy="strict-origin-when-cross-origin"
-                            />
-                        ) : (
-                            imageUrl && (
-                                <img
-                                    src={imageUrl}
-                                    alt={site.altText || t.ui.heroAlt}
+                        {embedUrl && started ? (
+                            <>
+                                <iframe
+                                    ref={frameRef}
+                                    src={embedUrl}
+                                    title={t.ui.heroVideoTitle}
+                                    allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                                    allowFullScreen
+                                    referrerPolicy="strict-origin-when-cross-origin"
                                 />
-                            )
-                        )}
-
-                        {embedUrl && (
-                            <button
-                                type="button"
-                                ref={soundButtonRef}
-                                className={`gaf-hero-sound ${soundOn ? "is-on" : ""}`}
-                                onClick={toggleSound}
-                                aria-pressed={soundOn}
-                                aria-label={soundLabel}
-                            >
-                                <i className={`bi ${soundOn ? "bi-volume-up-fill" : "bi-volume-mute-fill"}`} aria-hidden="true" />
-                                <span>{soundLabel}</span>
+                                <div className="gaf-hero-video-controls">
+                                    <button type="button" className="gaf-hero-control" onClick={togglePlay} aria-label={pauseLabel} title={pauseLabel}>
+                                        <i className={`bi ${playing ? "bi-pause-fill" : "bi-play-fill"}`} aria-hidden="true" />
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="gaf-hero-control"
+                                        onClick={toggleSound}
+                                        aria-pressed={!soundOn}
+                                        aria-label={soundLabel}
+                                        title={soundLabel}
+                                    >
+                                        <i className={`bi ${soundOn ? "bi-volume-up-fill" : "bi-volume-mute-fill"}`} aria-hidden="true" />
+                                    </button>
+                                </div>
+                            </>
+                        ) : embedUrl ? (
+                            <button type="button" className="gaf-hero-cover" onClick={start} aria-label={playLabel}>
+                                {coverUrl && <img src={coverUrl} alt="" aria-hidden="true" />}
+                                <span className="gaf-hero-play" aria-hidden="true">
+                                    <i className="bi bi-play-fill" />
+                                </span>
+                                <span className="gaf-hero-play-label">{playLabel}</span>
                             </button>
+                        ) : (
+                            imageUrl && <img src={imageUrl} alt={site.altText || t.ui.heroAlt} />
                         )}
                     </div>
 

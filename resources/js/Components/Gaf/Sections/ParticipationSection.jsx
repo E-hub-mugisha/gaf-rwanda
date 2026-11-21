@@ -30,18 +30,18 @@ export default function ParticipationSection() {
                     <div className="gaf-process">
                         <h3>{t.participation.processTitle}</h3>
 
-                        {/* QR code that opens the participation survey. */}
+                        {/* Animated poster with the steps to join; opens the survey. */}
                         <a
-                            className="gaf-participation-poster is-qr"
+                            className="gaf-participation-poster is-steps"
                             href={site.surveyUrl}
                             target="_blank"
                             rel="noreferrer"
                         >
                             <img
-                                src="/images/participation-qr.jpg"
-                                alt={tr({ en: "QR code to take part in the study", rw: "QR code yo kwitabira ubushakashatsi" })}
-                                width="150"
-                                height="150"
+                                src="/images/participation-steps.gif"
+                                alt={t.participation.posterAlt}
+                                width="1080"
+                                height="1125"
                                 loading="lazy"
                             />
                         </a>
