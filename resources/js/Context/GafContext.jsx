@@ -183,6 +183,7 @@ export const navUrl = (id) => {
     if (id === "activities") return "/events";
     if (id === "updates") return "/news";
     if (id === "gallery") return "/gallery";
+    if (id === "faq") return "/ibibazo";
 
     return `/#${id}`;
 };

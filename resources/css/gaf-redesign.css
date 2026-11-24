@@ -13,8 +13,8 @@
     --green: #20603D;
     --green2: #174A2F;
     --teal: #155B75;
-    --yellow: #EAD07F;
-    --rw-yellow: #EAD07F;
+    --yellow: #EAD07F; /* pale gold (was #FAD201) */
+    --rw-yellow: var(--yellow);
     --rw-yellow-dark: #D9BC66;
     --cream: #FEFAE2;
     --text: #DCE9EE;
@@ -362,3 +362,31 @@
 .gaf-site .al-album-cover .gp-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .gaf-site .al-album-counts span, .gaf-site .al-album-counts span i, .gaf-site .al-views button em { color: var(--d0) !important; }
 .gaf-site .al-album-cover::before { background: var(--line); }
+
+/* ---------------- FAQ page (approved layout) ---------------- */
+.rd-bg-green2 { background: var(--green2); }
+.rd-faq { display: flex; flex-direction: column; gap: 12px; }
+.rd-faq details { background: var(--card); border-radius: 16px; padding: 20px 24px; }
+.rd-faq summary { font-family: var(--head); font-weight: 600; font-size: 19px; color: var(--cream); cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+.rd-faq summary::-webkit-details-marker { display: none; }
+.rd-faq summary::after { content: "+"; color: var(--yellow); font-size: 24px; line-height: 1; flex: none; }
+.rd-faq details[open] summary::after { content: "−"; }
+.rd-faq details p { margin: 12px 0 0; color: var(--text); font-family: var(--body); font-size: 17px; line-height: 1.7; }
+.rd-privacy { display: flex; flex-wrap: wrap; gap: 48px; }
+.rd-privacy > div:first-child { flex: 1 1 320px; min-width: 0; }
+.rd-privacy > div:last-child { flex: 999 1 560px; min-width: 0; gap: 14px; }
+.rd-privacy p { margin: 0; color: var(--cream); font-size: 17px; line-height: 1.7; }
+.rd-contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.rd-contact { text-decoration: none; color: inherit; background: var(--card); border-radius: 20px; padding: 26px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.rd-contact.is-teal { background: var(--teal); }
+.rd-contact.is-green { background: var(--green); }
+.rd-contact-label { font-size: 14px; font-weight: 600; color: var(--lb); }
+.rd-contact.is-green .rd-contact-label { color: var(--lg); }
+.rd-contact-label.is-yellow { color: var(--yellow); }
+.rd-contact-value { font-family: var(--head); font-weight: 600; font-size: 21px; color: var(--cream); overflow-wrap: anywhere; }
+.rd-contact-lead { display: flex; gap: 14px; align-items: center; }
+.rd-contact-lead img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 3px solid var(--yellow); flex: none; }
+.rd-contact-lead div { display: flex; flex-direction: column; }
+.rd-contact-name { font-family: var(--head); font-weight: 600; font-size: 18px; color: var(--cream); }
+.rd-contact-mail { color: var(--cream); font-size: 15px; overflow-wrap: anywhere; }
+.rd-contact-small { font-size: 15px; color: var(--text); line-height: 1.6; }

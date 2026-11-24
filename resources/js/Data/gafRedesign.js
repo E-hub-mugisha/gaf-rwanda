@@ -192,7 +192,8 @@ export const RD = {
             ["/news", { rw: "Amakuru", en: "News" }],
             ["/events", { rw: "Ibikorwa", en: "Events" }],
             ["/gallery", { rw: "Amafoto", en: "Photos" }],
-            ["/#faq", { rw: "Ibibazo bikunze kubazwa", en: "Frequently asked questions" }],
+            ["/ibibazo", { rw: "Ibibazo bikunze kubazwa", en: "Frequently asked questions" }],
+            ["/ibibazo#ibanga", { rw: "Uko amakuru azabikwa", en: "Data protection" }],
         ],
     },
 

@@ -2,7 +2,6 @@ import React from "react";
 import { Head } from "@inertiajs/react";
 import GafLayout from "@/Layouts/GafLayout";
 import { useGaf } from "@/Context/GafContext";
-import FaqSection from "@/Components/Gaf/Sections/FaqSection";
 import RedesignHome, { Partners } from "@/Components/Gaf/Redesign/Home";
 
 function Home({ news, faqs }) {
@@ -10,7 +9,6 @@ function Home({ news, faqs }) {
     return (
         <>
             <RedesignHome news={news} heroVideo={site.heroVideo} />
-            <FaqSection faqs={faqs} />
             <Partners />
         </>
     );

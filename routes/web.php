@@ -59,6 +59,9 @@ Route::get('/gallery/{slug}', [GalleryController::class, 'show'])
 // Team page content is written in code (resources/js/Data/gafStories.js).
 Route::inertia('/team', 'UserPage/TeamStatic')->name('team.index');
 
+// FAQ page (approved layout), content in resources/js/Pages/UserPage/Faq.jsx.
+Route::inertia('/ibibazo', 'UserPage/Faq')->name('faq');
+
 // News stories written in code (resources/js/Data/gafStories.js).
 Route::get('/stories/{slug}', fn (string $slug) => \Inertia\Inertia::render('UserPage/Story', ['slug' => $slug]))
     ->where('slug', '[a-z0-9-]+')->name('stories.show');
