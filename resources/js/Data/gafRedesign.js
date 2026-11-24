@@ -4,6 +4,14 @@
 
 const IMG = "/images/redesign";
 
+// WhatsApp chat link for a Rwandan number (0781684259 / +250 781 684 259 -> wa.me/250781684259).
+export const whatsappUrl = (phone = "0781684259", text = "Muraho GAF-Rwanda, ") => {
+    let digits = String(phone || "").replace(/\D/g, "");
+    if (digits.startsWith("0")) digits = "250" + digits.slice(1);
+    if (digits.length === 9) digits = "250" + digits;
+    return `https://wa.me/${digits}${text ? `?text=${encodeURIComponent(text)}` : ""}`;
+};
+
 export const RD = {
     img: IMG,
     surveyUrl: "https://redcap.rbc.gov.rw/surveys/?s=YFPCATP3JAWD3PNP",
@@ -63,7 +71,6 @@ export const RD = {
             rw: "Ni umunyeshuri w'impamyabumenyi y'ikirenga (PhD) mu Ishami ry'Ubuzima bwo mu Mutwe muri Amsterdam UMC no muri Centre for Urban Mental Health ya Kaminuza ya Amsterdam. Ubushakashatsi bwe bwibanda ku kamaro k'ubufasha bwo kuri interineti buyoborwa n'abajyanama b'ubuzima ku bantu bafite agahinda gakabije mu Rwanda, n'ingaruka bugira ku bana b'ababyeyi babwitabiriye.",
             en: "PhD candidate in the Department of Psychiatry at Amsterdam UMC and the Centre for Urban Mental Health, University of Amsterdam. His research focuses on the effectiveness of a lay-counselor guided digital mental health intervention for depression in Rwanda and its impact on children of participating parents.",
         },
-        phd: { rw: "GAF-Rwanda ni igice cy'ubushakashatsi bwe bwa PhD.", en: "GAF-Rwanda is part of his PhD research." },
         supervisedBy: { rw: "Akurikiranwa na", en: "Supervised by" },
         supervisors: [
             { img: `${IMG}/team-claudi.jpg`, name: "Prof. dr. Claudi Bockting", org: "Amsterdam UMC" },

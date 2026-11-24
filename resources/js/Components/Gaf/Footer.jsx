@@ -1,6 +1,6 @@
 import React from "react";
 import { useGaf, imageFallback } from "@/Context/GafContext";
-import { RD } from "@/Data/gafRedesign";
+import { RD, whatsappUrl } from "@/Data/gafRedesign";
 
 const SOCIAL_ICONS = {
     facebook: "bi-facebook",
@@ -43,7 +43,7 @@ export default function Footer() {
                 <div className="rd-footer-col">
                     <h4>{L(F.contact)}</h4>
                     <a href={`mailto:${site.email}`}>{site.email}</a>
-                    <a href={`tel:${site.phone}`}>{site.phone} (WhatsApp)</a>
+                    <a href={whatsappUrl(site.phone || RD.phone)} target="_blank" rel="noreferrer"><i className="bi bi-whatsapp" aria-hidden="true" /> {site.phone || RD.phone} (WhatsApp)</a>
                 </div>
             </div>
             <div className="rd-footer-bottom">
@@ -52,6 +52,10 @@ export default function Footer() {
                     <a href="/abitabiriye">{L(F.participants)}</a>
                 </div>
             </div>
+            <a className="rd-wa-float" href={whatsappUrl(site.phone || RD.phone)} target="_blank" rel="noreferrer" aria-label={lang === "rw" ? "Twandikire kuri WhatsApp" : "Message us on WhatsApp"}>
+                <i className="bi bi-whatsapp" aria-hidden="true" />
+                <span>{lang === "rw" ? "Twandikire" : "Message us"}</span>
+            </a>
         </footer>
     );
 }

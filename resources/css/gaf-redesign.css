@@ -230,9 +230,9 @@
 .rd-footer-col { display: flex; flex-direction: column; gap: 8px; font-size: 15px; }
 .rd-footer-col h4 { margin: 0 0 4px; font-family: var(--head); font-weight: 700; color: var(--yellow); font-size: 16px; }
 .rd-footer-col a { color: var(--text); }
-.rd-footer-bottom { background: var(--yellow); color: var(--d2); font-size: 14px; font-weight: 500; }
+.rd-footer-bottom { background: var(--green); color: var(--cream); font-size: 14px; font-weight: 500; }
 .rd-footer-bottom-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding-top: 14px; padding-bottom: 14px; }
-.rd-footer-bottom a { color: var(--d2); text-decoration: none; opacity: 0.75; }
+.rd-footer-bottom a { color: var(--cream); text-decoration: none; opacity: 0.8; }
 
 /* ==========================================================================
    Part 2: existing header and inner pages on the dark palette
@@ -241,6 +241,7 @@
 .gaf-site .gaf-topline a { color: var(--muted) !important; }
 .gaf-site .gaf-header { background: var(--d0) !important; border-bottom: 1px solid var(--line) !important; box-shadow: none !important; }
 .gaf-site .gaf-brand img { background: var(--cream); border-radius: 12px; padding: 6px 12px; }
+@media (min-width: 701px) { .gaf-site .gaf-brand img { width: auto; height: 58px; } }
 .gaf-site .gaf-nav > a, .gaf-site .gaf-nav-dropdown-toggle { color: var(--cream) !important; font-family: var(--head) !important; font-weight: 600 !important; }
 .gaf-site .gaf-nav > a:hover, .gaf-site .gaf-nav-dropdown-toggle:hover { color: var(--yellow) !important; }
 .gaf-site .gaf-nav { background: transparent !important; }
@@ -390,3 +391,92 @@
 .rd-contact-name { font-family: var(--head); font-weight: 600; font-size: 18px; color: var(--cream); }
 .rd-contact-mail { color: var(--cream); font-size: 15px; overflow-wrap: anywhere; }
 .rd-contact-small { font-size: 15px; color: var(--text); line-height: 1.6; }
+
+/* ---------------- inline video (plays on the page, no loop) ---------------- */
+.rd-video-frame { aspect-ratio: 16 / 9; background: #000; }
+.rd-video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+.rd-video-poster { position: absolute; inset: 0; padding: 0; border: 0; background: #000; cursor: pointer; display: block; width: 100%; }
+.rd-video-poster img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ---------------- WhatsApp ---------------- */
+.rd-help-actions .bi-whatsapp, .rd-footer .bi-whatsapp, .gaf-top-contact .bi-whatsapp { margin-right: 4px; }
+.rd-wa-float { position: fixed; right: 18px; bottom: 18px; z-index: 900; display: inline-flex; align-items: center; gap: 8px; background: #25D366; color: #fff !important; text-decoration: none !important; font-family: var(--head); font-weight: 600; font-size: 15px; padding: 12px 18px 12px 14px; border-radius: 999px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); }
+.rd-wa-float i { font-size: 24px; line-height: 1; }
+.rd-wa-float:hover { background: #1EBE5A; }
+@media (max-width: 640px) {
+    .rd-wa-float { right: 14px; bottom: 14px; padding: 14px; }
+    .rd-wa-float span { display: none; }
+    .rd-wa-float i { font-size: 28px; }
+}
+
+/* ---------------- phone layout (most visitors use a phone) ---------------- */
+@media (max-width: 700px) {
+    .gaf-site .gaf-brand img { width: auto; height: 46px; padding: 4px 8px; }
+    .rd-section { padding: 52px 0; }
+    .rd-stack-lg { gap: 28px; }
+    .rd-hero { min-height: 560px; }
+    .rd-hero-content { padding-top: 200px; }
+    .rd-hero h1 { font-size: 30px; }
+    .rd-statement-text { font-size: 21px; }
+    .rd-lead { font-size: 16px; }
+    .rd-video { padding: 12px; gap: 16px; border-radius: 20px; }
+    .rd-video-frame { border-radius: 14px; }
+    .rd-play { width: 72px; height: 72px; }
+    .rd-video-text h2 { font-size: 26px; }
+    .rd-lead-row { gap: 24px; }
+    .rd-lead-photo img { max-width: 180px; border-width: 6px; }
+    .rd-h2-xl { font-size: 30px !important; }
+    .rd-chips { flex-direction: column; align-items: stretch; }
+    .rd-chip { border-radius: 16px; font-size: 14px; flex-wrap: wrap; row-gap: 0; }
+    .rd-chip em { flex-basis: 100%; padding-left: 50px; margin-top: -8px; font-size: 13px; }
+    .rd-programme-text h3 { font-size: 28px; }
+    .rd-programme-text { padding: 24px 20px; }
+    .rd-rings { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 12px; }
+    .rd-ring-item { gap: 10px; }
+    .rd-ring-item p { font-size: 14px; }
+    .rd-ring { width: 104px; height: 104px; }
+    .rd-ring-arc { border-width: 10px; }
+    .rd-ring-icon { font-size: 24px; }
+    .rd-ring-icon svg { width: 38px; height: 38px; }
+    .rd-steps { padding: 18px; gap: 20px; }
+    .rd-photos-content { padding: 64px 16px; }
+    .rd-cards { grid-template-columns: 1fr; gap: 16px; }
+    .rd-card-body { padding: 16px 16px 18px; }
+    .rd-card-body h3 { font-size: 17px; }
+    .rd-social { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .rd-social .rd-card-body { padding: 10px 12px 12px; }
+    .rd .rd-social .rd-h3-sm { font-size: 13px; }
+    .rd-cta h2 { font-size: 26px; }
+    .rd-logos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .rd-logo { height: 76px; padding: 10px 12px; }
+    .rd-help { padding: 20px 18px; }
+    .rd-help-actions { width: 100%; }
+    .rd-help-actions a { flex: 1 1 auto; text-align: center; justify-content: center; }
+    .rd-page-hero { padding: 44px 0; }
+    .rd-page-hero h1 { font-size: 30px; }
+    .rd .rd-h2-sm { font-size: 23px; }
+    .rd-person.is-big { flex-direction: row; align-items: center; padding: 18px; }
+    .rd-person.is-big img { width: 84px; height: 84px; }
+    .rd-team-count strong { font-size: 34px; }
+    .rd-faq summary { font-size: 16px; }
+    .rd-faq details { padding: 16px 18px; }
+    .rd-faq details p { font-size: 15px; }
+    .rd-privacy { gap: 18px; }
+    .rd-contact { padding: 20px; }
+    .rd-contact-value { font-size: 18px; }
+    .rd-story-body p { font-size: 16px; }
+    .rd-footer-main { gap: 28px; }
+    .rd-footer-bottom-inner { padding-bottom: 84px; } /* room for the WhatsApp button */
+}
+
+/* ---------------- readability fixes (team feedback) ---------------- */
+/* Hero title: no italics, darker shade behind the text, soft shadow so it reads over any photo */
+.rd-hero h1 em { font-style: normal; }
+.rd-hero h1 { text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55); }
+.rd-hero-shade { background: linear-gradient(to top, rgba(29, 47, 54, 0.97) 0%, rgba(29, 47, 54, 0.85) 38%, rgba(29, 47, 54, 0.35) 62%, rgba(29, 47, 54, 0.05) 80%); }
+@media (max-width: 700px) {
+    .rd-hero-shade { background: linear-gradient(to top, rgba(29, 47, 54, 0.98) 0%, rgba(29, 47, 54, 0.9) 50%, rgba(29, 47, 54, 0.45) 72%, rgba(29, 47, 54, 0.1) 90%); }
+}
+/* Yellow boxes on inner pages: dark text so it stays readable */
+.gaf-site .bl-widget-cta, .gaf-site .bl-widget-cta :is(h3, p, span, a, i, strong) { color: var(--d0) !important; }
+.gaf-site .bl-widget-cta .bl-more { font-weight: 700; text-decoration: underline; }

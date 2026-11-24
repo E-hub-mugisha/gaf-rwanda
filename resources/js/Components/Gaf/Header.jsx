@@ -74,24 +74,6 @@ export default function Header() {
 
     return (
         <>
-            <div className="gaf-topline">
-                <div className="gaf-container gaf-topline-inner">
-                    <span>{t.topLine}</span>
-
-                    <div className="gaf-top-contact">
-                        <a href={`mailto:${site.email}`}>
-                            {site.email}
-                        </a>
-
-                        <span aria-hidden="true">/</span>
-
-                        <a href={`tel:${site.phone}`}>
-                            {site.phone}
-                        </a>
-                    </div>
-                </div>
-            </div>
-
             <header className="gaf-header">
                 <div className="gaf-container gaf-header-inner">
                     {/* Brand */}

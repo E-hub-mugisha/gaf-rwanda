@@ -1,6 +1,7 @@
 import React from "react";
 import { useGaf } from "@/Context/GafContext";
-import { RD } from "@/Data/gafRedesign";
+import { RD, whatsappUrl } from "@/Data/gafRedesign";
+import InlineVideo from "@/Components/Gaf/Redesign/InlineVideo";
 import { STORIES, storyUrl } from "@/Data/gafStories";
 import { formatDate } from "@/lib/gafLocale";
 
@@ -41,7 +42,7 @@ export function HelpBox() {
             <div className="rd-help-actions">
                 <a className="rd-btn" href="tel:912">SAMU 912</a>
                 <a className="rd-btn-line" href="tel:114">RBC 114</a>
-                <a className="rd-btn-line" href={`tel:${RD.phone}`}>{RD.phone}</a>
+                <a className="rd-btn-line" href={whatsappUrl(RD.phone)} target="_blank" rel="noreferrer"><i className="bi bi-whatsapp" aria-hidden="true" /> {RD.phone}</a>
             </div>
         </div>
     );
@@ -111,15 +112,11 @@ export default function RedesignHome({ news = [], heroVideo }) {
                         <p className="rd-lead">{L(RD.study.partners)}</p>
                     </div>
                     <div className="rd-video">
-                        <a className="rd-video-frame" href={video} target="_blank" rel="noreferrer" aria-label={L(RD.study.videoTitle)}>
-                            <img src={`${RD.img}/video-poster.jpg`} alt="" />
-                            <span className="rd-play" aria-hidden="true"><svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg></span>
-                        </a>
+                        <InlineVideo url={video} poster={`${RD.img}/video-poster.jpg`} title={L(RD.study.videoTitle)} />
                         <div className="rd-video-text">
                             <p className="rd-eyebrow">VIDEO</p>
                             <h2>{L(RD.study.videoTitle)}</h2>
                             <p>{L(RD.study.videoText)}</p>
-                            <a className="rd-link" href={video} target="_blank" rel="noreferrer">{L(RD.study.videoLink)}</a>
                         </div>
                     </div>
                 </div>
@@ -134,7 +131,6 @@ export default function RedesignHome({ news = [], heroVideo }) {
                         <h2 className="rd-h2-xl">{RD.lead.name}</h2>
                         <p className="rd-soft">{RD.lead.role}</p>
                         <p className="rd-on-green">{L(RD.lead.bio)}</p>
-                        <p className="rd-strong">{L(RD.lead.phd)}</p>
                         <p className="rd-soft rd-small">{L(RD.lead.supervisedBy)}</p>
                         <div className="rd-chips">
                             {RD.lead.supervisors.map((s) => (

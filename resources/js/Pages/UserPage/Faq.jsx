@@ -2,7 +2,7 @@ import React from "react";
 import { Head } from "@inertiajs/react";
 import GafLayout from "@/Layouts/GafLayout";
 import { useGaf } from "@/Context/GafContext";
-import { RD } from "@/Data/gafRedesign";
+import { RD, whatsappUrl } from "@/Data/gafRedesign";
 import { HelpBox } from "@/Components/Gaf/Redesign/Home";
 
 // FAQ page (approved layout): questions, data protection, contact. Content is fixed here.
@@ -12,7 +12,7 @@ const FAQS = {
         ["Ni bande bemererwa kwitabira?", "Umuntu ufite ibimenyetso by'agahinda gakabije, ufite imyaka 18 kuzamura, uri mu Rwanda, uvuga Ikinyarwanda, kandi ushobora gukoresha interineti."],
         ["Nigute nakwitabira?", "Kanda kuri \"Itabire\" usubize ibibazo by'ibanze bigamije kureba niba wujuje ibisabwa. Niba wujuje ibisabwa, itsinda ryacu rizakuvugisha."],
         ["Ni iki kizaba nyuma yo kwemera kwitabira?", "Uzagirana ikiganiro kuri telefone n'inzobere mu by'imitekerereze (clinical psychologist), hanyuma ushyire umukono ahabugenewe wemera kwitabira (e-consent). Uzashyirwa muri imwe muri porogaramu ebyiri hifashishijwe tombola, kandi uzajya wuzuza ibibazo kuri interineti mu bihe bitandukanye."],
-        ["Ese kwitabira bisaba amafaranga?", "Oya. Ubushakashatsi bukorerwa kuri interineti no kuri telefone aho uri hose, nta ngendo bisaba. Niba udafite ubushobozi bwo kugura interineti, umushinga uzayigenera."],
+        ["Ese kwitabira bisaba amafaranga?", "Oya. Ubushakashatsi bukorerwa kuri interineti no kuri telefone aho uri hose, nta ngendo bisaba. Niba udafite ubushobozi bwo kugura interineti, umushinga uzayikugenera."],
         ["Nshobora kuvamo igihe nshakiye?", "Yego. Kwitabira ni ubushake bwawe bwuzuye. Ushobora kwisubiraho igihe cyose ubishakiye cyangwa gusimbuka ikibazo udashaka gusubiza, nta ngaruka ku burenganzira bwawe."],
         ["Bizagenda bite ibimenyetso byanjye nibiyongera?", "Tuzakurikirana uko umerewe binyuze mu bibazo wuzuza buri byumweru bibiri. Niba ibimenyetso byiyongereye cyane, inzobere mu by'ubuzima bwo mu mutwe izaguhamagara kugira ngo iguhe ubufasha bw'ibanze kandi ikurangire ivuriro rikwegereye."],
     ],
@@ -74,7 +74,7 @@ function Content() {
                             <span className="rd-contact-label">{T("IMEYILI", "EMAIL")}</span>
                             <span className="rd-contact-value">{RD.email}</span>
                         </a>
-                        <a className="rd-contact is-green" href={`tel:${RD.phone}`}>
+                        <a className="rd-contact is-green" href={whatsappUrl(RD.phone)} target="_blank" rel="noreferrer">
                             <span className="rd-contact-label">{T("TELEFONE", "PHONE")} / WHATSAPP</span>
                             <span className="rd-contact-value">{RD.phone}</span>
                         </a>

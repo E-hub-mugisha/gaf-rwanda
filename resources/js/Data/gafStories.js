@@ -215,7 +215,7 @@ export const TEAM = {
     },
     {
       "img": "nicole",
-      "name": "Uwase Atete Nicole",
+      "name": "Uwera Atete Nicole",
       "role": "Research assistant",
       "org": "Outcome assessments"
     },
