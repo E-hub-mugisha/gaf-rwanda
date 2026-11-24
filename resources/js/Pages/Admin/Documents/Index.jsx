@@ -16,7 +16,7 @@ import {
     Eye,
 } from "lucide-react";
 
-import { getLanguage, LANGUAGE_EVENT } from "@/lib/language";
+import { getLanguage, LANGUAGE_EVENT } from "@/lib/Language";
 
 const translations = {
     rw: {

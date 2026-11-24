@@ -5,7 +5,7 @@ import {
     getLanguage,
     setLanguage,
     LANGUAGE_EVENT,
-} from "@/lib/language";
+} from "@/lib/Language";
 
 /*
 |--------------------------------------------------------------------------

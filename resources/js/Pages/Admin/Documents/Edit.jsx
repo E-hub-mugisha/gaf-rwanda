@@ -15,7 +15,7 @@ import {
     X,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { getLanguage, LANGUAGE_EVENT } from '@/lib/language';
+import { getLanguage, LANGUAGE_EVENT } from '@/lib/Language';
 
 /*
 |--------------------------------------------------------------------------

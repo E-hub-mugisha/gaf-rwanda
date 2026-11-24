@@ -163,20 +163,22 @@ export const imageFallback = (event) => {
     event.currentTarget.style.display = "none";
 };
 
-// Order follows the website content structure:
-// Home, Recruitment Process, Team, Events / Gallery, Q&A, Contact.
+// Main navigation (redesign): Study, How it works, Eligibility, Team, News & photos, FAQ.
 export const navItems = [
-    ["home", "home"],
+    ["research", "research"],
+    ["how", "how"],
     ["participation", "participation"],
     ["team", "team"],
     ["activities", "activities"],
     ["faq", "faq"],
-    ["contact", "contact"],
 ];
 
 // Absolute URLs so links work from every page, not only the home page.
 export const navUrl = (id) => {
     if (id === "home") return "/";
+    if (id === "research") return "/#ubushakashatsi";
+    if (id === "how") return "/#porogaramu";
+    if (id === "participation") return "/#kwitabira";
     if (id === "team") return "/team";
     if (id === "activities") return "/events";
     if (id === "updates") return "/news";

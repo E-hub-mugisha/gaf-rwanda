@@ -58,6 +58,9 @@ Route::get('/gallery/{slug}', [GalleryController::class, 'show'])
 // Team
 Route::get('/team', [TeamController::class, 'index'])->name('team.index');
 
+// Participant login page (not in the menu; linked from the footer)
+Route::inertia('/abitabiriye', 'UserPage/Participants')->name('participants');
+
 // Mental health content (requires login)
 Route::get('/mental-health/depression', [DepressionController::class, 'show'])
     ->name('mental-health.depression')

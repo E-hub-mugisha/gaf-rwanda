@@ -4,7 +4,7 @@ import AdminLayout from "@/Layouts/AdminLayout";
 import {
     getLanguage,
     LANGUAGE_EVENT,
-} from "@/lib/language";
+} from "@/lib/Language";
 
 const BRAND = "#20603d";
 

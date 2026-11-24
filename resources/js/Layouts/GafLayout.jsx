@@ -9,6 +9,7 @@ import "../../css/gaf-pages.css";
 import "../../css/gaf-home.css";
 import "../../css/gaf-theme.css";
 import "../../css/gaf-blog.css";
+import "../../css/gaf-redesign.css";
 
 function Shell({ children }) {
     const { busy } = useGaf();
@@ -27,7 +28,7 @@ export default function GafLayout({ children }) {
     return (
         <GafProvider site={site}>
             <Head>
-                <meta name="theme-color" content="#20603D" />
+                <meta name="theme-color" content="#1D2F36" />
             </Head>
             <Shell>{children}</Shell>
         </GafProvider>

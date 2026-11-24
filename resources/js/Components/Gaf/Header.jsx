@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useGaf, imageFallback, navItems, navUrl } from "@/Context/GafContext";
+import { RD } from "@/Data/gafRedesign";
 
 export default function Header() {
     const { lang, setLang, t, site } = useGaf();
@@ -170,7 +171,7 @@ export default function Header() {
                                                 )
                                             }
                                         >
-                                            {t.nav?.[label] || label}
+                                            {RD.nav[label]?.[lang] || t.nav?.[label] || label}
 
                                             <span
                                                 className="gaf-dropdown-arrow"
@@ -220,7 +221,7 @@ export default function Header() {
                                     href={getNavUrl(id)}
                                     onClick={closeNavigation}
                                 >
-                                    {t.nav?.[label] || label}
+                                    {RD.nav[label]?.[lang] || t.nav?.[label] || label}
                                 </a>
                             );
                         })}
@@ -261,7 +262,7 @@ export default function Header() {
                             target="_blank"
                             rel="noreferrer"
                         >
-                            {t.participation.cta}
+                            {RD.nav.cta[lang]}
 
                             <span aria-hidden="true">↗</span>
                         </a>
