@@ -15,7 +15,7 @@ import {
     KeyRound,
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import { getLanguage, LANGUAGE_EVENT } from '@/lib/language';
+import { getLanguage, LANGUAGE_EVENT } from '@/lib/Language';
 
 /*
 |--------------------------------------------------------------------------

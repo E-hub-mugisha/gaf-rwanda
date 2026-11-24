@@ -11,7 +11,7 @@ import {
     X,
 } from 'lucide-react';
 
-import { getLanguage, LANGUAGE_EVENT } from '@/lib/language';
+import { getLanguage, LANGUAGE_EVENT } from '@/lib/Language';
 
 // These are the document upload languages (which PDF versions can be
 // attached), unrelated to the admin UI language selected in the header.

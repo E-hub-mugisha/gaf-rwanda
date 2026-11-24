@@ -17,7 +17,7 @@ import {
     getLanguage,
     setLanguage as persistLanguage,
     LANGUAGE_EVENT,
-} from "@/lib/language";
+} from "@/lib/Language";
 
 const translations = {
     rw: {
