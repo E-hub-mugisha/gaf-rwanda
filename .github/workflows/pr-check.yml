@@ -1,0 +1,52 @@
+# Test build for pull requests: builds the site exactly like deploy.yml
+# but uploads nothing. Safe to run on any branch.
+name: Build check
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build and boot test (no deploy)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          extensions: mbstring, intl, pdo_sqlite, gd, zip, bcmath, fileinfo
+          coverage: none
+          tools: composer:v2
+
+      - name: Install PHP dependencies
+        run: composer install --no-dev --no-interaction --prefer-dist --no-progress
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Build front-end assets
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+
+      - name: Start the app and check public pages
+        run: |
+          cp .env.example .env
+          touch database/database.sqlite
+          php artisan key:generate --force
+          php artisan migrate --force
+          php artisan serve --port=8123 > serve.log 2>&1 &
+          sleep 5
+          fail=0
+          for p in / /team /news /events /gallery /abitabiriye /login; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:8123$p")
+            echo "$p -> $code"
+            if [ "$code" != "200" ]; then fail=1; fi
+          done
+          if [ $fail = 1 ]; then tail -50 storage/logs/laravel.log || true; exit 1; fi
