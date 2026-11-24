@@ -103,10 +103,10 @@ export const RD = {
         title: { rw: "Ninde ushobora kwitabira?", en: "Who can take part?" },
         items: [
             { icon: "heart", a: "#34A46B", b: "#34A46B", text: { rw: "Ufite ibimenyetso by'agahinda gakabije", en: "A score of ≥10 on the Patient Health Questionnaire-9 (PHQ-9)" } },
-            { icon: "18+", a: "#FAD201", b: "#FAD201", text: { rw: "Ufite imyaka 18 kuzamura", en: "Aged 18 years or older" } },
+            { icon: "18+", a: "#EAD07F", b: "#EAD07F", text: { rw: "Ufite imyaka 18 kuzamura", en: "Aged 18 years or older" } },
             { icon: "RW", a: "#00A1DE", b: "#00A1DE", text: { rw: "Uri mu Rwanda", en: "Living in Rwanda" } },
             { icon: "talk", a: "#7FD3F2", b: "#34A46B", text: { rw: "Uvuga Ikinyarwanda", en: "Fluent in Kinyarwanda" } },
-            { icon: "wifi", a: "#FAD201", b: "#00A1DE", text: { rw: "Ushobora gukoresha interineti", en: "Ability to use the internet" } },
+            { icon: "wifi", a: "#EAD07F", b: "#00A1DE", text: { rw: "Ushobora gukoresha interineti", en: "Ability to use the internet" } },
         ],
         stepsTitle: { rw: "Intambwe zo kwinjira mu bushakashatsi", en: "Steps to join the study" },
         stepsText: {
