@@ -32,15 +32,8 @@ export const STORIES = [
     "cover": "/images/redesign/gallery/2026-11-psychologists-01.jpg",
     "photos": [
       "/images/redesign/gallery/2026-11-psychologists-01.jpg",
-      "/images/redesign/gallery/2026-11-psychologists-02.jpg",
-      "/images/redesign/gallery/2026-11-psychologists-03.jpg",
       "/images/redesign/gallery/2026-11-psychologists-04.jpg",
-      "/images/redesign/gallery/2026-11-psychologists-05.jpg",
-      "/images/redesign/gallery/2026-11-psychologists-06.jpg",
-      "/images/redesign/gallery/2026-11-psychologists-07.jpg",
-      "/images/redesign/gallery/2026-11-psychologists-08.jpg",
-      "/images/redesign/gallery/2026-11-psychologists-09.jpg",
-      "/images/redesign/gallery/2026-11-psychologists-10.jpg"
+      "/images/redesign/gallery/2026-11-psychologists-09.jpg"
     ],
     "links": []
   },
