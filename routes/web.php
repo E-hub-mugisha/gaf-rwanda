@@ -56,7 +56,12 @@ Route::get('/gallery/{slug}', [GalleryController::class, 'show'])
     ->name('gallery.show');
 
 // Team
-Route::get('/team', [TeamController::class, 'index'])->name('team.index');
+// Team page content is written in code (resources/js/Data/gafStories.js).
+Route::inertia('/team', 'UserPage/TeamStatic')->name('team.index');
+
+// News stories written in code (resources/js/Data/gafStories.js).
+Route::get('/stories/{slug}', fn (string $slug) => \Inertia\Inertia::render('UserPage/Story', ['slug' => $slug]))
+    ->where('slug', '[a-z0-9-]+')->name('stories.show');
 
 // Participant login page (not in the menu; linked from the footer)
 Route::inertia('/abitabiriye', 'UserPage/Participants')->name('participants');

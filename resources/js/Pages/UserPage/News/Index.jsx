@@ -4,8 +4,40 @@ import GafLayout from "@/Layouts/GafLayout";
 import { useGaf } from "@/Context/GafContext";
 import { Breadcrumbs, Cover, EmptyState, Pagination } from "@/Components/Gaf/Page";
 import { formatDate, localized, pick, readingMinutes } from "@/lib/gafLocale";
+import { STORIES, storyUrl } from "@/Data/gafStories";
 
 const articleUrl = (article) => route("news.show", { slug: article.slug });
+
+/** Card for a story written in code (Data/gafStories.js). */
+function StoryCard({ story, lang, t }) {
+    const title = story.title[lang] ?? story.title.en;
+    const excerpt = (story.body[lang] ?? story.body.en)[0];
+    return (
+        <article className="bl-post">
+            <a href={storyUrl(story)} className="bl-post-thumb" aria-label={title}>
+                <Cover src={story.cover} alt={title} icon="bi-newspaper" />
+            </a>
+            <div className="bl-post-body">
+                <div className="bl-post-meta">
+                    <span className="bl-cat">{story.tag[lang] ?? story.tag.en}</span>
+                    <time>{story.label[lang] ?? story.label.en}</time>
+                </div>
+                <h2 className="bl-post-title">
+                    <a href={storyUrl(story)}>{title}</a>
+                </h2>
+                <p className="bl-post-excerpt">{excerpt}</p>
+                <div className="bl-post-foot">
+                    <span>
+                        <i className="bi bi-images" aria-hidden="true" /> {story.photos.length} {pick(lang, { en: "photos", rw: "amafoto" })}
+                    </span>
+                    <a href={storyUrl(story)} className="bl-more">
+                        {t.readMore} <i className="bi bi-arrow-right" aria-hidden="true" />
+                    </a>
+                </div>
+            </div>
+        </article>
+    );
+}
 
 /** Small horizontal post card: thumbnail left, text right. */
 function PostCard({ article, lang, t, featured = false }) {
@@ -71,7 +103,8 @@ export default function Index({ featuredArticle, articles, categories = [], filt
     const filtering = Boolean(filters.search || filters.category);
     const firstPage = (articles?.current_page || 1) === 1;
     const showFeatured = featuredArticle && !filtering && firstPage;
-    const total = (articles?.total || 0) + (featuredArticle && !filtering ? 1 : 0);
+    const showStories = !filtering && firstPage;
+    const total = (articles?.total || 0) + (featuredArticle && !filtering ? 1 : 0) + (filtering ? 0 : STORIES.length);
     const activeCategory = categories.find((category) => category.slug === filters.category);
 
     return (
@@ -119,8 +152,9 @@ export default function Index({ featuredArticle, articles, categories = [], filt
                             </div>
                         )}
 
-                        {showFeatured || items.length ? (
+                        {showStories || showFeatured || items.length ? (
                             <div className="bl-list">
+                                {showStories && STORIES.map((story) => <StoryCard key={story.slug} story={story} lang={lang} t={t} />)}
                                 {showFeatured && <PostCard article={featuredArticle} lang={lang} t={t} featured />}
                                 {items.map((article) => (
                                     <PostCard key={article.id} article={article} lang={lang} t={t} />

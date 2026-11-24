@@ -1,6 +1,7 @@
 import React from "react";
 import { useGaf } from "@/Context/GafContext";
-import { RD, RD_STORIES } from "@/Data/gafRedesign";
+import { RD } from "@/Data/gafRedesign";
+import { STORIES, storyUrl } from "@/Data/gafStories";
 import { formatDate } from "@/lib/gafLocale";
 
 // Inline rich text: [["t"|"em"|"b"|"g", text], ...]
@@ -70,9 +71,13 @@ export default function RedesignHome({ news = [], heroVideo }) {
     const L = (o) => (o ? o[lang] ?? o.en : "");
     const video = heroVideo || RD.vimeoUrl;
 
-    const stories = news.length
-        ? news.slice(0, 3).map((n) => ({ url: n.url, image: n.image, date: formatDate(n.date, lang), title: tr(n.title) }))
-        : RD_STORIES.map((s) => ({ url: s.url, image: s.image, date: L(s.date), title: L(s.title) }));
+    // Latest 3 items: stories written in code plus any news added in the admin panel, newest first.
+    const stories = [
+        ...STORIES.map((s) => ({ sort: s.date, url: storyUrl(s), image: s.cover, date: L(s.label), title: L(s.title) })),
+        ...news.map((n) => ({ sort: String(n.date || ""), url: n.url, image: n.image, date: formatDate(n.date, lang), title: tr(n.title) })),
+    ]
+        .sort((a, b) => (a.sort < b.sort ? 1 : -1))
+        .slice(0, 3);
 
     const marquee = (row, cls) => {
         const imgs = row.map((name, i) => <img key={i} src={`${RD.img}/gallery/${name}.jpg`} alt="" loading="lazy" />);

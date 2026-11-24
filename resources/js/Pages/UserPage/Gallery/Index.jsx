@@ -4,6 +4,19 @@ import GafLayout from "@/Layouts/GafLayout";
 import { useGaf } from "@/Context/GafContext";
 import { Breadcrumbs, Cover, EmptyState, Lightbox } from "@/Components/Gaf/Page";
 import { formatDate, localized, pick } from "@/lib/gafLocale";
+import { STORIES, storyUrl } from "@/Data/gafStories";
+
+// Photos of the activities written in code (Data/gafStories.js), newest first.
+const STATIC_MEDIA = STORIES.flatMap((story) =>
+    story.photos.map((src, i) => ({
+        id: `static-${story.slug}-${i}`,
+        type: "image",
+        media_url: src,
+        caption: story.title.en,
+        caption_rw: story.title.rw,
+        gallery: { title: story.title.en, title_rw: story.title.rw },
+    }))
+);
 
 const albumUrl = (gallery) => route("gallery.show", { slug: gallery.slug });
 
@@ -69,7 +82,9 @@ function MediaTile({ item, lang, onOpen }) {
     );
 }
 
-export default function Index({ galleries = [], media = [], mediaTotal = 0 }) {
+export default function Index({ galleries = [], media: dbMedia = [], mediaTotal: dbTotal = 0 }) {
+    const media = useMemo(() => [...STATIC_MEDIA, ...dbMedia], [dbMedia]);
+    const mediaTotal = dbTotal + STATIC_MEDIA.length;
     const { lang, t: content } = useGaf();
     const t = content.galleryPage;
 
@@ -103,7 +118,7 @@ export default function Index({ galleries = [], media = [], mediaTotal = 0 }) {
     );
 
     const views = [
-        { key: "albums", label: pick(lang, { en: "Albums", rw: "Alubumu" }), count: galleries.length, icon: "bi-collection" },
+        { key: "albums", label: pick(lang, { en: "Albums", rw: "Alubumu" }), count: galleries.length + STORIES.length, icon: "bi-collection" },
         { key: "media", label: pick(lang, { en: "All photos & videos", rw: "Amafoto n’amashusho yose" }), count: mediaTotal, icon: "bi-grid-3x3-gap" },
     ];
 
@@ -126,7 +141,7 @@ export default function Index({ galleries = [], media = [], mediaTotal = 0 }) {
                         <div className="bl-titlebar-row">
                             <h1>{t.title}</h1>
                             <span className="bl-total">
-                                {galleries.length} {pick(lang, { en: galleries.length === 1 ? "album" : "albums", rw: "alubumu" })} · {mediaTotal}{" "}
+                                {galleries.length + STORIES.length} {pick(lang, { en: "albums", rw: "alubumu" })} · {mediaTotal}{" "}
                                 {pick(lang, { en: "photos & videos", rw: "amafoto n’amashusho" })}
                             </span>
                         </div>
@@ -151,6 +166,34 @@ export default function Index({ galleries = [], media = [], mediaTotal = 0 }) {
                             </button>
                         ))}
                     </div>
+
+                    {view === "albums" && (
+                        <section className="al-event">
+                            <header className="al-event-head">
+                                <div>
+                                    <h2>{pick(lang, { en: "Our activities", rw: "Ibikorwa byacu" })}</h2>
+                                </div>
+                            </header>
+                            <div className="al-album-grid">
+                                {STORIES.map((story) => (
+                                    <a key={story.slug} href={`${storyUrl(story)}#photos`} className="al-album">
+                                        <span className="al-album-cover">
+                                            <Cover src={story.cover} alt={story.title[lang] ?? story.title.en} icon="bi-images" />
+                                            <span className="al-album-counts">
+                                                <span>
+                                                    <i className="bi bi-image" aria-hidden="true" /> {story.photos.length}
+                                                </span>
+                                            </span>
+                                        </span>
+                                        <span className="al-album-body">
+                                            <strong>{story.title[lang] ?? story.title.en}</strong>
+                                            <small>{story.label[lang] ?? story.label.en}</small>
+                                        </span>
+                                    </a>
+                                ))}
+                            </div>
+                        </section>
+                    )}
 
                     {view === "albums" &&
                         (events.length ? (
@@ -184,9 +227,7 @@ export default function Index({ galleries = [], media = [], mediaTotal = 0 }) {
                                     </div>
                                 </section>
                             ))
-                        ) : (
-                            <EmptyState icon="bi-images" title={t.noGalleries} text={t.noGalleriesIntro} />
-                        ))}
+                        ) : null)}
 
                     {view === "media" && (
                         <>
@@ -217,7 +258,7 @@ export default function Index({ galleries = [], media = [], mediaTotal = 0 }) {
                                 <EmptyState icon="bi-images" title={t.noMedia} text={t.noMediaIntro} />
                             )}
 
-                            {mediaTotal > media.length && (
+                            {dbTotal > dbMedia.length && (
                                 <p className="al-media-note">
                                     {pick(lang, {
                                         en: `Showing the latest ${media.length} of ${mediaTotal}. Open an album to see all of its photos.`,

@@ -132,9 +132,9 @@ export const RD = {
         },
         button: { rw: "Reba amafoto yose", en: "See all photos" },
         rows: [
-            ["2026-10-scid-group", "2026-06-training-1", "2026-09-energizer", "2026-06-training-3", "2026-09-opening", "2026-09-training-1", "2026-06-team-kigali", "2026-09-app"],
+            ["2026-11-psychologists-01", "2026-10-scid-group", "2026-06-training-1", "2026-09-energizer", "2026-06-training-3", "2026-09-opening", "2026-09-training-1", "2026-06-team-kigali", "2026-09-app"],
             ["2026-09-plenary", "2026-06-training-opening", "2026-10-scid-session", "2026-09-guides", "2026-10-scid-practice", "2026-06-training-gift", "2026-09-training-2"],
-            ["2026-06-team-kigali", "2026-09-anne-marie-1", "2026-06-training-1", "2026-09-anne-marie-2", "2026-06-training-3", "2026-09-energizer", "2026-10-scid-practice"],
+            ["2026-06-team-kigali", "2026-11-psychologists-04", "2026-09-anne-marie-1", "2026-06-training-1", "2026-09-anne-marie-2", "2026-06-training-3", "2026-09-energizer", "2026-10-scid-practice"],
         ],
     },
 
