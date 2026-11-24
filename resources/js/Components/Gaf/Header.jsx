@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useGaf, imageFallback, navItems, navUrl } from "@/Context/GafContext";
-import { RD } from "@/Data/gafRedesign";
+import { RD, whatsappUrl } from "@/Data/gafRedesign";
 
 export default function Header() {
     const { lang, setLang, t, site } = useGaf();
@@ -85,8 +85,8 @@ export default function Header() {
 
                         <span aria-hidden="true">/</span>
 
-                        <a href={`tel:${site.phone}`}>
-                            {site.phone}
+                        <a href={whatsappUrl(site.phone || RD.phone)} target="_blank" rel="noreferrer">
+                            <i className="bi bi-whatsapp" aria-hidden="true" /> {site.phone || RD.phone}
                         </a>
                     </div>
                 </div>

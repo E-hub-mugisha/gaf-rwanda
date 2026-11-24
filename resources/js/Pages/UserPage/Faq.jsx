@@ -2,7 +2,7 @@ import React from "react";
 import { Head } from "@inertiajs/react";
 import GafLayout from "@/Layouts/GafLayout";
 import { useGaf } from "@/Context/GafContext";
-import { RD } from "@/Data/gafRedesign";
+import { RD, whatsappUrl } from "@/Data/gafRedesign";
 import { HelpBox } from "@/Components/Gaf/Redesign/Home";
 
 // FAQ page (approved layout): questions, data protection, contact. Content is fixed here.
@@ -74,7 +74,7 @@ function Content() {
                             <span className="rd-contact-label">{T("IMEYILI", "EMAIL")}</span>
                             <span className="rd-contact-value">{RD.email}</span>
                         </a>
-                        <a className="rd-contact is-green" href={`tel:${RD.phone}`}>
+                        <a className="rd-contact is-green" href={whatsappUrl(RD.phone)} target="_blank" rel="noreferrer">
                             <span className="rd-contact-label">{T("TELEFONE", "PHONE")} / WHATSAPP</span>
                             <span className="rd-contact-value">{RD.phone}</span>
                         </a>
