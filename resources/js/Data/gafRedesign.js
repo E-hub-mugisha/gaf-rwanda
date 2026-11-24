@@ -71,7 +71,6 @@ export const RD = {
             rw: "Ni umunyeshuri w'impamyabumenyi y'ikirenga (PhD) mu Ishami ry'Ubuzima bwo mu Mutwe muri Amsterdam UMC no muri Centre for Urban Mental Health ya Kaminuza ya Amsterdam. Ubushakashatsi bwe bwibanda ku kamaro k'ubufasha bwo kuri interineti buyoborwa n'abajyanama b'ubuzima ku bantu bafite agahinda gakabije mu Rwanda, n'ingaruka bugira ku bana b'ababyeyi babwitabiriye.",
             en: "PhD candidate in the Department of Psychiatry at Amsterdam UMC and the Centre for Urban Mental Health, University of Amsterdam. His research focuses on the effectiveness of a lay-counselor guided digital mental health intervention for depression in Rwanda and its impact on children of participating parents.",
         },
-        phd: { rw: "GAF-Rwanda ni ubushakashatsi akora mu rwego rw'impamyabumenyi y'ikirenga (PhD).", en: "GAF-Rwanda is part of his PhD research." },
         supervisedBy: { rw: "Akurikiranwa na", en: "Supervised by" },
         supervisors: [
             { img: `${IMG}/team-claudi.jpg`, name: "Prof. dr. Claudi Bockting", org: "Amsterdam UMC" },
