@@ -131,7 +131,6 @@ export default function RedesignHome({ news = [], heroVideo }) {
                         <h2 className="rd-h2-xl">{RD.lead.name}</h2>
                         <p className="rd-soft">{RD.lead.role}</p>
                         <p className="rd-on-green">{L(RD.lead.bio)}</p>
-                        <p className="rd-strong">{L(RD.lead.phd)}</p>
                         <p className="rd-soft rd-small">{L(RD.lead.supervisedBy)}</p>
                         <div className="rd-chips">
                             {RD.lead.supervisors.map((s) => (
