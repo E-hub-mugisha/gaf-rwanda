@@ -241,6 +241,7 @@
 .gaf-site .gaf-topline a { color: var(--muted) !important; }
 .gaf-site .gaf-header { background: var(--d0) !important; border-bottom: 1px solid var(--line) !important; box-shadow: none !important; }
 .gaf-site .gaf-brand img { background: var(--cream); border-radius: 12px; padding: 6px 12px; }
+@media (min-width: 701px) { .gaf-site .gaf-brand img { width: auto; height: 58px; } }
 .gaf-site .gaf-nav > a, .gaf-site .gaf-nav-dropdown-toggle { color: var(--cream) !important; font-family: var(--head) !important; font-weight: 600 !important; }
 .gaf-site .gaf-nav > a:hover, .gaf-site .gaf-nav-dropdown-toggle:hover { color: var(--yellow) !important; }
 .gaf-site .gaf-nav { background: transparent !important; }
